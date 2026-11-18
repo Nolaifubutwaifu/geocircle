@@ -13,5 +13,5 @@ export default async function CountryPage({ params }: PageProps<"/country/[code]
   const { code } = await params;
   const puzzle = all.find((p) => p.code!.toLowerCase() === code.toLowerCase());
   if (!puzzle) notFound();
-  return <GameClient puzzle={puzzle} daily={false} />;
+  return <GameClient key={String(puzzle.id)} puzzle={puzzle} daily={false} />;
 }

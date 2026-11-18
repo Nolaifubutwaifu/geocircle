@@ -63,3 +63,11 @@ export function whose(p: Puzzle): string {
   const owner = p.scope ? `${p.scope.name}'s` : "the world's";
   return `${owner} ${p.stat}`;
 }
+
+/** A random other puzzle, preferring ones not played yet. Null if the pool has nothing else. */
+export function pickRandom(pool: Puzzle[], currentId: Puzzle["id"], played: Set<string>, rand = Math.random): Puzzle | null {
+  const others = pool.filter((p) => String(p.id) !== String(currentId));
+  const fresh = others.filter((p) => !played.has(String(p.id)));
+  const from = fresh.length ? fresh : others;
+  return from.length ? from[Math.floor(rand() * from.length)] : null;
+}

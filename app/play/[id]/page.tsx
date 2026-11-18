@@ -11,5 +11,5 @@ export default async function PlayPage({ params }: PageProps<"/play/[id]">) {
   const { id } = await params;
   const puzzle = (puzzles as Puzzle[]).find((p) => String(p.id) === id);
   if (!puzzle) notFound();
-  return <GameClient puzzle={puzzle} daily={false} />;
+  return <GameClient key={String(puzzle.id)} puzzle={puzzle} daily={false} />;
 }

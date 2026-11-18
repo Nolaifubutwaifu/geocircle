@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
-import { puzzleHref, puzzleLabel, whose, type Puzzle } from "@/lib/puzzles";
-import type { Result } from "@/lib/storage";
+import { useRouter } from "next/navigation";
+import { pickRandom, puzzleHref, puzzleLabel, whose, type Puzzle } from "@/lib/puzzles";
+import { loadResults, type Result } from "@/lib/storage";
 
 function useCountUp(target: number, ms = 1400) {
   const [v, setV] = useState(0);
@@ -31,6 +32,22 @@ function count(x: number): string {
 export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result: Result }) {
   const score = useCountUp(result.score);
   const [copied, setCopied] = useState(false);
+  // A transition, so "Loading…" clears itself even when Next keeps this page around for the back button.
+  const [jumping, startJump] = useTransition();
+  const router = useRouter();
+
+  // Country puzzles jump to another country, daily puzzles to another daily one.
+  function randomPuzzle() {
+    startJump(async () => {
+      try {
+        const pool: Puzzle[] = await fetch(typeof puzzle.id === "number" ? "/data/puzzles.json" : "/data/countries-mode.json").then((r) => r.json());
+        const next = pickRandom(pool, puzzle.id, new Set(Object.keys(loadResults())));
+        if (next) router.push(puzzleHref(next));
+      } catch {
+        /* offline: stay on this puzzle */
+      }
+    });
+  }
   const pct = result.pct.toFixed(1);
 
   const caught = puzzle.stat === "land" ? "covered" : "caught";
@@ -69,9 +86,12 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
               {Math.round(score)}
             </p>
             <p className="pb-2 font-display text-[18px] text-mist">/ 100</p>
-            <div className="ml-auto flex gap-2 pb-1">
-              <button className="primary-btn" onClick={share}>
+            <div className="ml-auto flex flex-wrap justify-end gap-2 pb-1">
+              <button className="outline-btn" onClick={share}>
                 {copied ? "Copied" : "Share"}
+              </button>
+              <button className="primary-btn" onClick={randomPuzzle} disabled={jumping}>
+                {jumping ? "Loading…" : typeof puzzle.id === "number" ? "Random puzzle" : "Random country"}
               </button>
             </div>
           </div>
