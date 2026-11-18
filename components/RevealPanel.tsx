@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { Puzzle } from "@/lib/puzzles";
+import { puzzleHref, puzzleLabel, whose, type Puzzle } from "@/lib/puzzles";
 import type { Result } from "@/lib/storage";
 
 function useCountUp(target: number, ms = 1400) {
@@ -22,19 +22,32 @@ function useCountUp(target: number, ms = 1400) {
   return v;
 }
 
+function count(x: number): string {
+  if (x >= 1e9) return `${(x / 1e9).toFixed(1)} billion`;
+  if (x >= 1e6) return `${(x / 1e6).toFixed(1)} million`;
+  return Math.round(x).toLocaleString("en");
+}
+
 export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result: Result }) {
   const score = useCountUp(result.score);
   const [copied, setCopied] = useState(false);
   const pct = result.pct.toFixed(1);
 
-  const detail =
-    puzzle.mode === "target"
-      ? `You caught ${pct}% of the world's ${puzzle.stat}. The target was ${puzzle.target_pct}%.`
-      : `You caught ${pct}%. The best spot we found catches ${puzzle.best.pct?.toFixed(1)}%, drawn dashed on the map.`;
+  const caught = puzzle.stat === "land" ? "covered" : "caught";
+  let detail: string;
+  if (puzzle.mode === "target") detail = `You ${caught} ${pct}% of ${whose(puzzle)}. The target was ${puzzle.target_pct}%.`;
+  else if (puzzle.mode === "budget") detail = `You ${caught} ${pct}%. The best spot we found catches ${puzzle.best.pct?.toFixed(1)}%, drawn dashed on the map.`;
+  else {
+    const { a, b } = result.counts ?? { a: 0, b: 0 };
+    const vs = puzzle.vs?.label ?? "people";
+    const margin = a - b;
+    const verdict = margin > 0 ? `${puzzle.stat} win by ${count(margin)}` : `${vs} win by ${count(-margin)}`;
+    detail = `Your circle holds ${count(a)} ${puzzle.stat} and ${count(b)} ${vs}: ${verdict}. The best spot we found wins by ${count(puzzle.best.net ?? 0)}, drawn dashed.`;
+  }
 
   async function share() {
     const icon = puzzle.mechanic === "circle" ? "⭕" : "🔺";
-    const text = `Geocircle No. ${puzzle.id} ${icon} ${result.score}/100\n${location.origin}/play/${puzzle.id}`;
+    const text = `Geocircle ${puzzleLabel(puzzle)} ${icon} ${result.score}/100\n${location.origin}${puzzleHref(puzzle)}`;
     try {
       if (navigator.share && matchMedia("(pointer: coarse)").matches) await navigator.share({ text });
       else {
@@ -67,6 +80,9 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
             <Link href="/archive" className="text-amber underline-offset-4 hover:underline">
               All puzzles
+            </Link>
+            <Link href="/countries" className="text-amber underline-offset-4 hover:underline">
+              Halve a country
             </Link>
             <span className="text-mist">Zoom in to see where it all is.</span>
             <span className="ml-auto text-[12px] text-mist/80">Data: {puzzle.credit}</span>

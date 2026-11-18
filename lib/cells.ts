@@ -16,33 +16,55 @@ export type Dataset = {
   binUrl: string;
   res: number;
   groups: Map<string, Group>;
-  /** Weighted total per r3 cell (equals group total unless a per-country stat applies). */
+  /** Weighted total per r3 cell, limited to the scope's countries when there is one. */
   r3Totals: Map<string, number>;
   total: number;
   kg: number[] | null;
+  /** Only cells in these countries count. Null = whole world. */
+  countries: Set<number> | null;
   cache: Map<string, Fine[]>;
 };
 
-export function makeDataset(binUrl: string, index: CellIndex, stat: StatFile | null): Dataset {
+/** Per-country r3 totals of the raw values: { countryIndex: { r3: total } }. */
+export type ByCountry = Record<string, Record<string, number>>;
+
+export function makeDataset(
+  binUrl: string,
+  index: CellIndex,
+  stat: StatFile | null,
+  scope?: { countries: number[]; byCountry: ByCountry } | null,
+): Dataset {
   const groups = new Map<string, Group>();
   for (const [k, [offset, count, total, maxR]] of Object.entries(index.groups)) groups.set(k, { offset, count, total, maxR });
   const r3Totals = new Map<string, number>();
-  if (stat) for (const [k, v] of Object.entries(stat.r3)) r3Totals.set(k, v);
+  if (scope) {
+    for (const c of scope.countries) {
+      const mult = stat ? (stat.kg[c] ?? 0) : 1;
+      for (const [k, v] of Object.entries(scope.byCountry[c] ?? {})) r3Totals.set(k, (r3Totals.get(k) ?? 0) + v * mult);
+    }
+  } else if (stat) for (const [k, v] of Object.entries(stat.r3)) r3Totals.set(k, v);
   else for (const [k, g] of groups) r3Totals.set(k, g.total);
   let total = 0;
   for (const v of r3Totals.values()) total += v;
-  return { binUrl, res: index.res, groups, r3Totals, total, kg: stat?.kg ?? null, cache: new Map() };
+  return { binUrl, res: index.res, groups, r3Totals, total, kg: stat?.kg ?? null, countries: scope ? new Set(scope.countries) : null, cache: new Map() };
 }
 
-export async function loadDataset(base: string, stat: string | null): Promise<Dataset> {
-  const [index, statFile] = await Promise.all([
-    fetch(`${base}.index.json`).then((r) => r.json() as Promise<CellIndex>),
-    stat ? fetch(stat).then((r) => r.json() as Promise<StatFile>) : Promise.resolve(null),
+export async function loadDataset(base: string, stat: string | null, scopeCountries?: number[] | null): Promise<Dataset> {
+  const json = <T,>(url: string) =>
+    fetch(url).then((r) => {
+      if (!r.ok) throw new Error(`Couldn't load ${url} (${r.status})`);
+      return r.json() as Promise<T>;
+    });
+  const [index, statFile, byCountry] = await Promise.all([
+    json<CellIndex>(`${base}.index.json`),
+    stat ? json<StatFile>(stat) : Promise.resolve(null),
+    scopeCountries ? json<ByCountry>(`${base}.bycountry.json`) : Promise.resolve(null),
   ]);
-  return makeDataset(`${base}.bin`, index, statFile);
+  return makeDataset(`${base}.bin`, index, statFile, scopeCountries && byCountry ? { countries: scopeCountries, byCountry } : null);
 }
 
-export function weightOf(ds: Pick<Dataset, "kg">, f: Fine): number {
+export function weightOf(ds: Pick<Dataset, "kg" | "countries">, f: Fine): number {
+  if (ds.countries && !ds.countries.has(f.country)) return 0;
   return ds.kg ? f.value * (ds.kg[f.country] ?? 0) : f.value;
 }
 
@@ -130,13 +152,19 @@ export function classifyGroups(shape: Shape, ds: Pick<Dataset, "groups" | "r3Tot
   return { inside, edge };
 }
 
-/** Caught share in percent (0 to 100). */
-export async function capturedPct(shape: Shape, ds: Dataset): Promise<number> {
+/** Weighted sum of everything inside the shape (same units as the data). */
+export async function capturedSum(shape: Shape, ds: Dataset): Promise<number> {
   const { inside, edge } = classifyGroups(shape, ds);
   await fetchGroups(ds, edge);
   let sum = 0;
   for (const k of inside) sum += ds.r3Totals.get(k) ?? 0;
   for (const k of edge) for (const f of ds.cache.get(k) ?? []) if (contains(shape, fineLngLat(f))) sum += weightOf(ds, f);
+  return sum;
+}
+
+/** Caught share in percent (0 to 100). */
+export async function capturedPct(shape: Shape, ds: Dataset): Promise<number> {
+  const sum = await capturedSum(shape, ds);
   return ds.total > 0 ? (100 * sum) / ds.total : 0;
 }
 

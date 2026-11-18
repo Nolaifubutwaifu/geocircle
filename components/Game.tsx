@@ -17,9 +17,9 @@ import {
   type LngLat,
   type Shape,
 } from "@/lib/geo";
-import { aggregateTo, capturedPct, classifyGroups, fetchGroups, loadDataset, type Dataset } from "@/lib/cells";
-import { scoreBudget, scoreTarget } from "@/lib/score";
-import { goalText, type Puzzle } from "@/lib/puzzles";
+import { aggregateTo, capturedSum, classifyGroups, fetchGroups, loadDataset, type Dataset } from "@/lib/cells";
+import { scoreBudget, scoreNet, scoreTarget } from "@/lib/score";
+import { goalText, puzzleLabel, type Puzzle } from "@/lib/puzzles";
 import { hasSeenHowTo, loadResults, markSeenHowTo, saveResult, type Result } from "@/lib/storage";
 import type { Bounds } from "@/lib/land";
 import type { Handle, HitTarget, Pill } from "./GameMap";
@@ -34,7 +34,7 @@ type Phase = "play" | "scoring" | "done";
 
 export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean }) {
   const isCircle = puzzle.mechanic === "circle";
-  const fixedRadius = isCircle && puzzle.mode === "budget" ? puzzle.radius_km : null;
+  const fixedRadius = isCircle && puzzle.mode !== "target" ? puzzle.radius_km : null;
 
   // Game renders client-only, so the earlier result can seed state directly.
   const [prev] = useState(() => loadResults()[puzzle.id] ?? null);
@@ -49,12 +49,15 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
   const [howTo, setHowTo] = useState(() => !hasSeenHowTo());
   const [heat, setHeat] = useState<{ id: string; v: number }[] | null>(null);
   const ds = useRef<Promise<Dataset> | null>(null);
+  const vsDs = useRef<Promise<Dataset> | null>(null); // the "people" side of net puzzles
   const view = useRef<{ res: number; bounds: Bounds } | null>(null);
 
   // Load the puzzle's data.
   useEffect(() => {
-    ds.current = loadDataset(puzzle.cells, puzzle.stat_file);
-    ds.current.catch(() => setError("Couldn't load this puzzle's data. Reload the page to try again."));
+    const scope = puzzle.scope?.countries ?? null;
+    ds.current = loadDataset(puzzle.cells, puzzle.stat_file, scope);
+    vsDs.current = puzzle.vs ? loadDataset(puzzle.vs.cells, null, scope) : null;
+    Promise.all([ds.current, vsDs.current]).catch(() => setError("Couldn't load this puzzle's data. Reload the page to try again."));
   }, [puzzle]);
 
   const shape: Shape | null = useMemo(() => {
@@ -68,8 +71,10 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
   useEffect(() => {
     if (!shape || problem || phase !== "play") return;
     const t = setTimeout(async () => {
-      const d = await ds.current;
-      if (d) fetchGroups(d, classifyGroups(shape, d).edge).catch(() => {});
+      for (const p of [ds.current, vsDs.current]) {
+        const d = await p;
+        if (d) fetchGroups(d, classifyGroups(shape, d).edge).catch(() => {});
+      }
     }, 400);
     return () => clearTimeout(t);
   }, [shape, problem, phase]);
@@ -87,9 +92,16 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
     setPhase("scoring");
     try {
       const d = await ds.current!;
-      const pct = await capturedPct(shape, d);
-      const score = puzzle.mode === "target" ? scoreTarget(pct, puzzle.target_pct!) : scoreBudget(pct, puzzle.best.pct ?? pct);
-      const r: Result = { score, pct, shape, playedAt: new Date().toISOString() };
+      const a = await capturedSum(shape, d);
+      const pct = d.total > 0 ? (100 * a) / d.total : 0;
+      let score: number;
+      let counts: Result["counts"];
+      if (puzzle.mode === "net") {
+        const b = await capturedSum(shape, (await vsDs.current)!);
+        counts = { a, b };
+        score = scoreNet(a - b, puzzle.best.net ?? a - b);
+      } else score = puzzle.mode === "target" ? scoreTarget(pct, puzzle.target_pct!) : scoreBudget(pct, puzzle.best.pct ?? pct);
+      const r: Result = { score, pct, shape, playedAt: new Date().toISOString(), counts };
       saveResult(puzzle.id, r);
       setResult(r);
       setPhase("done");
@@ -268,10 +280,10 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
         <section className="chamfer pointer-events-auto min-w-0 max-w-md flex-1 sm:flex-none" aria-live="polite">
           <div className="chamfer-in px-4 py-3 sm:px-5 sm:py-4">
             <div className="flex items-center gap-2 whitespace-nowrap text-[13px] text-mist">
-              <Link href="/archive" className="font-display font-semibold text-amber hover:underline">
-                No. {puzzle.id}
+              <Link href={daily || typeof puzzle.id === "number" ? "/archive" : "/countries"} className="font-display font-semibold text-amber hover:underline">
+                {puzzleLabel(puzzle)}
               </Link>
-              <span className="hidden sm:inline">{daily ? "Today's puzzle" : "From the archive"}</span>
+              <span className="hidden sm:inline">{daily ? "Today's puzzle" : typeof puzzle.id === "number" ? "From the archive" : "Halve the country"}</span>
               <span className="ml-auto rounded-sm bg-deep px-1.5 py-0.5 font-display text-[12px] text-chalk">{goalText(puzzle)}</span>
             </div>
             <h1 className="mt-1.5 font-display text-[17px] font-semibold leading-snug text-balance sm:text-[22px]">{puzzle.prompt}</h1>

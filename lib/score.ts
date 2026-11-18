@@ -9,3 +9,9 @@ export function scoreBudget(caughtPct: number, bestPct: number): number {
   if (bestPct <= 0) return 0;
   return Math.min(100, Math.round((100 * caughtPct) / bestPct));
 }
+
+/** Net modes (cows minus people): share of the best known margin, 0 when the other side wins. */
+export function scoreNet(net: number, bestNet: number): number {
+  if (bestNet <= 0) return 0;
+  return Math.max(0, Math.min(100, Math.round((100 * net) / bestNet)));
+}

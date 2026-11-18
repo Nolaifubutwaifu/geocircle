@@ -41,8 +41,38 @@ test("triangle: three taps, submit, reveal", async ({ page }) => {
   await expect(page.getByText(/You caught \d+(\.\d)?% of the world's beer drunk/)).toBeVisible({ timeout: 20_000 });
 });
 
+test("halve a country: Austria", async ({ page }) => {
+  await page.goto("/country/aut");
+  await mapReady(page);
+  const box = (await page.locator(".maplibregl-canvas").boundingBox())!;
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  await page.mouse.click(cx, cy);
+  await page.mouse.move(cx, cy);
+  await page.mouse.down();
+  await page.mouse.move(cx + 60, cy, { steps: 6 });
+  await page.mouse.up();
+  await page.getByRole("button", { name: "Submit circle" }).click();
+  await expect(page.getByText(/of Austria's people\. The target was 50%/)).toBeVisible({ timeout: 20_000 });
+});
+
+test("cows vs people: net score", async ({ page }) => {
+  await page.goto("/play/13");
+  await mapReady(page);
+  const box = (await page.locator(".maplibregl-canvas").boundingBox())!;
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await page.getByRole("button", { name: "Submit circle" }).click();
+  await expect(page.getByText(/Your circle holds .* cattle and .* people/)).toBeVisible({ timeout: 20_000 });
+});
+
+test("countries page lists countries", async ({ page }) => {
+  await page.goto("/countries");
+  await expect(page.getByRole("heading", { name: "Halve a country" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Austria/ })).toBeVisible();
+});
+
 test("archive lists puzzles", async ({ page }) => {
   await page.goto("/archive");
   await expect(page.getByRole("heading", { name: "All puzzles" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /No\. 2/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^No\. 2 / })).toBeVisible();
 });

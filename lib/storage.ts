@@ -1,7 +1,14 @@
 // Results and first-visit flag in localStorage.
 import type { Shape } from "./geo";
 
-export type Result = { score: number; pct: number; shape: Shape; playedAt: string };
+export type Result = {
+  score: number;
+  pct: number;
+  shape: Shape;
+  playedAt: string;
+  /** Net puzzles: what the shape caught of each side. */
+  counts?: { a: number; b: number };
+};
 export const RESULTS_KEY = "geocircle:v1:results";
 const SEEN = "geocircle:v1:seen-how-to";
 
@@ -14,7 +21,7 @@ export function loadResults(): Record<string, Result> {
   }
 }
 
-export function saveResult(id: number, r: Result) {
+export function saveResult(id: number | string, r: Result) {
   const all = loadResults();
   all[id] = r;
   localStorage.setItem(RESULTS_KEY, JSON.stringify(all));

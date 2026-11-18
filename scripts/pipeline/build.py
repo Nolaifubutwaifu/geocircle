@@ -8,17 +8,20 @@
 #   "pandas>=2.2",
 #   "numpy>=1.26",
 #   "scikit-learn>=1.4",
+#   "rasterio>=1.3",
 # ]
 # ///
 """Geocircle data pipeline.
 
 Reads raw downloads from data-raw/ and writes everything the game loads into public/data/.
 Run from the project root:  uv run scripts/pipeline/build.py [step ...]
-Steps: land, geo, population, stats, points, puzzles (default: all, in that order).
+Steps: land, geo, population, stats, points, livestock, landcells, bycountry, puzzles, countries
+(default: all, in that order).
 
 Formats (see lib/cells.ts and lib/land.ts for the readers):
   fine-cell file  <name>.bin           16-byte records: u32 lo, u32 hi, f32 value, u16 country, u16 0
                   <name>.index.json    {"res": r, "groups": {r3: [offset, count, total, maxR_km]}}
+                  <name>.bycountry.json {country_index: {r3: total}} for puzzles limited to some countries
   land bitmaps    land-r{5,6,7}.bin    one bit per child (sorted ids) of each parent cell
                   land-r{5,6,7}.json   {"res", "parentRes", "groups": {parent: [byteOffset, nBytes]}, "full": [parent...]}
 """
@@ -339,6 +342,19 @@ def write_cells(name: str, cells: np.ndarray, values: np.ndarray, country: np.nd
     log(f"{name}: {len(cells):,} cells in {len(groups):,} r3 groups, {path.stat().st_size / 1e6:.2f} MB")
     total = sum(g[2] for g in groups.values())
     assert abs(total - rec["value"].astype(np.float64).sum()) < 1e-6 * max(1, total), "r3 totals don't add up"
+    write_bycountry(name)
+
+
+def write_bycountry(name: str):
+    """Per-country r3 totals, so a puzzle can be limited to one or more countries."""
+    idx, cells, value, cidx = read_cells(name)
+    parents = np.array([h3.cell_to_parent(int(c), 3) for c in cells], dtype=np.uint64)
+    g = pd.DataFrame({"c": cidx, "p": parents, "v": value}).groupby(["c", "p"])["v"].sum()
+    out: dict[str, dict[str, float]] = defaultdict(dict)
+    for (c, par), v in g.items():
+        if v > 0:
+            out[str(int(c))][h3.int_to_str(int(par))] = round(float(v), 2)
+    write_json(OUT / f"{name}.bycountry.json", out)
 
 
 def read_cells(name: str):
@@ -491,17 +507,80 @@ def step_points():
         log("mcdonalds: no Overture extract yet, skipping")
 
 
+# ---------------------------------------------------------------- livestock (GLW4 2015, CC0)
+
+def raster_to_cells(path: Path, res: int):
+    """Sum a global count raster (one value per pixel) into H3 cells by pixel centre."""
+    import rasterio
+    from rasterio.transform import xy
+
+    with rasterio.open(path) as src:
+        a = src.read(1).astype(np.float64)
+        nodata = src.nodata
+        transform = src.transform
+    if nodata is not None:
+        a[a == nodata] = 0
+    a[~np.isfinite(a) | (a < 0)] = 0
+    rows, cols = np.nonzero(a > 0)
+    xs, ys = xy(transform, rows, cols)
+    vals = a[rows, cols]
+    ids = np.array([h3.latlng_to_cell(float(y), float(x), res) for x, y in zip(xs, ys)], dtype=np.uint64)
+    agg = pd.Series(vals).groupby(ids).sum()
+    return agg.index.to_numpy(dtype=np.uint64), agg.to_numpy()
+
+
+def step_livestock():
+    countries = load_countries()
+    for name, lo, hi in (("cattle", 1.2e9, 2.0e9), ("sheep", 0.9e9, 1.6e9)):
+        cells, vals = raster_to_cells(RAW / "glw" / f"{name}.tif", 5)
+        log(f"{name}: {vals.sum() / 1e9:.2f} B head in {len(cells):,} r5 cells")
+        assert lo < vals.sum() < hi, vals.sum()
+        latlng = np.array([h3.cell_to_latlng(int(c)) for c in cells])
+        write_cells(name, cells, vals, assign_country(latlng[:, 0], latlng[:, 1], countries), 5)
+
+
+# ---------------------------------------------------------------- land area
+
+def step_landcells():
+    """Every r5 land hex (from the land bitmaps) weighted by its area in km²."""
+    idx = json.loads((OUT / "land-r5.json").read_text())
+    blob = (OUT / "land-r5.bin").read_bytes()
+    cells: list[int] = []
+    for p_str in idx["full"]:
+        cells.extend(h3.cell_to_children(h3.str_to_int(p_str), 5))
+    for p_str, (o, n) in idx["groups"].items():
+        kids = sorted(h3.cell_to_children(h3.str_to_int(p_str), 5))
+        bits = np.unpackbits(np.frombuffer(blob[o : o + n], dtype=np.uint8), bitorder="little")[: len(kids)]
+        cells.extend(kids[i] for i in np.flatnonzero(bits))
+    arr = np.array(sorted(set(cells)), dtype=np.uint64)
+    area = np.array([h3.cell_area(int(c), "km^2") for c in arr])
+    log(f"land: {len(arr):,} r5 cells, {area.sum() / 1e6:.0f} M km²")
+    assert 140e6 < area.sum() < 175e6, area.sum()
+    latlng = np.array([h3.cell_to_latlng(int(c)) for c in arr])
+    write_cells("land", arr, area, assign_country(latlng[:, 0], latlng[:, 1], load_countries()), 5)
+
+
+def step_bycountry():
+    """Backfill per-country totals for files written before write_cells produced them."""
+    for name in ("population", "points/earthquakes", "points/mcdonalds"):
+        if (OUT / f"{name}.index.json").exists():
+            write_bycountry(name)
+
+
 # ---------------------------------------------------------------- best possible shapes
 
-def fine_points(cells_name: str, stat: str | None):
+def fine_points(cells_name: str, stat: str | None, scope: list[int] | None = None):
+    """Cell centres and weights for one dataset, optionally limited to some countries."""
     idx, cells, value, cidx = read_cells(cells_name)
     w = value
     if stat:
         kg = np.array(json.loads((OUT / "stats" / f"{stat}.json").read_text())["kg"])
         w = value * kg[cidx]
-    latlng = np.array([h3.cell_to_latlng(int(c)) for c in cells])
     keep = w > 0
-    return latlng[keep], w[keep]
+    if scope is not None:
+        keep &= np.isin(cidx, scope)
+    latlng = np.array([h3.cell_to_latlng(int(c)) for c in cells[keep]])
+    return latlng, w[keep]
 
 
 def unit(latlng):
@@ -509,26 +588,42 @@ def unit(latlng):
     return np.stack([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)], axis=1)
 
 
-def best_circle(latlng, w, radius_km):
+def best_circle(latlng, w, radius_km, n_cand=4000, rank=None, tree=None):
+    """Centre that catches the largest sum of w (w may be negative). Returns (lng, lat), sum."""
     from sklearn.neighbors import BallTree
 
     rad = np.radians(latlng)
-    tree = BallTree(rad, metric="haversine")
+    tree = tree or BallTree(rad, metric="haversine")
     r = radius_km / EARTH_R
-    # Coarse pass: candidate centres on a ~25 km thinned subset of heavy cells.
-    order = np.argsort(-w)
-    cand = order[: min(len(order), 4000)]
+    order = np.argsort(-(w if rank is None else rank))
+    cand = order[: min(len(order), n_cand)]
     sums = np.array([w[ix].sum() for ix in tree.query_radius(rad[cand], r)])
-    top = cand[np.argsort(-sums)[:15]]
-    best_c, best_s = None, -1.0
+    top = cand[np.argsort(-sums)[:12]]
+    step = min(0.6, radius_km / 111 / 3)
+    best_c, best_s = None, -np.inf
     for t in top:  # local refinement on a small grid around each top centre
-        for dlat in np.linspace(-0.6, 0.6, 7):
-            for dlng in np.linspace(-0.6, 0.6, 7):
+        for dlat in np.linspace(-step, step, 7):
+            for dlng in np.linspace(-step, step, 7):
                 c = np.radians([[latlng[t, 0] + dlat, latlng[t, 1] + dlng]])
-                s = w[tree.query_radius(c, r)[0]].sum()
-                if s > best_s:
-                    best_s, best_c = s, (latlng[t, 1] + dlng, latlng[t, 0] + dlat)
-    return best_c, 100 * best_s / w.sum()
+                s_ = w[tree.query_radius(c, r)[0]].sum()
+                if s_ > best_s:
+                    best_s, best_c = s_, (latlng[t, 1] + dlng, latlng[t, 0] + dlat)
+    return best_c, float(best_s)
+
+
+def smallest_circle_km(latlng, w, frac):
+    """Smallest radius (km) we can find whose best circle holds `frac` of the total."""
+    from sklearn.neighbors import BallTree
+
+    tree = BallTree(np.radians(latlng), metric="haversine")
+    lo, hi, goal = 5.0, 5000.0, frac * w.sum()
+    for _ in range(14):
+        mid = (lo + hi) / 2
+        if best_circle(latlng, w, mid, n_cand=600, tree=tree)[1] >= goal:
+            hi = mid
+        else:
+            lo = mid
+    return hi
 
 
 def tri_mask(U, A, B, C):
@@ -585,12 +680,37 @@ def best_triangle(latlng, w, budget_km, seed=1):
     return [[q[1], q[0]] for q in best_p], 100 * fine / w.sum()
 
 
+def auto_view(latlng, w):
+    """Centre and zoom that frame where most of the weight is (5th to 95th percentile)."""
+    def wq(x, q):
+        o = np.argsort(x)
+        cw = np.cumsum(w[o]) / w.sum()
+        return x[o][np.searchsorted(cw, q).clip(0, len(x) - 1)]
+
+    lat0, lat1 = wq(latlng[:, 0], 0.05), wq(latlng[:, 0], 0.95)
+    lngs = latlng[:, 1].copy()
+    if wq(lngs, 0.95) - wq(lngs, 0.05) > 180:  # straddles the date line (Russia, Fiji, NZ islands)
+        lngs = np.where(lngs < 0, lngs + 360, lngs)
+    lng0, lng1 = wq(lngs, 0.05), wq(lngs, 0.95)
+    span = max(lat1 - lat0, (lng1 - lng0) * np.cos(np.radians((lat0 + lat1) / 2)), 0.5)
+    zoom = float(np.clip(np.log2(300 / span) - 0.2, 1.2, 8))
+    lng = (lng0 + lng1) / 2
+    return [round(float(((lng + 180) % 360) - 180), 3), round(float((lat0 + lat1) / 2), 3), round(zoom, 2)]
+
+
 # ---------------------------------------------------------------- puzzles
 
+POP = "Kontur Population (CC BY 4.0)"
+FOOD_CREDIT = "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+GLW = "FAO Gridded Livestock of the World 2015 (CC0)"
+LAND = "Natural Earth (public domain)"
+QUAKES = "USGS Earthquake Catalog (public domain)"
+MCD = "Overture Maps Places (CDLA Permissive 2.0)"
+
+# scope: list of Natural Earth country names, or {"continent": "Europe"}. vs: second dataset for "net" puzzles.
 PUZZLES = [
-    dict(stat="people", cells="population", food=None, mechanic="circle", mode="target", target_pct=10,
-         prompt="Draw a circle that holds exactly 10% of all people on Earth.", view=[95, 25, 1.6],
-         credit="Kontur Population (CC BY 4.0)"),
+    dict(stat="people", cells="population", mechanic="circle", mode="target", target_pct=10,
+         prompt="Draw a circle that holds exactly 10% of all people on Earth.", view=[95, 25, 1.6], credit=POP),
     dict(stat="rice eaten", cells="population", food="rice", mechanic="circle", mode="target", target_pct=20,
          prompt="Draw a circle that holds exactly 20% of the world's rice eaten.", view=[100, 20, 1.6]),
     dict(stat="beer drunk", cells="population", food="beer", mechanic="triangle", mode="target", target_pct=25,
@@ -605,71 +725,213 @@ PUZZLES = [
          prompt="Put down 3 pins. Your triangle must hold exactly 20% of the world's potatoes eaten.", view=[40, 40, 1.4]),
     dict(stat="fish eaten", cells="population", food="fish", mechanic="circle", mode="budget", radius_km=1000,
          prompt="You get a 1,000 km circle. Catch as much of the world's fish eaten as you can.", view=[120, 25, 1.6]),
-    dict(stat="earthquakes", cells="points/earthquakes", food=None, mechanic="triangle", mode="budget", perimeter_km=8000,
+    dict(stat="earthquakes", cells="points/earthquakes", mechanic="triangle", mode="budget", perimeter_km=8000,
          prompt="Your triangle can be at most 8,000 km around. Catch as many earthquakes (M4.5+, since 2000) as you can.",
-         view=[150, 0, 1.3], credit="USGS Earthquake Catalog (public domain)"),
-    dict(stat="mapped McDonald's", cells="points/mcdonalds", food=None, mechanic="circle", mode="target", target_pct=10,
-         prompt="Draw a circle that holds exactly 10% of the world's mapped McDonald's.", view=[-40, 35, 1.4],
-         credit="Overture Maps Places (CDLA Permissive 2.0)"),
+         view=[150, 0, 1.3], credit=QUAKES),
+    dict(stat="mapped McDonald's", cells="points/mcdonalds", mechanic="circle", mode="target", target_pct=10,
+         prompt="Draw a circle that holds exactly 10% of the world's mapped McDonald's.", view=[-40, 35, 1.4], credit=MCD),
+    # --- batch 2: country and region puzzles, livestock, land
+    dict(stat="people", cells="population", scope=["Australia"], mechanic="circle", mode="target", target_pct=50,
+         prompt="Draw a circle that holds exactly half of Australia's people.", credit=POP),
+    dict(stat="people", cells="population", scope=["Egypt"], mechanic="triangle", mode="target", target_pct=50,
+         prompt="Put down 3 pins. Your triangle must hold exactly half of Egypt's people.", credit=POP),
+    dict(stat="cattle", cells="cattle", vs="population", vs_label="people", mechanic="circle", mode="net", radius_km=1000,
+         prompt="Cows vs people. You get a 1,000 km circle: find where cows outnumber people by the most.",
+         view=[0, 0, 1.3], credit=f"{GLW}; {POP}"),
+    dict(stat="sheep", cells="sheep", vs="population", vs_label="people", scope=["Australia", "New Zealand"], mechanic="circle",
+         mode="net", radius_km=500, prompt="Sheep vs people in Australia and New Zealand. Your 500 km circle should catch the most sheep beyond the number of people.",
+         credit=f"{GLW}; {POP}"),
+    dict(stat="mapped McDonald's", cells="points/mcdonalds", scope=["United States of America"], mechanic="circle", mode="target",
+         target_pct=25, prompt="Draw a circle that holds exactly 25% of America's mapped McDonald's.", credit=MCD),
+    dict(stat="earthquakes", cells="points/earthquakes", scope=["Japan"], mechanic="circle", mode="budget", radius_km=300,
+         prompt="You get a 300 km circle. Catch as many of Japan's earthquakes (M4.5+, since 2000) as you can.", credit=QUAKES),
+    dict(stat="wine drunk", cells="population", food="wine", scope={"continent": "Europe"}, mechanic="triangle", mode="target",
+         target_pct=30, prompt="Put down 3 pins. Your triangle must hold exactly 30% of Europe's wine drunk."),
+    dict(stat="land", cells="land", mechanic="circle", mode="target", target_pct=10,
+         prompt="Draw a circle that covers exactly 10% of all land on Earth.", view=[60, 30, 1.3], credit=LAND),
+    dict(stat="land", cells="land", scope=["Canada"], mechanic="triangle", mode="target", target_pct=50,
+         prompt="Put down 3 pins. Your triangle must cover exactly half of Canada's land.", credit=LAND),
+    dict(stat="cattle", cells="cattle", scope=["India"], mechanic="circle", mode="target", target_pct=25,
+         prompt="Draw a circle that holds exactly 25% of India's cattle.", credit=GLW),
 ]
 
-FOOD_CREDIT = "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+
+def resolve_scope(scope, countries) -> tuple[list[int] | None, str | None]:
+    if scope is None:
+        return None, None
+    if isinstance(scope, dict):
+        ids = [int(i) for i in countries.index[countries["CONTINENT"] == scope["continent"]]]
+        return ids, scope["continent"]
+    ids = []
+    for name in scope:
+        hit = countries.index[countries["ADMIN"] == name]
+        assert len(hit), f"unknown country {name}"
+        ids.extend(int(i) for i in hit)
+    label = scope[0] if len(scope) == 1 else " and ".join(scope)
+    return ids, label.replace("United States of America", "the USA")
+
+
+def fmt_count(x: float) -> str:
+    if abs(x) >= 1e9:
+        return f"{x / 1e9:.1f} billion"
+    if abs(x) >= 1e6:
+        return f"{x / 1e6:.1f} million"
+    return f"{round(x):,}"
 
 
 def pct_text(s):
     return f"{s * 100:.0f}%"
 
 
+def country_shares(cells: str, food: str | None, scope: list[int] | None, countries):
+    bc = json.loads((OUT / f"{cells}.bycountry.json").read_text())
+    kg = json.loads((OUT / "stats" / f"{food}.json").read_text())["kg"] if food else None
+    tot = {int(c): sum(v.values()) * (kg[int(c)] if kg else 1) for c, v in bc.items()}
+    if scope is not None:
+        tot = {c: v for c, v in tot.items() if c in scope}
+    s = sum(tot.values())
+    return [(countries.loc[c, "ADMIN"] if c > 0 else "?", v / s, v) for c, v in sorted(tot.items(), key=lambda x: -x[1]) if c > 0]
+
+
+def make_fact(p, latlng, w, scope_ids, scope_label, countries) -> str:
+    if p["mode"] == "net":
+        a = json.loads((OUT / f"{p['cells']}.bycountry.json").read_text())
+        b = json.loads((OUT / f"{p['vs']}.bycountry.json").read_text())
+        ratios = []
+        for c, v in a.items():
+            if int(c) == 0 or (scope_ids is not None and int(c) not in scope_ids):
+                continue
+            people = sum(b.get(c, {}).values())
+            if people > (2e5 if scope_ids else 2e6):
+                ratios.append((sum(v.values()) / people, countries.loc[int(c), "ADMIN"]))
+        ratios.sort(reverse=True)
+        (r1, n1), (r2, n2) = ratios[0], ratios[1]
+        return f"{n1} has {r1:.1f} {p['stat']} per person. {n2} has {r2:.1f}."
+    if p["mode"] == "target" and scope_ids is not None:
+        km = smallest_circle_km(latlng, w, p["target_pct"] / 100)
+        return f"The smallest circle we found holding {p['target_pct']}% of {scope_label}'s {p['stat']} has a radius of {fmt_count(km)} km."
+    shares = country_shares(p["cells"], p.get("food"), scope_ids, countries)
+    if scope_ids is not None:
+        n, _, v = shares[0]
+        return f"{n} recorded {fmt_count(v)} {p['stat']} since 2000." if p["cells"] == "points/earthquakes" else f"{n} leads with {fmt_count(v)}."
+    if p["cells"] == "population" and not p.get("food"):
+        return "Half of all people live in a circle about 4,000 km wide over Asia."
+    (n1, s1, _), (n2, s2, _), (n3, s3, _) = shares[:3]
+    what = "the world's land" if p["stat"] == "land" else f"the world's {p['stat']}"
+    return f"{n1} alone accounts for {pct_text(s1)} of {what}. {n2} and {n3} follow with {pct_text(s2)} and {pct_text(s3)}."
+
+
+def build_puzzle(pid, p, countries):
+    scope_ids, scope_label = resolve_scope(p.get("scope"), countries)
+    latlng, w = fine_points(p["cells"], p.get("food"), scope_ids)
+    best = {"pct": None, "net": None, "shape": None}
+    if p["mode"] == "budget":
+        if p["mechanic"] == "circle":
+            c, s_ = best_circle(latlng, w, p["radius_km"])
+            best = {"pct": round(100 * s_ / w.sum(), 2), "net": None, "shape": {"center": [round(c[0], 4), round(c[1], 4)], "radius_km": p["radius_km"]}}
+        else:
+            pins, pct = best_triangle(latlng, w, p["perimeter_km"])
+            best = {"pct": round(pct, 2), "net": None, "shape": {"pins": [[round(a, 4), round(b, 4)] for a, b in pins]}}
+    elif p["mode"] == "net":
+        lb, wb = fine_points(p["vs"], None, scope_ids)
+        ll = np.vstack([latlng, lb])
+        ww = np.r_[w, -wb]
+        c, s_ = best_circle(ll, ww, p["radius_km"], n_cand=5000, rank=np.r_[w, np.zeros(len(wb))])
+        best = {"pct": None, "net": round(s_), "shape": {"center": [round(c[0], 4), round(c[1], 4)], "radius_km": p["radius_km"]}}
+    view = p.get("view") or auto_view(latlng, w)
+    fact = make_fact(p, latlng, w, scope_ids, scope_label, countries).replace("United States of America", "the USA")
+    fact = fact[0].upper() + fact[1:]
+    if p["stat"] == "land":
+        fact = fact.replace("holding", "covering")
+    out = {
+        "id": pid,
+        "stat": p["stat"],
+        "prompt": p["prompt"],
+        "mechanic": p["mechanic"],
+        "mode": p["mode"],
+        "target_pct": p.get("target_pct"),
+        "radius_km": p.get("radius_km"),
+        "perimeter_km": p.get("perimeter_km"),
+        "best": best,
+        "cells": f"/data/{p['cells']}",
+        "stat_file": f"/data/stats/{p['food']}.json" if p.get("food") else None,
+        "scope": {"name": scope_label, "countries": scope_ids} if scope_ids is not None else None,
+        "vs": {"cells": f"/data/{p['vs']}", "label": p["vs_label"]} if p.get("vs") else None,
+        "view": {"center": view[:2], "zoom": view[2]},
+        "fact": fact,
+        "credit": p.get("credit", FOOD_CREDIT),
+    }
+    log(f"puzzle {pid} ({p['stat']}{', ' + scope_label if scope_label else ''}): best {best['pct'] or best['net']} | {out['fact']}")
+    return out
+
+
 def step_puzzles():
-    out = []
-    for i, p in enumerate(PUZZLES, start=1):
-        if not (OUT / f"{p['cells']}.index.json").exists():
-            log(f"puzzle {i} ({p['stat']}): data missing, skipped")
-            continue
-        latlng, w = fine_points(p["cells"], p["food"])
-        best = {"pct": None, "shape": None}
-        if p["mode"] == "budget":
-            if p["mechanic"] == "circle":
-                c, pct = best_circle(latlng, w, p["radius_km"])
-                best = {"pct": round(pct, 2), "shape": {"center": [round(c[0], 4), round(c[1], 4)], "radius_km": p["radius_km"]}}
-            else:
-                pins, pct = best_triangle(latlng, w, p["perimeter_km"])
-                best = {"pct": round(pct, 2), "shape": {"pins": [[round(a, 4), round(b, 4)] for a, b in pins]}}
-            log(f"puzzle {i} ({p['stat']}): best {best['pct']}%")
-        if p["food"]:
-            top = json.loads((OUT / "stats" / f"{p['food']}.json").read_text())["top"]
-        elif p["cells"].startswith("points/"):
-            top = json.loads((OUT / f"{p['cells']}.top.json").read_text())
-        else:
-            top = []
-        if top:
-            fact = f"{top[0]['name']} alone accounts for {pct_text(top[0]['share'])} of the world's {p['stat']}."
-            if len(top) > 2:
-                fact += f" {top[1]['name']} and {top[2]['name']} follow with {pct_text(top[1]['share'])} and {pct_text(top[2]['share'])}."
-        else:
-            fact = "Half of all people live in a circle about 4,000 km wide over Asia."
-        out.append(
-            {
-                "id": i,
-                "stat": p["stat"],
-                "prompt": p["prompt"],
-                "mechanic": p["mechanic"],
-                "mode": p["mode"],
-                "target_pct": p.get("target_pct"),
-                "radius_km": p.get("radius_km"),
-                "perimeter_km": p.get("perimeter_km"),
-                "best": best,
-                "cells": f"/data/{p['cells']}",
-                "stat_file": f"/data/stats/{p['food']}.json" if p["food"] else None,
-                "view": {"center": p["view"][:2], "zoom": p["view"][2]},
-                "fact": fact,
-                "credit": p.get("credit", FOOD_CREDIT),
-            }
-        )
+    countries = load_countries()
+    out = [build_puzzle(i, p, countries) for i, p in enumerate(PUZZLES, start=1) if (OUT / f"{p['cells']}.index.json").exists()]
+    assert len(out) == len(PUZZLES), "some puzzle data is missing"
     write_json(OUT / "puzzles.json", out)
 
 
-STEPS = {"land": step_land, "geo": step_geo, "population": step_population, "stats": step_stats, "points": step_points, "puzzles": step_puzzles}
+def step_countries():
+    """'Halve the country' puzzles: one circle puzzle per country with enough population cells."""
+    countries = load_countries()
+    idx, cells, pop, cidx = read_cells("population")
+    out, used = [], set()
+    for ci, r in countries.iterrows():
+        mask = cidx == ci
+        if mask.sum() < 25 or pop[mask].sum() < 2e5:
+            continue
+        code = r.ISO_A3_EH if isinstance(r.ISO_A3_EH, str) and r.ISO_A3_EH not in ("-99", "") else r.ADMIN[:3].upper()
+        if code in used:
+            continue
+        used.add(code)
+        latlng = np.array([h3.cell_to_latlng(int(c)) for c in cells[mask]])
+        w = pop[mask]
+        name = r.ADMIN.replace("United States of America", "the USA").replace("United Kingdom", "the UK")
+        km = smallest_circle_km(latlng, w, 0.5)
+        view = auto_view(latlng, w)
+        out.append(
+            {
+                "id": f"c-{code.lower()}",
+                "code": code,
+                "country": r.ADMIN,
+                "continent": r.CONTINENT,
+                "population": round(float(w.sum())),
+                "stat": "people",
+                "prompt": f"Draw a circle that holds exactly half of {name}'s people.",
+                "mechanic": "circle",
+                "mode": "target",
+                "target_pct": 50,
+                "radius_km": None,
+                "perimeter_km": None,
+                "best": {"pct": None, "net": None, "shape": None},
+                "cells": "/data/population",
+                "stat_file": None,
+                "scope": {"name": name, "countries": [int(ci)]},
+                "vs": None,
+                "view": {"center": view[:2], "zoom": view[2]},
+                "fact": f"The smallest circle we found holding half of {name}'s people has a radius of {fmt_count(km)} km.",
+                "credit": POP,
+            }
+        )
+    out.sort(key=lambda x: x["country"])
+    log(f"countries: {len(out)} 'halve the country' puzzles")
+    assert len(out) > 150, len(out)
+    write_json(OUT / "countries-mode.json", out)
+
+
+STEPS = {
+    "land": step_land,
+    "geo": step_geo,
+    "population": step_population,
+    "stats": step_stats,
+    "points": step_points,
+    "livestock": step_livestock,
+    "landcells": step_landcells,
+    "bycountry": step_bycountry,
+    "puzzles": step_puzzles,
+    "countries": step_countries,
+}
 
 if __name__ == "__main__":
     CACHE.mkdir(parents=True, exist_ok=True)

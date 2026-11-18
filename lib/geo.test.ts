@@ -114,10 +114,17 @@ describe("refined capture equals brute force", () => {
     ordered.push(...list);
   }
   const fine = parseRecords(encodeRecords(ordered));
+  // Per-country r3 totals of the raw values, as the pipeline writes them.
+  const byCountry: Record<string, Record<string, number>> = {};
+  for (const c of ordered) {
+    const p = cellToParent(c.id, 3);
+    byCountry[c.country] ??= {};
+    byCountry[c.country][p] = (byCountry[c.country][p] ?? 0) + c.value;
+  }
 
-  for (const withStat of [false, true]) {
-    it(`matches for 200 random shapes${withStat ? " (per-country stat)" : ""}`, () => {
-      const ds = makeDataset("x", index, withStat ? { kg, r3 } : null);
+  for (const [withStat, scoped] of [[false, false], [true, false], [false, true], [true, true]]) {
+    it(`matches for 200 random shapes${withStat ? " (per-country stat)" : ""}${scoped ? " (one country only)" : ""}`, () => {
+      const ds = makeDataset("x", index, withStat ? { kg, r3 } : null, scoped ? { countries: [1], byCountry } : null);
       // Fill the cache as if every group were fetched.
       let off = 0;
       for (const [p, list] of byParent) {
