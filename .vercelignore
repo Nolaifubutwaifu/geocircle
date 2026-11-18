@@ -1,0 +1,6 @@
+# raw downloads and pipeline cache stay local (hundreds of MB)
+data-raw
+scripts/pipeline/.cache
+test-results
+playwright-report
+public/maplibre
