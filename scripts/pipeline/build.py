@@ -30,6 +30,7 @@ from __future__ import annotations
 import gzip
 import json
 import math
+import re
 import os
 import shutil
 import sys
@@ -301,17 +302,18 @@ def load_countries() -> gpd.GeoDataFrame:
     return c
 
 
-def assign_country(lats: np.ndarray, lngs: np.ndarray, countries: gpd.GeoDataFrame) -> np.ndarray:
+def assign_country(lats: np.ndarray, lngs: np.ndarray, countries: gpd.GeoDataFrame, max_deg: float | None = None) -> np.ndarray:
+    """Country index per point: the country it is in, else the nearest one (within max_deg if given, else 0)."""
     pts = gpd.GeoDataFrame(geometry=gpd.points_from_xy(lngs, lats), crs=countries.crs)
     j = gpd.sjoin(pts, countries[["geometry"]], how="left", predicate="within")
     j = j[~j.index.duplicated()]
     out = j["index_right"].to_numpy(dtype=float, copy=True)
     miss = np.isnan(out)
     if miss.any():
-        near = gpd.sjoin_nearest(pts[miss], countries[["geometry"]], how="left")
+        near = gpd.sjoin_nearest(pts[miss], countries[["geometry"]], how="left", max_distance=max_deg)
         near = near[~near.index.duplicated()]
         out[miss] = near["index_right"].to_numpy()
-    return out.astype(np.uint16)
+    return np.nan_to_num(out, nan=0).astype(np.uint16)
 
 
 # ---------------------------------------------------------------- fine-cell files
@@ -403,6 +405,9 @@ FOOD = {
     "wine": "Wine",
     "potatoes": "Potatoes and products",
     "fish": "Fish, Seafood",
+    "tea": "Tea (including mate)",
+    "bananas": "Bananas",
+    "eggs": "Eggs",
 }
 
 
@@ -478,13 +483,13 @@ def step_stats():
 
 # ---------------------------------------------------------------- point datasets
 
-def points_to_cells(name: str, lats: np.ndarray, lngs: np.ndarray):
+def points_to_cells(name: str, lats: np.ndarray, lngs: np.ndarray, max_deg: float | None = None):
     r7 = np.array([h3.latlng_to_cell(float(a), float(b), 7) for a, b in zip(lats, lngs)], dtype=np.uint64)
     counts = pd.Series(1.0, index=r7).groupby(level=0).sum()
     cells = counts.index.to_numpy(dtype=np.uint64)
     latlng = np.array([h3.cell_to_latlng(int(c)) for c in cells])
     countries = load_countries()
-    cidx = assign_country(latlng[:, 0], latlng[:, 1], countries)
+    cidx = assign_country(latlng[:, 0], latlng[:, 1], countries, max_deg)
     write_cells(f"points/{name}", cells, counts.to_numpy(), cidx, 7)
     by_country = pd.Series(counts.to_numpy()).groupby(cidx).sum().sort_values(ascending=False) / counts.sum()
     top = [{"name": countries.loc[int(i), "ADMIN"], "share": round(float(s), 4)} for i, s in by_country.head(5).items() if i > 0]
@@ -496,7 +501,8 @@ def step_points():
     eq = pd.concat(frames)
     log(f"earthquakes: {len(eq):,} events M4.5+")
     assert len(eq) > 100_000, len(eq)
-    points_to_cells("earthquakes", eq["latitude"].to_numpy(), eq["longitude"].to_numpy())
+    # Offshore quakes belong to a country only within ~3° (about 300 km) of its coast; mid-ocean ridges stay unassigned.
+    points_to_cells("earthquakes", eq["latitude"].to_numpy(), eq["longitude"].to_numpy(), max_deg=3)
     mcd_path = RAW / "overture" / "mcdonalds.csv"
     if mcd_path.exists():
         mcd = pd.read_csv(mcd_path).dropna(subset=["lat", "lng"])
@@ -531,7 +537,8 @@ def raster_to_cells(path: Path, res: int):
 
 def step_livestock():
     countries = load_countries()
-    for name, lo, hi in (("cattle", 1.2e9, 2.0e9), ("sheep", 0.9e9, 1.6e9)):
+    # Expected world totals (FAO, 2015) as a sanity range.
+    for name, lo, hi in (("cattle", 1.2e9, 2.0e9), ("sheep", 0.9e9, 1.6e9), ("pigs", 0.7e9, 1.3e9), ("chickens", 15e9, 28e9), ("goats", 0.8e9, 1.4e9)):
         cells, vals = raster_to_cells(RAW / "glw" / f"{name}.tif", 5)
         log(f"{name}: {vals.sum() / 1e9:.2f} B head in {len(cells):,} r5 cells")
         assert lo < vals.sum() < hi, vals.sum()
@@ -753,6 +760,29 @@ PUZZLES = [
          prompt="Put down 3 pins. Your triangle must cover exactly half of Canada's land.", credit=LAND),
     dict(stat="cattle", cells="cattle", scope=["India"], mechanic="circle", mode="target", target_pct=25,
          prompt="Draw a circle that holds exactly 25% of India's cattle.", credit=GLW),
+    # --- batch 3
+    dict(stat="pigs", cells="pigs", mechanic="circle", mode="target", target_pct=25,
+         prompt="Draw a circle that holds exactly 25% of the world's pigs.", view=[60, 30, 1.4], credit=GLW),
+    dict(stat="chickens", cells="chickens", vs="population", vs_label="people", mechanic="circle", mode="net", radius_km=1000,
+         prompt="Chickens vs people. Your 1,000 km circle should catch the most chickens beyond the number of people.",
+         view=[0, 20, 1.3], credit=f"{GLW}; {POP}"),
+    dict(stat="goats", cells="goats", vs="population", vs_label="people", scope={"continent": "Africa"}, mechanic="circle",
+         mode="net", radius_km=800, prompt="Goats vs people in Africa. Your 800 km circle should catch the most goats beyond the number of people.",
+         credit=f"{GLW}; {POP}"),
+    dict(stat="tea drunk", cells="population", food="tea", mechanic="triangle", mode="budget", perimeter_km=5000,
+         prompt="Your triangle can be at most 5,000 km around. Catch as much of the world's tea drunk as you can.", view=[80, 25, 1.4]),
+    dict(stat="bananas eaten", cells="population", food="bananas", mechanic="circle", mode="target", target_pct=20,
+         prompt="Draw a circle that holds exactly 20% of the world's bananas eaten.", view=[20, 5, 1.3]),
+    dict(stat="beer drunk", cells="population", food="beer", scope=["Germany"], mechanic="circle", mode="target", target_pct=50,
+         prompt="Draw a circle that holds exactly half of Germany's beer drunk."),
+    dict(stat="coffee drunk", cells="population", food="coffee", scope=["Brazil"], mechanic="triangle", mode="target", target_pct=50,
+         prompt="Put down 3 pins. Your triangle must hold exactly half of Brazil's coffee drunk."),
+    dict(stat="earthquakes", cells="points/earthquakes", scope=["Chile"], mechanic="triangle", mode="target", target_pct=50,
+         prompt="Put down 3 pins. Your triangle must hold exactly half of Chile's earthquakes (M4.5+, since 2000).", credit=QUAKES),
+    dict(stat="mapped McDonald's", cells="points/mcdonalds", scope=["Japan"], mechanic="circle", mode="budget", radius_km=300,
+         prompt="You get a 300 km circle. Catch as many of Japan's mapped McDonald's as you can.", credit=MCD),
+    dict(stat="land", cells="land", scope=["Indonesia"], mechanic="triangle", mode="target", target_pct=50,
+         prompt="Put down 3 pins. Your triangle must cover exactly half of Indonesia's land.", credit=LAND),
 ]
 
 
@@ -813,7 +843,7 @@ def make_fact(p, latlng, w, scope_ids, scope_label, countries) -> str:
     shares = country_shares(p["cells"], p.get("food"), scope_ids, countries)
     if scope_ids is not None:
         n, _, v = shares[0]
-        return f"{n} recorded {fmt_count(v)} {p['stat']} since 2000." if p["cells"] == "points/earthquakes" else f"{n} leads with {fmt_count(v)}."
+        return f"{n} recorded {fmt_count(v)} {p['stat']} since 2000." if p["cells"] == "points/earthquakes" else f"{n} has {fmt_count(v)} {p['stat']}."
     if p["cells"] == "population" and not p.get("food"):
         return "Half of all people live in a circle about 4,000 km wide over Asia."
     (n1, s1, _), (n2, s2, _), (n3, s3, _) = shares[:3]
@@ -840,7 +870,7 @@ def build_puzzle(pid, p, countries):
         best = {"pct": None, "net": round(s_), "shape": {"center": [round(c[0], 4), round(c[1], 4)], "radius_km": p["radius_km"]}}
     view = p.get("view") or auto_view(latlng, w)
     fact = make_fact(p, latlng, w, scope_ids, scope_label, countries).replace("United States of America", "the USA")
-    fact = fact[0].upper() + fact[1:]
+    fact = re.sub(r"(^|\. )([a-z])", lambda m: m.group(1) + m.group(2).upper(), fact)  # "the USA" opening a sentence
     if p["stat"] == "land":
         fact = fact.replace("holding", "covering")
     out = {

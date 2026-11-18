@@ -42,7 +42,7 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
     const vs = puzzle.vs?.label ?? "people";
     const margin = a - b;
     const verdict = margin > 0 ? `${puzzle.stat} win by ${count(margin)}` : `${vs} win by ${count(-margin)}`;
-    detail = `Your circle holds ${count(a)} ${puzzle.stat} and ${count(b)} ${vs}: ${verdict}. The best spot we found wins by ${count(puzzle.best.net ?? 0)}, drawn dashed.`;
+    detail = `Your circle holds ${count(a)} ${puzzle.stat} and ${count(b)} ${vs}: ${verdict}. At the best spot we found, ${puzzle.stat} win by ${count(puzzle.best.net ?? 0)} (dashed circle).`;
   }
 
   async function share() {
