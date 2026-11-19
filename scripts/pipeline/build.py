@@ -15,7 +15,7 @@
 
 Reads raw downloads from data-raw/ and writes everything the game loads into public/data/.
 Run from the project root:  uv run scripts/pipeline/build.py [step ...]
-Steps: land, geo, population, stats, points, livestock, landcells, bycountry, puzzles, countries
+Steps: land, geo, population, stats, points, livestock, landcells, bycountry, apad, puzzles, countries, candidates, selftest
 (default: all, in that order).
 
 Formats (see lib/cells.ts and lib/land.ts for the readers):
@@ -1028,6 +1028,263 @@ def step_countries():
     write_json(OUT / "countries-mode.json", out)
 
 
+# ---------------------------------------------------------------- puzzle generator (PRD-puzzle-generator.md)
+
+GEN_OUT = ROOT / "scripts" / "pipeline" / "out"
+CURATED = ROOT / "puzzles" / "curated.json"
+
+FOOD_STAT = {"rice": "rice eaten", "beer": "beer drunk", "coffee": "coffee drunk", "chocolate": "chocolate eaten",
+             "wine": "wine drunk", "potatoes": "potatoes eaten", "fish": "fish eaten", "tea": "tea drunk",
+             "bananas": "bananas eaten", "eggs": "eggs eaten"}
+
+# One entry per dataset. licence_ok: True only if GAME-SPEC §4 marks it ✅ or Max checked the source page.
+DATASETS = [
+    dict(key="population", cells="population", stat="people", noun="count", credit=POP, licence_ok=True, baseline=True),
+    dict(key="land", cells="land", stat="land", noun="mass", credit=LAND, licence_ok=True, baseline=True),
+    *[dict(key=k, cells="population", food=k, stat=FOOD_STAT[k], noun="mass", credit=FOOD_CREDIT, licence_ok=True) for k in FOOD],
+    dict(key="earthquakes", cells="points/earthquakes", stat="earthquakes", noun="count", credit=QUAKES, licence_ok=True),
+    dict(key="mcdonalds", cells="points/mcdonalds", stat="mapped McDonald's", noun="count", credit=MCD, licence_ok=True),
+    # GLW is ⚠️ in GAME-SPEC §4: flip licence_ok once Max has checked each species file (PRD open question 1).
+    *[dict(key=k, cells=k, stat=k, noun="count", credit=GLW, licence_ok=False, vs=("population", "people"))
+      for k in ("cattle", "sheep", "pigs", "chickens", "goats")],
+    # APAD: CC BY 4.0 / ODC-By 1.0 (both allow commercial use), checked when puzzles 31 to 40 were added.
+    dict(key="brick-kilns", cells="points/brick-kilns", stat="brick kilns", noun="count", credit=APAD_BY, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="igp-coal", cells="points/igp-coal", stat="coal power capacity", noun="mass", credit=APAD_BY, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="igp-cement", cells="points/igp-cement", stat="cement plants", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="igp-paper", cells="points/igp-paper", stat="paper mills", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="igp-waste", cells="points/igp-waste", stat="plastic waste and dump sites", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="africa-power", cells="points/africa-power", stat="mapped gas and oil power capacity", noun="mass", credit=APAD_BY, licence_ok=True, coverage=["Africa"]),
+    dict(key="africa-waste", cells="points/africa-waste", stat="waste tonnage at mapped dump sites", noun="mass", credit=APAD_ODC, licence_ok=True, coverage=["Africa"]),
+]
+CONTINENTS = ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"]
+REGIONS = {"Indo-Gangetic Plain": IGP}
+TARGET_PCTS = [10, 20, 25, 30, 50]  # 50 only for country and region scopes
+RADII = [100, 150, 200, 250, 300, 400, 500, 750, 1000, 1500, 2000]
+PERIMETERS = [1000, 1500, 2000, 3000, 4000, 5000, 6000, 8000, 10000]
+GATE = dict(min_cells=200, max_top_share=0.20, min_surprise=0.25, budget_lo=20, budget_hi=60, budget_aim=35,
+            country_min_share=0.02)
+
+
+def tvd(a: np.ndarray, p: np.ndarray) -> float:
+    """Total variation distance between two weight vectors over the same cells: 0 = same layout, 1 = no overlap."""
+    return float(0.5 * np.abs(a / a.sum() - p / p.sum()).sum())
+
+
+def cheap_fails(w: np.ndarray, mode: str, target_pct: int | None, surprise: float, baseline: bool) -> list[str]:
+    """Checks that only need the scope's fine-cell weights (w > 0) and the surprise score."""
+    fails = []
+    top = w.max() / w.sum() if len(w) else 1.0
+    if len(w) < GATE["min_cells"]:
+        fails.append("cells")
+    if top >= GATE["max_top_share"] or (mode == "target" and top >= target_pct / 200):
+        fails.append("hotspot")
+    if not baseline and surprise < GATE["min_surprise"]:
+        fails.append("surprise")
+    return fails
+
+
+def best_r3_sums(ll_rad: np.ndarray, w: np.ndarray, radii_km, rank: np.ndarray | None = None, n_cand=600) -> dict:
+    """Best circle sum per radius, with r3 cell centres as both points and candidate centres. An estimate for picking sizes."""
+    from sklearn.neighbors import BallTree
+
+    nz = np.flatnonzero(w != 0)
+    pts, ww = ll_rad[nz], w[nz]
+    tree = BallTree(pts, metric="haversine")
+    cand = np.argsort(-(ww if rank is None else rank[nz]))[:n_cand]
+    return {r: float(max(ww[ix].sum() for ix in tree.query_radius(pts[cand], r / EARTH_R))) for r in radii_km}
+
+
+def pick_budget_radius(frac_by_radius: dict) -> int:
+    return min(frac_by_radius, key=lambda r: (abs(frac_by_radius[r] - GATE["budget_aim"] / 100), r))
+
+
+def nearest_perimeter(radius_km: int) -> int:
+    """An equilateral triangle with perimeter 8r has about the area of a circle of radius r."""
+    return min(PERIMETERS, key=lambda p: (abs(p - 8 * radius_km), p))
+
+
+def gen_key(dataset: str, scope: str, mechanic: str, mode: str, param) -> str:
+    return f"{dataset}|{scope}|{mechanic}|{mode}|{param}"
+
+
+def country_code(c: dict) -> str:
+    return c["iso3"] if c["iso3"] not in ("-99", "", None) else c["name"][:3].upper()
+
+
+def gen_scopes(countries: list[dict]) -> list[dict]:
+    """World, continents and named regions. Single countries are added per dataset."""
+    by_name = {c["name"]: c["i"] for c in countries}
+    out = [dict(code="world", name="the world", kind="world", ids=None)]
+    out += [dict(code=k, name=k, kind="continent", ids=[c["i"] for c in countries if c["continent"] == k]) for k in CONTINENTS]
+    out += [dict(code=k, name=v["label"], kind="region", ids=[by_name[n] for n in v["countries"]]) for k, v in REGIONS.items()]
+    return out
+
+
+def legacy_key(p: dict, countries: list[dict]) -> str:
+    d = next(d for d in DATASETS if d["cells"] == p["cells"] and d.get("food") == p.get("food"))
+    s = p.get("scope")
+    if s is None:
+        code = "world"
+    elif isinstance(s, dict) and "continent" in s:
+        code = s["continent"]
+    elif isinstance(s, dict):
+        code = next(k for k, v in REGIONS.items() if v["countries"] == s["countries"])
+    else:
+        iso = {c["name"]: country_code(c) for c in countries}
+        code = "+".join(iso[n] for n in s)
+    param = p.get("target_pct") or p.get("radius_km") or p.get("perimeter_km")
+    return gen_key(d["key"], code, p["mechanic"], p["mode"], param)
+
+
+def load_weights(d: dict, r3_vocab: dict, cache: dict):
+    """Fine-cell weights, country index and r3 parent id (into r3_vocab) for one dataset."""
+    if d["cells"] not in cache:
+        idx = json.loads((OUT / f"{d['cells']}.index.json").read_text())
+        rec = np.fromfile(OUT / f"{d['cells']}.bin", dtype=REC)
+        r3 = np.empty(len(rec), dtype=np.int64)
+        for p_str, (o, n, *_) in idx["groups"].items():
+            r3[o : o + n] = r3_vocab.setdefault(p_str, len(r3_vocab))
+        cache[d["cells"]] = (rec["value"].astype(np.float64), rec["country"].astype(np.int64), r3)
+    w, cidx, r3 = cache[d["cells"]]
+    if d.get("food"):
+        w = w * np.array(json.loads((OUT / "stats" / f"{d['food']}.json").read_text())["kg"])[cidx]
+    return w, cidx, r3
+
+
+def step_candidates():
+    countries = json.loads((OUT / "countries.json").read_text())
+    by_i = {c["i"]: c for c in countries}
+    base_scopes = gen_scopes(countries)
+    scope_by_code = {s["code"]: s for s in base_scopes}
+    vocab, cache = {}, {}
+    data = {d["key"]: load_weights(d, vocab, cache) for d in DATASETS if d["licence_ok"]}
+    ll_rad = np.radians([h3.cell_to_latlng(h3.str_to_int(s)) for s in vocab])  # vocab keeps insertion order
+    V = len(vocab)
+
+    # Approved puzzles (legacy + curated) block duplicates; rejected keys stay rejected.
+    used, approved_n = set(), defaultdict(int)
+    curated = json.loads(CURATED.read_text()) if CURATED.exists() else {}
+    keys = [legacy_key(p, countries) for p in PUZZLES] + [k for k, v in curated.items() if v["status"] == "approved"]
+    for k in keys:
+        ds, sc, mech, mode, _ = k.split("|")
+        used.add((ds, sc, mech, mode))
+        approved_n[ds] += 1
+    rejected = {k for k, v in curated.items() if v["status"] == "rejected"}
+
+    def in_scope(cidx, scope):
+        return np.ones(len(cidx), bool) if scope["ids"] is None else np.isin(cidx, scope["ids"])
+
+    def covered(d, scope):
+        cov = d.get("coverage")
+        if cov is None or scope["code"] in cov:
+            return True
+        return scope["kind"] == "country" and any(scope["ids"][0] in scope_by_code[c]["ids"] for c in cov)
+
+    pw, pc, pr = data["population"]
+    out = []
+    for d in DATASETS:
+        if not d["licence_ok"]:
+            continue
+        w, cidx, r3 = data[d["key"]]
+        pos = w > 0
+        tot = np.bincount(cidx[pos], weights=w[pos])
+        cnt = np.bincount(cidx[pos])
+        countries_here = [
+            dict(code=country_code(by_i[i]), kind="country", ids=[int(i)],
+                 name=by_i[i]["name"].replace("United States of America", "the USA").replace("United Kingdom", "the UK"))
+            for i in np.argsort(-tot) if i > 0 and cnt[i] >= GATE["min_cells"] and tot[i] >= GATE["country_min_share"] * w[pos].sum()
+        ]
+        for scope in base_scopes + countries_here:
+            if not covered(d, scope):
+                continue
+            m = in_scope(cidx, scope) & pos
+            if not m.any():
+                continue
+            ws = w[m]
+            a = np.bincount(r3[m], weights=ws, minlength=V)
+            pm = in_scope(pc, scope) & (pw > 0)
+            p = np.bincount(pr[pm], weights=pw[pm], minlength=V)
+            surprise = tvd(a, p)
+            base = dict(dataset=d["key"], stat=d["stat"], scope=scope["code"], scope_name=scope["name"], scope_kind=scope["kind"],
+                        countries=scope["ids"])
+            measured = dict(cells=len(ws), top_cell_share=round(float(ws.max() / ws.sum()), 4), surprise=round(surprise, 3))
+
+            variants = []  # (mechanic, mode, param name, param, best_pct, best_net)
+            for mech in ("circle", "triangle"):
+                for pct in TARGET_PCTS:
+                    if pct < 50 or scope["kind"] in ("country", "region"):
+                        variants.append((mech, "target", "target_pct", pct, None, None))
+            fracs = {r: s / ws.sum() for r, s in best_r3_sums(ll_rad, a, RADII).items()}
+            r = pick_budget_radius(fracs)
+            variants.append(("circle", "budget", "radius_km", r, round(100 * fracs[r], 1), None))
+            variants.append(("triangle", "budget", "perimeter_km", nearest_perimeter(r), None, None))
+            if d.get("vs"):
+                nets = best_r3_sums(ll_rad, a - p, RADII, rank=a)  # v1: vs is always population
+                rn = max(RADII, key=lambda x: (nets[x], -x))
+                variants.append(("circle", "net", "radius_km", rn, None, round(nets[rn])))
+
+            for mech, mode, pname, param, best_pct, best_net in variants:
+                key = gen_key(d["key"], scope["code"], mech, mode, param)
+                fails = cheap_fails(ws, mode, param if mode == "target" else None, surprise, d.get("baseline", False))
+                if best_pct is not None and not GATE["budget_lo"] <= best_pct <= GATE["budget_hi"]:
+                    fails.append("budget_range")
+                if best_net is not None and best_net <= 0:
+                    fails.append("net_positive")
+                if (d["key"], scope["code"], mech, mode) in used:
+                    fails.append("duplicate")
+                if key in rejected:
+                    fails.append("rejected")
+                out.append(dict(key=key, mechanic=mech, mode=mode, **{pname: param}, **base,
+                                checks=dict(**measured, best_pct=best_pct, best_net=best_net, passed=not fails, failed=fails)))
+
+    out.sort(key=lambda c: (not c["checks"]["passed"], -c["checks"]["surprise"], approved_n[c["dataset"]], c["key"]))
+    for c in out:
+        c["rank"] = c["checks"]["surprise"]
+    write_json(GEN_OUT / "candidates.json", out)
+    passed = [c for c in out if c["checks"]["passed"]]
+    log(f"candidates: {len(out):,} raw, {len(passed):,} pass the cheap checks")
+    log("candidates: failures " + ", ".join(f"{k} {v}" for k, v in sorted(
+        pd.Series([f for c in out for f in c["checks"]["failed"]]).value_counts().items())))
+    log("candidates: passing per dataset " + ", ".join(f"{k} {v}" for k, v in pd.Series([c["dataset"] for c in passed]).value_counts().items()))
+    for c in passed[:15]:
+        log(f"  {c['rank']:.2f}  {c['key']}")
+
+
+def step_selftest():
+    """Assert-based checks for the generator (PRD §5.11, Python part)."""
+    p = np.array([5.0, 3, 0, 2])
+    assert tvd(p, p) == 0
+    assert tvd(p, p * 7) < 1e-12  # scale-free
+    assert abs(tvd(np.array([1.0, 0]), np.array([0.0, 1])) - 1) < 1e-12
+    flat = np.ones(400)
+    assert cheap_fails(flat, "target", 10, 0.5, False) == []
+    assert cheap_fails(flat[:100], "target", 10, 0.5, False) == ["cells"]
+    spike = np.r_[flat, 30.0]  # one cell holds ~7%: fine for budget, too much for a 10% target
+    assert cheap_fails(spike, "budget", None, 0.5, False) == []
+    assert cheap_fails(spike, "target", 10, 0.5, False) == ["hotspot"]
+    assert cheap_fails(flat, "target", 10, 0.1, False) == ["surprise"]
+    assert cheap_fails(flat, "target", 10, 0.1, True) == []
+    # Toy r3 circles: two heavy points 50 km apart and one far away.
+    ll = np.radians([[0, 0], [0, 0.45], [40, 40]])
+    s = best_r3_sums(ll, np.array([1.0, 1, 5]), [10, 100])
+    assert s == {10: 5.0, 100: 5.0}
+    s = best_r3_sums(ll, np.array([3.0, 3, 5]), [10, 100])
+    assert s == {10: 5.0, 100: 6.0}
+    assert best_r3_sums(ll, np.array([3.0, -4, 1]), [100], rank=np.array([3.0, 0, 1])) == {100: 1.0}
+    assert pick_budget_radius({100: 0.1, 200: 0.3, 300: 0.4}) == 200  # tie 0.05 vs 0.05 goes to the smaller radius
+    assert nearest_perimeter(500) == 4000 and nearest_perimeter(2000) == 10000
+    # Keys: deterministic, and every legacy puzzle maps to a unique one.
+    countries = json.loads((OUT / "countries.json").read_text())
+    keys = [legacy_key(p, countries) for p in PUZZLES]
+    assert keys == [legacy_key(p, countries) for p in PUZZLES]
+    assert len(set(keys)) == len(keys), "two legacy puzzles share a key"
+    assert keys[26] == "coffee|BRA|triangle|target|50", keys[26]
+    assert keys[13] == "sheep|AUS+NZL|circle|net|500", keys[13]
+    assert keys[30] == "brick-kilns|Indo-Gangetic Plain|circle|target|25", keys[30]
+    assert keys[16] == "wine|Europe|triangle|target|30", keys[16]
+    log("selftest: ok")
+
+
 STEPS = {
     "land": step_land,
     "geo": step_geo,
@@ -1040,6 +1297,8 @@ STEPS = {
     "apad": step_apad,
     "puzzles": step_puzzles,
     "countries": step_countries,
+    "candidates": step_candidates,
+    "selftest": step_selftest,
 }
 
 if __name__ == "__main__":

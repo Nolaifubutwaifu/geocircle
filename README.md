@@ -19,8 +19,10 @@ Everything the game loads lives in `public/data/` and is built by one script:
 
 ```bash
 pnpm data              # all steps
-pnpm data stats puzzles  # just some steps: land, geo, population, stats, points, livestock, landcells, bycountry, apad, puzzles, countries
+pnpm data stats puzzles  # just some steps: land, geo, population, stats, points, livestock, landcells, bycountry, apad, puzzles, countries, candidates, selftest
 ```
+
+**Puzzle generator** ([PRD](PRD-puzzle-generator.md)): `pnpm data candidates` writes `scripts/pipeline/out/candidates.json` (git-ignored): every dataset × scope × mechanic × mode from the `DATASETS` registry, with the cheap quality checks. `pnpm data selftest` runs its assert checks. To add a dataset: run its pipeline step, then add one `DATASETS` entry.
 
 It reads raw downloads from `data-raw/` (not in git). Sources and download URLs:
 
