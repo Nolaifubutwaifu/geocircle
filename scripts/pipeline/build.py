@@ -483,9 +483,9 @@ def step_stats():
 
 # ---------------------------------------------------------------- point datasets
 
-def points_to_cells(name: str, lats: np.ndarray, lngs: np.ndarray, max_deg: float | None = None):
+def points_to_cells(name: str, lats: np.ndarray, lngs: np.ndarray, max_deg: float | None = None, weights: np.ndarray | None = None):
     r7 = np.array([h3.latlng_to_cell(float(a), float(b), 7) for a, b in zip(lats, lngs)], dtype=np.uint64)
-    counts = pd.Series(1.0, index=r7).groupby(level=0).sum()
+    counts = pd.Series(1.0 if weights is None else np.asarray(weights, dtype=float), index=r7).groupby(level=0).sum()
     cells = counts.index.to_numpy(dtype=np.uint64)
     latlng = np.array([h3.cell_to_latlng(int(c)) for c in cells])
     countries = load_countries()
@@ -572,6 +572,46 @@ def step_bycountry():
     for name in ("population", "points/earthquakes", "points/mcdonalds"):
         if (OUT / f"{name}.index.json").exists():
             write_bycountry(name)
+
+
+# ---------------------------------------------------------------- APAD industrial asset data (AWS Open Data)
+
+# name, file in data-raw/apad, weight column (None = count each site), what one unit of weight is
+APAD = [
+    ("brick-kilns", "Brick_Kilns_Brick_kilns_biomass.csv", None, "kilns"),
+    ("igp-coal", "asset_igp_csvs_coal_plants_main.csv", "capacity_power", "MW"),
+    ("igp-cement", "asset_igp_csvs_cement_plants_main.csv", None, "plants"),  # capacity missing for 42%
+    ("igp-paper", "asset_igp_csvs_paper_pulp_main.csv", None, "mills"),  # capacity missing for 78%
+    ("igp-waste", "asset_igp_csvs_waste_main.csv", None, "sites"),
+    ("africa-power", "africa_assets_csvs_Power_Generation.csv", "capacity_power", "MW"),
+    ("africa-waste", "africa_assets_csvs_waste_Africa_main.csv", "capacity_tonnes", "tonnes"),
+]
+
+
+def load_apad(file: str) -> pd.DataFrame:
+    d = pd.read_csv(RAW / "apad" / file, encoding="utf-8-sig", encoding_errors="replace")
+    d.columns = [c.strip().replace("\ufffd", "") for c in d.columns]
+    d["lat"] = pd.to_numeric(d["lat"], errors="coerce")
+    d["lon"] = pd.to_numeric(d["lon"], errors="coerce")
+    return d[d.lat.between(-60, 60) & d.lon.between(-180, 180)].reset_index(drop=True)
+
+
+def step_apad():
+    for name, file, wcol, unit in APAD:
+        d = load_apad(file)
+        if wcol:
+            w = pd.to_numeric(d[wcol], errors="coerce")
+            w = w.where(w > 0)
+            log(f"apad {name}: {w.isna().mean():.0%} missing {wcol}, filled with the median")
+            w = w.fillna(w.median()).to_numpy()
+        else:
+            w = np.ones(len(d))
+        points_to_cells(name, d.lat.to_numpy(), d.lon.to_numpy(), weights=w)
+        big = int(np.argmax(w))
+        nm = re.sub(r"[*]+", "", str(d.loc[big, "name"])).strip() if "name" in d and isinstance(d.loc[big, "name"], str) else ""
+        biggest = f"The biggest, {nm}, has {fmt_count(w[big])} {unit}." if wcol and nm else ""
+        write_json(OUT / "points" / f"{name}.meta.json", {"sites": len(d), "total": float(w.sum()), "unit": unit, "biggest": biggest})
+        log(f"apad {name}: {len(d):,} sites, total {fmt_count(w.sum())} {unit}")
 
 
 # ---------------------------------------------------------------- best possible shapes
@@ -663,7 +703,8 @@ def best_triangle(latlng, w, budget_km, seed=1):
     heavy = np.argsort(-cw)[:300]
     best_p, best_s = None, -1.0
     for n in range(300):
-        c = cl[heavy[n % 40]] if n < 120 else cl[rng.choice(heavy)]  # every top-40 cell gets 3 tries first
+        top_n = min(40, len(heavy))
+        c = cl[heavy[n % top_n]] if n < 3 * top_n else cl[rng.choice(heavy)]  # every top cell gets 3 tries first
         r = budget_km / 3 / 1.732 / 111 * rng.uniform(0.7, 1.0)  # equilateral triangle radius in degrees, roughly
         ang = rng.uniform(0, 2 * np.pi) + np.array([0, 2.094, 4.189])
         p = [[c[0] + r * np.sin(a), c[1] + r * np.cos(a) / max(0.2, np.cos(np.radians(c[0])))] for a in ang]
@@ -713,6 +754,11 @@ GLW = "FAO Gridded Livestock of the World 2015 (CC0)"
 LAND = "Natural Earth (public domain)"
 QUAKES = "USGS Earthquake Catalog (public domain)"
 MCD = "Overture Maps Places (CDLA Permissive 2.0)"
+
+APAD_BY = "APAD Asset Data via AWS Open Data (CC BY 4.0)"
+APAD_ODC = "APAD Asset Data via AWS Open Data (ODC-By 1.0)"
+IGP = {"countries": ["India", "Pakistan", "Bangladesh"], "label": "the Indo-Gangetic Plain"}
+AFRICA_APAD = {"continent": "Africa", "label": "Africa"}
 
 # scope: list of Natural Earth country names, or {"continent": "Europe"}. vs: second dataset for "net" puzzles.
 PUZZLES = [
@@ -783,15 +829,44 @@ PUZZLES = [
          prompt="You get a 300 km circle. Catch as many of Japan's mapped McDonald's as you can.", credit=MCD),
     dict(stat="land", cells="land", scope=["Indonesia"], mechanic="triangle", mode="target", target_pct=50,
          prompt="Put down 3 pins. Your triangle must cover exactly half of Indonesia's land.", credit=LAND),
+    # --- batch 4: APAD industrial asset data (AWS Open Data)
+    dict(stat="brick kilns", cells="points/brick-kilns", scope=IGP, mechanic="circle", mode="target", target_pct=25,
+         prompt="Draw a circle that holds exactly 25% of the brick kilns mapped by satellite across India, Pakistan and Bangladesh.",
+         credit=APAD_BY),
+    dict(stat="brick kilns", cells="points/brick-kilns", scope=IGP, mechanic="circle", mode="budget", radius_km=150,
+         prompt="You get a 150 km circle. Catch as many of South Asia's mapped brick kilns as you can.", credit=APAD_BY),
+    dict(stat="brick kilns", cells="points/brick-kilns", scope=["Bangladesh"], mechanic="triangle", mode="target", target_pct=50,
+         prompt="Put down 3 pins. Your triangle must hold exactly half of Bangladesh's mapped brick kilns.", credit=APAD_BY),
+    dict(stat="brick kilns", cells="points/brick-kilns", scope=["Pakistan"], mechanic="circle", mode="target", target_pct=50,
+         prompt="Draw a circle that holds exactly half of Pakistan's mapped brick kilns.", credit=APAD_BY),
+    dict(stat="coal power capacity", cells="points/igp-coal", scope=IGP, mechanic="circle", mode="target", target_pct=30,
+         prompt="Draw a circle that holds exactly 30% of the coal power capacity on the Indo-Gangetic Plain.", fact_biggest=True,
+         credit=APAD_BY),
+    dict(stat="cement plants", cells="points/igp-cement", scope=IGP, mechanic="triangle", mode="target", target_pct=25,
+         prompt="Put down 3 pins. Your triangle must hold exactly 25% of the Indo-Gangetic Plain's cement plants.", credit=APAD_ODC),
+    dict(stat="paper mills", cells="points/igp-paper", scope=IGP, mechanic="circle", mode="budget", radius_km=250,
+         prompt="You get a 250 km circle. Catch as many of the Indo-Gangetic Plain's paper mills as you can.", credit=APAD_ODC),
+    dict(stat="plastic waste and dump sites", cells="points/igp-waste", scope=IGP, mechanic="circle", mode="target", target_pct=30,
+         prompt="Draw a circle that holds exactly 30% of the plastic waste and dump sites mapped on the Indo-Gangetic Plain.",
+         credit=APAD_ODC),
+    dict(stat="mapped gas and oil power capacity", cells="points/africa-power", scope=AFRICA_APAD, mechanic="triangle", mode="budget",
+         perimeter_km=3000, prompt="Your triangle can be at most 3,000 km around. Catch as much of the mapped gas and oil power capacity in Africa as you can.",
+         fact_biggest=True, credit=APAD_BY),
+    dict(stat="waste tonnage at mapped dump sites", cells="points/africa-waste", scope=AFRICA_APAD, mechanic="circle", mode="target", target_pct=50,
+         prompt="Draw a circle that holds exactly half of the waste tonnage at Africa's mapped dump sites.", fact_biggest=True,
+         credit=APAD_ODC),
 ]
 
 
 def resolve_scope(scope, countries) -> tuple[list[int] | None, str | None]:
     if scope is None:
         return None, None
-    if isinstance(scope, dict):
+    if isinstance(scope, dict) and "continent" in scope:
         ids = [int(i) for i in countries.index[countries["CONTINENT"] == scope["continent"]]]
-        return ids, scope["continent"]
+        return ids, scope.get("label", scope["continent"])
+    if isinstance(scope, dict):
+        ids, _ = resolve_scope(scope["countries"], countries)
+        return ids, scope["label"]
     ids = []
     for name in scope:
         hit = countries.index[countries["ADMIN"] == name]
@@ -824,6 +899,9 @@ def country_shares(cells: str, food: str | None, scope: list[int] | None, countr
 
 
 def make_fact(p, latlng, w, scope_ids, scope_label, countries) -> str:
+    meta = OUT / f"{p['cells']}.meta.json"
+    if p.get("fact_biggest") and meta.exists() and json.loads(meta.read_text())["biggest"]:
+        return json.loads(meta.read_text())["biggest"]
     if p["mode"] == "net":
         a = json.loads((OUT / f"{p['cells']}.bycountry.json").read_text())
         b = json.loads((OUT / f"{p['vs']}.bycountry.json").read_text())
@@ -959,6 +1037,7 @@ STEPS = {
     "livestock": step_livestock,
     "landcells": step_landcells,
     "bycountry": step_bycountry,
+    "apad": step_apad,
     "puzzles": step_puzzles,
     "countries": step_countries,
 }
