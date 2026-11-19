@@ -15,8 +15,9 @@
 
 Reads raw downloads from data-raw/ and writes everything the game loads into public/data/.
 Run from the project root:  uv run scripts/pipeline/build.py [step ...]
-Steps: land, geo, population, stats, points, livestock, landcells, bycountry, apad, puzzles, publish, countries, candidates, selftest
-(default: all, in that order). publish only re-merges puzzles/curated.json into puzzles.json.
+Steps: land, geo, population, stats, points, livestock, landcells, bycountry, apad, puzzles, publish, schedule, countries, candidates, selftest
+(default: all, in that order). publish only re-merges puzzles/curated.json into puzzles.json;
+schedule fills public/data/schedule.json up to 60 days ahead.
 
 Formats (see lib/cells.ts and lib/land.ts for the readers):
   fine-cell file  <name>.bin           16-byte records: u32 lo, u32 hi, f32 value, u16 country, u16 0
@@ -27,6 +28,7 @@ Formats (see lib/cells.ts and lib/land.ts for the readers):
 """
 from __future__ import annotations
 
+import datetime as dt
 import gzip
 import hashlib
 import json
@@ -1015,6 +1017,84 @@ def step_publish():
     write_puzzles(legacy)
 
 
+LAUNCH_DAY = "2026-11-18"  # same as lib/puzzles.ts; 18 Nov to 27 Dec are puzzles 1 to 40
+SCHEDULE_AHEAD = 60
+WEEKDAY_LEVEL = ["easy", "easy", "medium", "medium", "medium", "hard", "hard"]  # Monday first
+LEVELS = ["easy", "medium", "hard"]
+
+
+def puzzle_dataset(p):
+    """Dataset name from the files a puzzle reads: works for legacy and generated puzzles alike."""
+    return Path(p.get("stat_file") or p["cells"]).name.removesuffix(".json")
+
+
+def fill_schedule(schedule, puzzles, today, ahead=SCHEDULE_AHEAD):
+    """Fills empty dates from today to today + ahead (PRD §5.9). Never changes a date already set.
+
+    Picks, per date, the puzzle that breaks the fewest rules in priority order:
+    weekday difficulty (distance to the wanted level), dataset within 7 days, mechanic 3 days running,
+    no budget/net puzzle in 7 days. Ties go to the lowest ID (approved first)."""
+    by_id = {p["id"]: p for p in puzzles}
+    out = dict(schedule)
+    launch = dt.date.fromisoformat(LAUNCH_DAY)
+    for i in range(len(PUZZLES)):
+        out.setdefault((launch + dt.timedelta(i)).isoformat(), i + 1)
+    used = set(out.values())
+    pool = [p for p in puzzles if isinstance(p["id"], int) and p["id"] not in used]
+    at = lambda d: by_id.get(out.get(d.isoformat()))  # noqa: E731
+
+    for k in range(ahead + 1):
+        d = today + dt.timedelta(k)
+        if d.isoformat() in out or not pool:
+            continue
+        want = LEVELS.index(WEEKDAY_LEVEL[d.weekday()])
+        near = [at(d + dt.timedelta(j)) for j in range(-6, 7) if j]  # shortcut: looks both ways for datasets only
+        recent_ds = {puzzle_dataset(q) for q in near if q}
+        prev = [at(d - dt.timedelta(j)) for j in (1, 2)]
+        run_mech = prev[0]["mechanic"] if all(prev) and prev[0]["mechanic"] == prev[1]["mechanic"] else None
+        week = [at(d - dt.timedelta(j)) for j in range(1, 7)]
+        need_size = not any(q and q["mode"] != "target" for q in week)
+
+        def cost(p):
+            return (
+                abs(LEVELS.index(p.get("difficulty") or "medium") - want),
+                puzzle_dataset(p) in recent_ds,
+                p["mechanic"] == run_mech,
+                need_size and p["mode"] == "target",
+                p["id"],
+            )
+
+        pick = min(pool, key=cost)
+        out[d.isoformat()] = pick["id"]
+        pool.remove(pick)
+    return dict(sorted(out.items()))
+
+
+def days_ahead(schedule, today):
+    """Consecutive scheduled days starting today."""
+    n = 0
+    while (today + dt.timedelta(n)).isoformat() in schedule:
+        n += 1
+    return n
+
+
+def step_schedule():
+    path = OUT / "schedule.json"
+    puzzles = json.loads((OUT / "puzzles.json").read_text())
+    old = json.loads(path.read_text()) if path.exists() else {}
+    ids = {p["id"] for p in puzzles}
+    missing = sorted({v for v in old.values() if v not in ids})
+    assert not missing, f"schedule.json uses unknown puzzle ids {missing}, run: pnpm data publish"
+    twice = sorted({v for v in old.values() if list(old.values()).count(v) > 1})
+    if twice:
+        log(f"warning: puzzles scheduled more than once: {twice}")
+    today = dt.date.today()
+    new = fill_schedule(old, puzzles, today)
+    path.write_text(json.dumps(new, indent=0) + "\n")  # one date per line, easy to edit by hand
+    unscheduled = sum(1 for p in puzzles if p["id"] not in set(new.values()))
+    log(f"schedule: {len(new) - len(old)} days added, {days_ahead(new, today)} days scheduled ahead (target 60), {unscheduled} approved puzzles left")
+
+
 def step_countries():
     """'Halve the country' puzzles: one circle puzzle per country with enough population cells."""
     countries = load_countries()
@@ -1680,6 +1760,38 @@ def step_selftest():
         except AssertionError as e:
             assert "accepted" not in str(e)
 
+    # schedule (PRD §5.11): rules on a fake pool of 10 datasets x 3 levels x 2 mechanics x 2 modes
+    legacy = [{"id": i, "cells": f"/data/legacy{i % 5}", "stat_file": None, "mechanic": "circle", "mode": "target"} for i in range(1, len(PUZZLES) + 1)]
+    pool, pid = [], len(PUZZLES) + 1
+    for ds in range(10):
+        for lv in LEVELS:
+            for mech in ("circle", "triangle"):
+                for mode in ("target", "budget"):
+                    pool.append({"id": pid, "cells": f"/data/d{ds}", "stat_file": None, "difficulty": lv, "mechanic": mech, "mode": mode})
+                    pid += 1
+    first = dt.date(2026, 12, 28)
+    fixed_swap = {"2026-11-20": 4, "2026-11-21": 3, "2027-01-05": pool[-1]["id"]}  # hand edits the script must keep
+    sched = fill_schedule(fixed_swap, legacy + pool, first, ahead=59)
+    launch = dt.date.fromisoformat(LAUNCH_DAY)
+    assert sched["2026-11-20"] == 4 and sched["2026-11-21"] == 3 and sched["2027-01-05"] == pool[-1]["id"]
+    assert all(sched[(launch + dt.timedelta(i)).isoformat()] == i + 1 for i in range(len(PUZZLES)) if i not in (2, 3))
+    assert days_ahead(sched, first) == 60 and days_ahead(sched, first + dt.timedelta(60)) == 0
+    vals = list(sched.values())
+    assert len(vals) == len(set(vals)), "each puzzle at most once"
+    byid = {q["id"]: q for q in legacy + pool}
+    days = [first + dt.timedelta(k) for k in range(60)]
+    seq = [byid[sched[d.isoformat()]] for d in days]
+    for k, (d, q) in enumerate(zip(days, seq)):
+        if d.isoformat() != "2027-01-05":
+            assert q["difficulty"] == WEEKDAY_LEVEL[d.weekday()], (d, q)
+        assert all(puzzle_dataset(q) != puzzle_dataset(o) for o in seq[max(0, k - 6):k]), f"dataset repeat {d}"
+        assert k < 2 or not (q["mechanic"] == seq[k - 1]["mechanic"] == seq[k - 2]["mechanic"]), f"mechanic x3 {d}"
+        assert k < 6 or any(o["mode"] != "target" for o in seq[k - 6:k + 1]), f"no budget/net in 7 days {d}"
+    # nearest level when the wanted one runs out
+    only_hard = [q for q in pool if q["difficulty"] == "hard"][:3]
+    s2 = fill_schedule({}, legacy + only_hard, first, ahead=0)  # Monday wants easy
+    assert byid[s2[first.isoformat()]]["difficulty"] == "hard"
+
     log("selftest: ok")
 
 
@@ -1695,6 +1807,7 @@ STEPS = {
     "apad": step_apad,
     "puzzles": step_puzzles,
     "publish": step_publish,
+    "schedule": step_schedule,
     "countries": step_countries,
     "candidates": step_candidates,
     "selftest": step_selftest,

@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { pickRandom, puzzleHref, puzzleLabel, whose, type Puzzle } from "@/lib/puzzles";
+import { pickRandom, puzzleHref, puzzleLabel, released, whose, type Puzzle, type Schedule } from "@/lib/puzzles";
 import { loadResults, type Result } from "@/lib/storage";
 
 function useCountUp(target: number, ms = 1400) {
@@ -40,8 +40,13 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
   function randomPuzzle() {
     startJump(async () => {
       try {
-        const pool: Puzzle[] = await fetch(typeof puzzle.id === "number" ? "/data/puzzles.json" : "/data/countries-mode.json").then((r) => r.json());
-        const next = pickRandom(pool, puzzle.id, new Set(Object.keys(loadResults())));
+        const daily = typeof puzzle.id === "number";
+        const [pool, schedule]: [Puzzle[], Schedule] = await Promise.all([
+          fetch(daily ? "/data/puzzles.json" : "/data/countries-mode.json").then((r) => r.json()),
+          daily ? fetch("/data/schedule.json").then((r) => r.json()) : {},
+        ]);
+        // Never jump to a future daily puzzle.
+        const next = pickRandom(released(pool, schedule), puzzle.id, new Set(Object.keys(loadResults())));
         if (next) router.push(puzzleHref(next));
       } catch {
         /* offline: stay on this puzzle */

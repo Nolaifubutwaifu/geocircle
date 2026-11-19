@@ -41,8 +41,35 @@ export function dayIndex(now = new Date()): number {
   return Math.max(0, Math.round((local.getTime() - new Date(y, m - 1, d).getTime()) / 86_400_000));
 }
 
-export function todaysPuzzle(puzzles: Puzzle[], now = new Date()): Puzzle {
-  return puzzles[dayIndex(now) % puzzles.length];
+/** Local date to puzzle ID, from public/data/schedule.json (PRD §5.9). */
+export type Schedule = Record<string, number>;
+
+/** "2026-11-19" in the player's time zone. */
+export const localDate = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+/** The scheduled puzzle for today; cycles through all puzzles if the date isn't scheduled, so the site never breaks. */
+export function todaysPuzzle(puzzles: Puzzle[], schedule: Schedule = {}, now = new Date()): Puzzle {
+  const id = schedule[localDate(now)];
+  return puzzles.find((p) => p.id === id) ?? puzzles[dayIndex(now) % puzzles.length];
+}
+
+/** Puzzles a player may open: scheduled on or before today, or never scheduled. Future dailies stay hidden. */
+export function released(puzzles: Puzzle[], schedule: Schedule, now = new Date()): Puzzle[] {
+  const today = localDate(now);
+  const future = new Set(Object.entries(schedule).filter(([d]) => d > today).map(([, id]) => id));
+  return puzzles.filter((p) => !future.has(p.id as number));
+}
+
+/** Puzzles scheduled on or before today, newest first, each once. */
+export function archive(puzzles: Puzzle[], schedule: Schedule, now = new Date()): Puzzle[] {
+  const today = localDate(now);
+  const byId = new Map(puzzles.map((p) => [p.id, p]));
+  const ids = Object.entries(schedule)
+    .filter(([d]) => d <= today)
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([, id]) => id);
+  return [...new Set(ids)].flatMap((id) => byId.get(id) ?? []);
 }
 
 export function goalText(p: Puzzle): string {

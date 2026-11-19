@@ -1,5 +1,5 @@
 // Review decisions stored in puzzles/curated.json (PRD §6). Used by the dev-only review page.
-import type { Puzzle } from "./puzzles";
+import { localDate, type Puzzle } from "./puzzles";
 
 export type Candidate = Omit<Puzzle, "id"> & {
   key: string;
@@ -41,9 +41,6 @@ export type Curated = Record<string, CuratedEntry>;
 export type Decision =
   | { key: string; status: "approved"; fact: string; prompt: string }
   | { key: string; status: "rejected"; reason: string; note?: string };
-
-const localDate = (d: Date) =>
-  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
 /** Next free integer ID: above every published and every curated ID, never reused. */
 export function nextId(curated: Curated, publishedIds: (number | string)[]): number {
