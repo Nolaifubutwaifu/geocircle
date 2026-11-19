@@ -8,6 +8,8 @@ const body = Figtree({ variable: "--font-figtree", subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Geocircle",
   description: "A daily map puzzle. Catch a share of the world's rice, beer or earthquakes with one circle or one triangle.",
+  icons: { icon: { url: "/icons/32", type: "image/png" }, apple: "/icons/180" },
+  appleWebApp: { capable: true, title: "Geocircle", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = { themeColor: "#0B1228", width: "device-width", initialScale: 1, viewportFit: "cover" };

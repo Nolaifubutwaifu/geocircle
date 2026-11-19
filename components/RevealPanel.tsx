@@ -78,14 +78,14 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
   }
 
   return (
-    <section className="reveal pointer-events-none absolute inset-x-0 bottom-0 flex justify-center p-3 sm:p-5" aria-live="polite">
+    <section className="reveal pointer-events-none absolute inset-x-0 bottom-0 flex justify-center p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-5 sm:pb-[max(1.25rem,env(safe-area-inset-bottom))]" aria-live="polite">
       <div className="chamfer pointer-events-auto w-full max-w-xl">
         <div className="chamfer-in px-5 py-4 sm:px-6 sm:py-5">
           <div className="flex items-end gap-4">
             <p className="font-display text-[64px] font-bold leading-none text-amber tabular-nums sm:text-[76px]" aria-label={`Score ${result.score} out of 100`}>
               {Math.round(score)}
             </p>
-            <p className="pb-2 font-display text-[18px] text-mist">/ 100</p>
+            <p className="whitespace-nowrap pb-2 font-display text-[18px] text-mist">/ 100</p>
             <div className="ml-auto flex flex-wrap justify-end gap-2 pb-1">
               <button className="outline-btn" onClick={share}>
                 {copied ? "Copied" : "Share"}

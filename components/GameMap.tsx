@@ -115,7 +115,8 @@ export default function GameMap(props: Props) {
       container: el.current!,
       style: STYLE,
       center: live.current.view.center,
-      zoom: live.current.view.zoom,
+      // Puzzle views are framed for desktop; zoom out on narrow screens so the area still fits.
+      zoom: live.current.view.zoom - Math.max(0, Math.log2(800 / el.current!.clientWidth)),
       minZoom: 0.8,
       maxZoom: 10,
       attributionControl: false,

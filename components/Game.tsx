@@ -276,7 +276,7 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
         onView={onView}
       />
 
-      <header className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-3 sm:p-5">
+      <header className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:p-5 sm:pt-[max(1.25rem,env(safe-area-inset-top))]">
         <section className="chamfer pointer-events-auto min-w-0 max-w-md flex-1 sm:flex-none" aria-live="polite">
           <div className="chamfer-in px-4 py-3 sm:px-5 sm:py-4">
             <div className="flex items-center gap-2 whitespace-nowrap text-[13px] text-mist">
@@ -304,7 +304,7 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
       </header>
 
       {phase !== "done" && (
-        <footer className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center p-3 sm:p-5">
+        <footer className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-5 sm:pb-[max(1.25rem,env(safe-area-inset-bottom))]">
           <div className="chamfer pointer-events-auto w-full max-w-xl">
             <div className="chamfer-in flex items-center gap-3 px-4 py-3">
               <div className="min-w-0 flex-1">
