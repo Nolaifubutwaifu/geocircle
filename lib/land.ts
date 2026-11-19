@@ -8,13 +8,12 @@ const staticLists = new Map<number, Promise<{ id: string; lng: number; lat: numb
 const indexes = new Map<number, Promise<BitmapIndex & { fullSet: Set<string> }>>();
 const decoded = new Map<string, Set<string>>(); // parent id -> land children at that index's res
 
-/** Zoom to hex resolution, so hexes stay roughly 10 px wide on screen. */
+/** Zoom to hex resolution: one step finer than ~10 px hexes, which read as chunky blocks. */
 export function resForZoom(zoom: number): number {
-  if (zoom < 2) return 2;
-  if (zoom < 3.5) return 3;
-  if (zoom < 5) return 4;
-  if (zoom < 6.5) return 5;
-  if (zoom < 8) return 6;
+  if (zoom < 2) return 3;
+  if (zoom < 3.5) return 4;
+  if (zoom < 5) return 5;
+  if (zoom < 6.5) return 6;
   return 7;
 }
 
