@@ -27,6 +27,9 @@ export type Puzzle = {
   view: { center: LngLat; zoom: number };
   fact: string;
   credit: string;
+  /** Generated puzzles: candidate key and simulated difficulty. */
+  key?: string;
+  difficulty?: "easy" | "medium" | "hard";
 };
 
 /** First daily puzzle. Day n after this shows puzzle n (cycling). */

@@ -15,8 +15,8 @@
 
 Reads raw downloads from data-raw/ and writes everything the game loads into public/data/.
 Run from the project root:  uv run scripts/pipeline/build.py [step ...]
-Steps: land, geo, population, stats, points, livestock, landcells, bycountry, apad, puzzles, countries, candidates, selftest
-(default: all, in that order).
+Steps: land, geo, population, stats, points, livestock, landcells, bycountry, apad, puzzles, publish, countries, candidates, selftest
+(default: all, in that order). publish only re-merges puzzles/curated.json into puzzles.json.
 
 Formats (see lib/cells.ts and lib/land.ts for the readers):
   fine-cell file  <name>.bin           16-byte records: u32 lo, u32 hi, f32 value, u16 country, u16 0
@@ -980,11 +980,39 @@ def build_puzzle(pid, p, countries):
     return out
 
 
+def merge_curated(legacy, curated):
+    """puzzles.json = legacy + approved curated entries, sorted by ID (PRD §5.8). The reviewed fact and prompt win."""
+    out = list(legacy)
+    for key, e in curated.items():
+        if e.get("status") != "approved":
+            continue
+        assert isinstance(e["id"], int) and e["id"] > len(PUZZLES), f"{key}: id {e['id']} clashes with the legacy puzzles"
+        out.append({"id": e["id"], **e["puzzle"], "key": key, "fact": e["fact"], "prompt": e["prompt"] or e["puzzle"]["prompt"]})
+    ids = [p["id"] for p in out]
+    assert len(ids) == len(set(ids)), "duplicate puzzle ids in curated.json"
+    return sorted(out, key=lambda p: p["id"])
+
+
+def write_puzzles(legacy):
+    curated = json.loads(CURATED.read_text()) if CURATED.exists() else {}
+    out = merge_curated(legacy, curated)
+    write_json(OUT / "puzzles.json", out)
+    log(f"puzzles.json: {len(legacy)} legacy + {len(out) - len(legacy)} approved = {len(out)}")
+
+
 def step_puzzles():
     countries = load_countries()
     out = [build_puzzle(i, p, countries) for i, p in enumerate(PUZZLES, start=1) if (OUT / f"{p['cells']}.index.json").exists()]
     assert len(out) == len(PUZZLES), "some puzzle data is missing"
-    write_json(OUT / "puzzles.json", out)
+    write_puzzles(out)
+
+
+def step_publish():
+    """Re-merges curated.json into puzzles.json without recomputing the legacy puzzles."""
+    path = OUT / "puzzles.json"
+    legacy = [p for p in json.loads(path.read_text()) if isinstance(p["id"], int) and p["id"] <= len(PUZZLES)] if path.exists() else []
+    assert len(legacy) == len(PUZZLES), "legacy puzzles missing from puzzles.json, run: pnpm data puzzles"
+    write_puzzles(legacy)
 
 
 def step_countries():
@@ -1636,6 +1664,22 @@ def step_selftest():
     assert keys[16] == "wine|Europe|triangle|target|30", keys[16]
     assert legacy_scope(PUZZLES[13]["scope"], countries)[1:] == ("Australia and New Zealand", "region")
     assert legacy_scope(PUZZLES[14]["scope"], countries)[1:] == ("the USA", "country")
+    # publish: legacy kept, approved appended by ID with the reviewed text, rejected dropped
+    legacy = [{"id": i, "prompt": "L"} for i in range(1, len(PUZZLES) + 1)]
+    snap = {"key": "k", "prompt": "Gen.", "fact": "Gen fact.", "difficulty": "easy"}
+    cur = {"b": {"status": "approved", "id": 60, "fact": "Mine.", "prompt": None, "puzzle": {**snap, "key": "b"}},
+           "a": {"status": "approved", "id": 59, "fact": "F.", "prompt": "Edited.", "puzzle": {**snap, "key": "a"}},
+           "r": {"status": "rejected", "reason": "boring"}}
+    m = merge_curated(legacy, cur)
+    assert [p["id"] for p in m[-2:]] == [59, 60] and len(m) == len(PUZZLES) + 2
+    assert m[-2]["prompt"] == "Edited." and m[-1]["prompt"] == "Gen." and m[-1]["fact"] == "Mine." and m[-1]["key"] == "b"
+    for bad in ({"x": {**cur["a"], "id": 3}}, {"x": cur["a"], "y": {**cur["b"], "id": 59}}):
+        try:
+            merge_curated(legacy, bad)
+            raise AssertionError("bad curated ids accepted")
+        except AssertionError as e:
+            assert "accepted" not in str(e)
+
     log("selftest: ok")
 
 
@@ -1650,6 +1694,7 @@ STEPS = {
     "bycountry": step_bycountry,
     "apad": step_apad,
     "puzzles": step_puzzles,
+    "publish": step_publish,
     "countries": step_countries,
     "candidates": step_candidates,
     "selftest": step_selftest,

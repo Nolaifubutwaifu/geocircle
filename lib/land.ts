@@ -97,7 +97,7 @@ export async function landCellsInView(b: Bounds, res: number, max = 60000): Prom
     for (let x = w; x < e; x += 90) {
       const x2 = Math.min(e, x + 90);
       const ring = [[s, x], [s, x2], [n, x2], [n, x], [s, x]];
-      ids.push(...polygonToCells(ring, res));
+      for (const id of polygonToCells(ring, res)) ids.push(id); // spread overflows the stack past ~100k cells
       if (ids.length > max * 3) return null;
     }
   }
