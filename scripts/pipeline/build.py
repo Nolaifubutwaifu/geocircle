@@ -833,11 +833,11 @@ PUZZLES = [
     dict(stat="land", cells="land", scope=["Indonesia"], mechanic="triangle", mode="target", target_pct=50,
          prompt="Put down 3 pins. Your triangle must cover exactly half of Indonesia's land.", credit=LAND),
     # --- batch 4: APAD industrial asset data (AWS Open Data)
-    dict(stat="brick kilns", cells="points/brick-kilns", scope=IGP, mechanic="circle", mode="target", target_pct=25,
-         prompt="Draw a circle that holds exactly 25% of the brick kilns mapped by satellite across India, Pakistan and Bangladesh.",
-         credit=APAD_BY),
-    dict(stat="brick kilns", cells="points/brick-kilns", scope=IGP, mechanic="circle", mode="budget", radius_km=150,
-         prompt="You get a 150 km circle. Catch as many of South Asia's mapped brick kilns as you can.", credit=APAD_BY),
+    # 31 and 32 were brick kilns on the Indo-Gangetic Plain until 20 Nov 2026; Max: too hard, all along one strip.
+    dict(stat="chickens", cells="chickens", scope=["United States of America"], mechanic="circle", mode="target", target_pct=50,
+         prompt="Draw a circle that holds exactly half of the USA's chickens.", credit=GLW),
+    dict(stat="sheep", cells="sheep", scope={"continent": "Oceania"}, mechanic="triangle", mode="target", target_pct=25,
+         prompt="Put down 3 pins. Your triangle must hold exactly 25% of Oceania's sheep.", credit=GLW),
     dict(stat="brick kilns", cells="points/brick-kilns", scope=["Bangladesh"], mechanic="triangle", mode="target", target_pct=50,
          prompt="Put down 3 pins. Your triangle must hold exactly half of Bangladesh's mapped brick kilns.", credit=APAD_BY),
     dict(stat="brick kilns", cells="points/brick-kilns", scope=["Pakistan"], mechanic="circle", mode="target", target_pct=50,
@@ -852,9 +852,9 @@ PUZZLES = [
     dict(stat="plastic waste and dump sites", cells="points/igp-waste", scope=IGP, mechanic="circle", mode="target", target_pct=30,
          prompt="Draw a circle that holds exactly 30% of the plastic waste and dump sites mapped on the Indo-Gangetic Plain.",
          credit=APAD_ODC),
-    dict(stat="mapped gas and oil power capacity", cells="points/africa-power", scope=AFRICA_APAD, mechanic="triangle", mode="budget",
-         perimeter_km=3000, prompt="Your triangle can be at most 3,000 km around. Catch as much of the mapped gas and oil power capacity in Africa as you can.",
-         fact_biggest=True, credit=APAD_BY),
+    # 39 was Africa's gas and oil power capacity until 20 Nov 2026: a few plants hold it all, a first guess scored 0 at any size.
+    dict(stat="potatoes eaten", cells="population", food="potatoes", scope={"continent": "Africa"}, mechanic="triangle", mode="target",
+         target_pct=10, prompt="Put down 3 pins. Your triangle must hold exactly 10% of Africa's potatoes eaten.", credit=FOOD_CREDIT),
     dict(stat="waste tonnage at mapped dump sites", cells="points/africa-waste", scope=AFRICA_APAD, mechanic="circle", mode="target", target_pct=50,
          prompt="Draw a circle that holds exactly half of the waste tonnage at Africa's mapped dump sites.", fact_biggest=True,
          credit=APAD_ODC),
@@ -1769,7 +1769,7 @@ def step_selftest():
     assert len(set(keys)) == len(keys), "two legacy puzzles share a key"
     assert keys[26] == "coffee|BRA|triangle|target|50", keys[26]
     assert keys[13] == "sheep|AUS+NZL|circle|net|500", keys[13]
-    assert keys[30] == "brick-kilns|Indo-Gangetic Plain|circle|target|25", keys[30]
+    assert keys[30] == "chickens|USA|circle|target|50", keys[30]
     assert keys[16] == "wine|Europe|triangle|target|30", keys[16]
     assert legacy_scope(PUZZLES[13]["scope"], countries)[1:] == ("Australia and New Zealand", "region")
     assert legacy_scope(PUZZLES[14]["scope"], countries)[1:] == ("the USA", "country")

@@ -1722,7 +1722,7 @@
       "credit": "APAD Asset Data via AWS Open Data (CC BY 4.0)"
     }
   },
-  "pigs|USA|circle|net|400": {
+  "pigs|USA|circle|net|500": {
     "status": "approved",
     "id": 70,
     "fact": "The USA has 0.2 pigs per person.",
@@ -1730,24 +1730,24 @@
     "reason": null,
     "decided": "2026-11-20",
     "puzzle": {
-      "key": "pigs|USA|circle|net|400",
+      "key": "pigs|USA|circle|net|500",
       "difficulty": "hard",
       "stat": "pigs",
-      "prompt": "Pigs vs people in the USA. Your 400 km circle should catch the most pigs beyond the number of people.",
+      "prompt": "Pigs vs people in the USA. Your 500 km circle should catch the most pigs beyond the number of people.",
       "mechanic": "circle",
       "mode": "net",
       "target_pct": null,
-      "radius_km": 400,
+      "radius_km": 500,
       "perimeter_km": null,
       "best": {
         "pct": null,
-        "net": 28411371,
+        "net": 26804661,
         "shape": {
           "center": [
-            -94.7684,
-            41.207
+            -96.5192,
+            40.9397
           ],
-          "radius_km": 400
+          "radius_km": 500
         }
       },
       "cells": "/data/pigs",

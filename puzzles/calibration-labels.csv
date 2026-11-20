@@ -1,0 +1,5 @@
+id,key,max_quality,max_difficulty,max_score,note,date
+31,brick-kilns|Indo-Gangetic Plain|circle|target|25,too hard,hard,,weird data: everything along one strip. Replaced by chickens USA 20 Nov 2026,2026-11-20
+32,brick-kilns|Indo-Gangetic Plain|circle|budget|150,too hard,hard,,same as 31. Replaced by sheep Oceania 20 Nov 2026,2026-11-20
+39,africa-power|Africa|triangle|budget|3000,too hard,hard,,triangle too small. Replaced by potatoes Africa 20 Nov 2026,2026-11-20
+70,pigs|USA|circle|net|400,too hard,hard,,really hard. Circle raised to 500 km 20 Nov 2026,2026-11-20
