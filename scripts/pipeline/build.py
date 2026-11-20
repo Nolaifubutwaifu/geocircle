@@ -411,6 +411,18 @@ FOOD = {
     "tea": "Tea (including mate)",
     "bananas": "Bananas",
     "eggs": "Eggs",
+    "yams": "Yams",
+    "cassava": "Cassava and products",
+    "plantains": "Plantains",
+    "dates": "Dates",
+    "rye": "Rye and products",
+    "pork": "Pigmeat",
+    "millet": "Millet and products",
+    "sorghum": "Sorghum and products",
+    "mutton": "Mutton & Goat Meat",
+    "sweet-potatoes": "Sweet potatoes",
+    "olive-oil": "Olive Oil",
+    "apples": "Apples and products",
 }
 
 
@@ -486,14 +498,14 @@ def step_stats():
 
 # ---------------------------------------------------------------- point datasets
 
-def points_to_cells(name: str, lats: np.ndarray, lngs: np.ndarray, max_deg: float | None = None, weights: np.ndarray | None = None):
-    r7 = np.array([h3.latlng_to_cell(float(a), float(b), 7) for a, b in zip(lats, lngs)], dtype=np.uint64)
+def points_to_cells(name: str, lats: np.ndarray, lngs: np.ndarray, max_deg: float | None = None, weights: np.ndarray | None = None, res: int = 7):
+    r7 = np.array([h3.latlng_to_cell(float(a), float(b), res) for a, b in zip(lats, lngs)], dtype=np.uint64)
     counts = pd.Series(1.0 if weights is None else np.asarray(weights, dtype=float), index=r7).groupby(level=0).sum()
     cells = counts.index.to_numpy(dtype=np.uint64)
     latlng = np.array([h3.cell_to_latlng(int(c)) for c in cells])
     countries = load_countries()
     cidx = assign_country(latlng[:, 0], latlng[:, 1], countries, max_deg)
-    write_cells(f"points/{name}", cells, counts.to_numpy(), cidx, 7)
+    write_cells(f"points/{name}", cells, counts.to_numpy(), cidx, res)
     by_country = pd.Series(counts.to_numpy()).groupby(cidx).sum().sort_values(ascending=False) / counts.sum()
     top = [{"name": countries.loc[int(i), "ADMIN"], "share": round(float(s), 4)} for i, s in by_country.head(5).items() if i > 0]
     write_json(OUT / "points" / f"{name}.top.json", top)
@@ -514,6 +526,25 @@ def step_points():
         points_to_cells("mcdonalds", mcd["lat"].to_numpy(), mcd["lng"].to_numpy())
     else:
         log("mcdonalds: no Overture extract yet, skipping")
+    # PBDB, birds already excluded by the query (base_name=Dinosauria^Aves). Keep finds dated to the Mesozoic.
+    dino = pd.read_csv(RAW / "pbdb" / "dinosauria.csv", low_memory=False).dropna(subset=["lat", "lng"])
+    dino = dino[dino["max_ma"] > 66]
+    log(f"dinosaurs: {len(dino):,} fossil finds")
+    assert 15_000 < len(dino) < 40_000, len(dino)
+    points_to_cells("dinosaurs", dino["lat"].to_numpy(), dino["lng"].to_numpy(), max_deg=1)
+    lang = pd.read_csv(RAW / "glottolog" / "languages_and_dialects_geo.csv").dropna(subset=["latitude", "longitude"])
+    lang = lang[lang["level"] == "language"]
+    log(f"languages: {len(lang):,} with a location")
+    assert 7_000 < len(lang) < 10_000, len(lang)
+    points_to_cells("languages", lang["latitude"].to_numpy(), lang["longitude"].to_numpy(), max_deg=1)
+    # HydroLAKES pour points, lakes of 10 ha and up. r5 keeps the file small (1.4 M lakes).
+    import pyogrio
+    lakes = pyogrio.read_dataframe(RAW / "hydrolakes" / "HydroLAKES_points_v10.shp", columns=["Lake_area"])
+    log(f"lakes: {len(lakes):,}, {lakes.Lake_area.sum() / 1e6:.2f} M km²")
+    assert 1.3e6 < len(lakes) < 1.5e6 and 2.5e6 < lakes.Lake_area.sum() < 3.2e6, (len(lakes), lakes.Lake_area.sum())
+    lat, lng = lakes.geometry.y.to_numpy(), lakes.geometry.x.to_numpy()
+    points_to_cells("lakes", lat, lng, max_deg=0.5, res=5)
+    points_to_cells("lake-area", lat, lng, max_deg=0.5, weights=lakes["Lake_area"].to_numpy(), res=5)
 
 
 # ---------------------------------------------------------------- livestock (GLW4 2015, CC0 on Dataverse)
@@ -761,6 +792,9 @@ GLW = "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY
 LAND = "Natural Earth (public domain)"
 QUAKES = "USGS Earthquake Catalog (public domain)"
 MCD = "Overture Maps Places (CDLA Permissive 2.0)"
+PBDB = "The Paleobiology Database (CC0)"
+GLOTTOLOG = "Glottolog 5.4, Hammarström, Forkel, Haspelmath & Bank (CC BY 4.0)"
+LAKES = "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
 
 APAD_BY = "APAD Asset Data via AWS Open Data (CC BY 4.0)"
 APAD_ODC = "APAD Asset Data via AWS Open Data (ODC-By 1.0)"
@@ -936,6 +970,8 @@ def make_fact(p, latlng, w, scope_ids, scope_label, countries) -> str:
             return f"{n} recorded {fmt_count(v)} {p['stat']} since 2000."
         if p["cells"] == "land":  # hex areas overcount coasts a few %, hence "about"
             return f"{n} has about {fmt_count(v)} km² of land."
+        if p["cells"] == "points/lake-area":
+            return f"{n} has {fmt_count(v)} km² of lakes."
         return f"{n} has {fmt_count(v)} {p['stat']}."
     if p["cells"] == "population" and not p.get("food"):
         return "Half of all people live in a circle about 4,000 km wide over Asia."
@@ -1175,7 +1211,10 @@ CURATED = ROOT / "puzzles" / "curated.json"
 
 FOOD_STAT = {"rice": "rice eaten", "beer": "beer drunk", "coffee": "coffee drunk", "chocolate": "chocolate eaten",
              "wine": "wine drunk", "potatoes": "potatoes eaten", "fish": "fish eaten", "tea": "tea drunk",
-             "bananas": "bananas eaten", "eggs": "eggs eaten"}
+             "bananas": "bananas eaten", "eggs": "eggs eaten", "yams": "yams eaten", "cassava": "cassava eaten",
+             "plantains": "plantains eaten", "dates": "dates eaten", "rye": "rye eaten", "pork": "pork eaten",
+             "millet": "millet eaten", "sorghum": "sorghum eaten", "mutton": "mutton and goat meat eaten",
+             "sweet-potatoes": "sweet potatoes eaten", "olive-oil": "olive oil used", "apples": "apples eaten"}
 
 # One entry per dataset. licence_ok: True only if GAME-SPEC §4 marks it ✅ or Max checked the source page.
 DATASETS = [
@@ -1184,6 +1223,11 @@ DATASETS = [
     *[dict(key=k, cells="population", food=k, stat=FOOD_STAT[k], noun="mass", credit=FOOD_CREDIT, licence_ok=True) for k in FOOD],
     dict(key="earthquakes", cells="points/earthquakes", stat="earthquakes", prompt_stat="earthquakes (M4.5+, since 2000)", noun="count", credit=QUAKES, licence_ok=True),
     dict(key="mcdonalds", cells="points/mcdonalds", stat="mapped McDonald's", noun="count", credit=MCD, licence_ok=True),
+    # PBDB says CC0 in its API's datainfo header; Glottolog and HydroLAKES say CC BY 4.0 on their download pages (checked 20 Nov 2026).
+    dict(key="dinosaurs", cells="points/dinosaurs", stat="dinosaur fossil finds", noun="count", credit=PBDB, licence_ok=True),
+    dict(key="languages", cells="points/languages", stat="languages", noun="count", credit=GLOTTOLOG, licence_ok=True),
+    dict(key="lakes", cells="points/lakes", stat="lakes", prompt_stat="lakes (10 hectares and up)", noun="count", credit=LAKES, licence_ok=True),
+    dict(key="lake-area", cells="points/lake-area", stat="lake area", noun="mass", credit=LAKES, licence_ok=True),
     # GLW: each 2015 species record on Harvard Dataverse is CC0, FAO's catalogue says CC BY 4.0; both allow commercial use (checked 20 Nov 2026).
     *[dict(key=k, cells=k, stat=k, noun="count", credit=GLW, licence_ok=True, vs=("population", "people"))
       for k in ("cattle", "sheep", "pigs", "chickens", "goats")],
@@ -1204,14 +1248,15 @@ PERIMETERS = [1000, 1500, 2000, 3000, 4000, 5000, 6000, 8000, 10000]
 # Thresholds (PRD §5.3, §5.4). Starting values until calibration; changing them needs no re-measuring.
 GATE = dict(min_cells=200, max_top_share=0.20, min_surprise=0.25, budget_lo=20, budget_hi=60, budget_aim=35,
             country_min_share=0.02, reach_margin=10, min_smallest_km=25, prompt_max=140, easy_from=55, medium_from=30,
-            max_naive=95)
+            max_naive=95, continent_min_share=0.05)  # 5%: Max disliked "a few spots hold it all" puzzles
 # Measurement settings. They are part of the cache hash, as is GEN_VERSION: bump it when gen_measure changes.
 MEASURE = dict(fine_max=40_000, circle_max_km=5000, side_max_km=8000, tri_fallback_margin=10, sim_shapes=400, sim_sigma=0.4,
                net_jitter_km=500)
 GEN_VERSION = "4"
 SCOPE_NAMES = {"United States of America": "the USA", "United Kingdom": "the UK", "Netherlands": "the Netherlands",
                "Philippines": "the Philippines", "Solomon Islands": "the Solomon Islands",
-               "United Republic of Tanzania": "Tanzania", "South Georgia and the Islands": "South Georgia"}
+               "United Republic of Tanzania": "Tanzania", "South Georgia and the Islands": "South Georgia",
+               "Democratic Republic of the Congo": "DR Congo", "Republic of the Congo": "the Republic of the Congo"}
 
 
 def tvd(a: np.ndarray, p: np.ndarray) -> float:
@@ -1611,6 +1656,9 @@ def step_candidates():
         ]
         for scope in base_scopes + countries_here:
             if not covered(d, scope):
+                continue
+            # "Europe's cassava eaten": a continent that eats almost none of a food just shows where its few eaters live.
+            if d.get("food") and scope["kind"] == "continent" and w[pos & np.isin(cidx, scope["ids"])].sum() < GATE["continent_min_share"] * w[pos].sum():
                 continue
             ws, a, p, measured = cheap(d, scope["ids"])
             if not len(ws):

@@ -255,5 +255,96 @@
       "source": "https://www.engineeringnews.co.za/article/un-csir-launch-africa-waste-management-outlook-2018-06-05",
       "approved": true
     }
+  ],
+  "lake-area": [
+    {
+      "text": "Lake Baikal in Siberia holds about 20% of the world's unfrozen fresh water.",
+      "source": "https://whc.unesco.org/en/list/754/",
+      "approved": true
+    }
+  ],
+  "lakes": [
+    {
+      "text": "About 62% of the world's lakes are in Canada (counting lakes of 10 hectares and up).",
+      "source": "https://www.asc-csa.gc.ca/eng/multimedia/search/image/17643",
+      "approved": true
+    }
+  ],
+  "languages": [
+    {
+      "text": "Papua New Guinea has about 840 living languages, more than any other country.",
+      "source": "https://ourworldindata.org/data-insights/papua-new-guinea-has-more-living-languages-than-any-other-country",
+      "approved": true
+    }
+  ],
+  "dinosaurs": [
+    {
+      "text": "Megalosaurus was the first dinosaur to get a scientific name, in 1824. The word \"dinosaur\" only came 17 years later.",
+      "source": "https://www.earthdate.org/episodes/the-first-dinosaur-fossil",
+      "approved": true
+    }
+  ],
+  "cassava": [
+    {
+      "text": "After rice and maize, cassava is the third biggest source of calories in the tropics.",
+      "source": "https://news.un.org/en/story/2002/11/50492",
+      "approved": true
+    }
+  ],
+  "millet": [
+    {
+      "text": "The UN made 2023 the International Year of Millets, after a proposal from India.",
+      "source": "https://www.fao.org/newsroom/detail/international-year-of-millets-unleashing-the-potential-of-millets-for-the-well-being-of-people-and-the-environment",
+      "approved": true
+    }
+  ],
+  "sorghum": [
+    {
+      "text": "Sorghum is the world's fifth most important cereal, after maize, rice, wheat and barley.",
+      "source": "https://www.croptrust.org/knowledge-hub/crops/sorghum/",
+      "approved": true
+    }
+  ],
+  "apples": [
+    {
+      "text": "China grows nearly half of the world's apples.",
+      "source": "https://www.ers.usda.gov/data-products/charts-of-note/78865",
+      "approved": true
+    }
+  ],
+  "sweet-potatoes": [
+    {
+      "text": "China grows about 55% of the world's sweet potatoes.",
+      "source": "https://www.freshplaza.com/europe/article/9776240/china-produces-over-half-of-global-sweet-potatoes",
+      "approved": true
+    }
+  ],
+  "dates": [
+    {
+      "text": "Egypt grows more dates than any other country, about 19% of the world's crop.",
+      "source": "https://www.arabnews.com/node/2632333",
+      "approved": true
+    }
+  ],
+  "olive-oil": [
+    {
+      "text": "Spain produces more olive oil than any other country.",
+      "source": "https://www.oliveoiltimes.com/business/global-olive-oil-production-hits-record-3-5-million-tons/142651",
+      "approved": true
+    }
+  ],
+  "rye": [
+    {
+      "text": "Germany, Poland and Russia grow 57% of the world's rye.",
+      "source": "https://www.indexbox.io/blog/rye-world-market-overview-2024-4/",
+      "approved": true
+    }
+  ],
+  "mutton": [
+    {
+      "text": "China produces about 31% of the world's sheep meat, more than any other country.",
+      "source": "https://www.thecattlesite.com/articles/fao-meat-market-review-ovine-sheep-meat",
+      "approved": true
+    }
   ]
 }
