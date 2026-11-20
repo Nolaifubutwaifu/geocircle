@@ -33,6 +33,8 @@ type Props = {
   shapeBad: boolean;
   pins: LngLat[]; // open polyline while placing triangle pins
   best: LngLat[] | null;
+  /** A friend's shape from a challenge link, drawn dotted after the reveal. */
+  friend: LngLat[] | null;
   handles: Handle[];
   pills: Pill[];
   ring: { center: LngLat; radiusKm: number } | null; // circle edge is draggable
@@ -98,11 +100,17 @@ export default function GameMap(props: Props) {
   function positionPills() {
     const map = mapRef.current;
     if (!map) return;
+    const placed: { x: number; y: number; w: number; h: number }[] = [];
     for (const p of live.current.pills) {
       const node = pillEls.current.get(p.id);
       if (!node) continue;
       const s = map.project(p.at);
       node.style.transform = `translate(${Math.round(s.x)}px, ${Math.round(s.y)}px) translate(-50%, -150%)`;
+      // Short triangle sides put their length labels on top of each other: show the first, hide the rest.
+      const box = { x: s.x, y: s.y, w: node.offsetWidth + 6, h: node.offsetHeight + 4 };
+      const hit = placed.some((b) => Math.abs(b.x - box.x) < (b.w + box.w) / 2 && Math.abs(b.y - box.y) < (b.h + box.h) / 2);
+      node.style.visibility = hit ? "hidden" : "visible";
+      if (!hit) placed.push(box);
     }
   }
 
@@ -137,6 +145,7 @@ export default function GameMap(props: Props) {
       add("shape");
       add("pins");
       add("best");
+      add("friend");
       add("handles");
       map.addLayer({ id: "grid", type: "line", source: "grid", paint: { "line-color": C.grid, "line-width": 1 } });
       map.addLayer({ id: "hex-side", type: "fill", source: "hex", paint: { "fill-color": C.side, "fill-translate": [0, 2.5], "fill-antialias": false } });
@@ -191,6 +200,7 @@ export default function GameMap(props: Props) {
         paint: { "text-color": C.city, "text-halo-color": C.ocean, "text-halo-width": 1.4 },
       });
       map.addLayer({ id: "best", type: "line", source: "best", paint: { "line-color": "#E6ECFA", "line-width": 2, "line-dasharray": [2, 2] } });
+      map.addLayer({ id: "friend", type: "line", source: "friend", paint: { "line-color": "#7FD4E6", "line-width": 2.5, "line-dasharray": [0.5, 1.5] } });
       map.addLayer({ id: "shape-fill", type: "fill", source: "shape", paint: { "fill-color": ["case", ["get", "bad"], C.bad, C.amber], "fill-opacity": 0.22 } });
       map.addLayer({ id: "shape-line", type: "line", source: "shape", paint: { "line-color": ["case", ["get", "bad"], C.bad, C.amber], "line-width": 2.5 } });
       map.addLayer({ id: "pins-line", type: "line", source: "pins", paint: { "line-color": C.amber, "line-width": 2, "line-dasharray": [1.5, 1.5] } });
@@ -327,12 +337,13 @@ export default function GameMap(props: Props) {
     set("shape", props.shape ? { type: "FeatureCollection", features: [{ ...poly(props.shape), properties: { bad: props.shapeBad } }] } : empty());
     set("pins", props.pins.length > 1 ? { type: "FeatureCollection", features: [line(props.pins)] } : empty());
     set("best", props.best ? { type: "FeatureCollection", features: [line(props.best)] } : empty());
+    set("friend", props.friend ? { type: "FeatureCollection", features: [line(props.friend)] } : empty());
     set("handles", {
       type: "FeatureCollection",
       features: props.handles.map((h) => ({ type: "Feature", properties: { id: h.id }, geometry: { type: "Point", coordinates: h.at } })),
     });
     positionPills();
-  }, [ready, props.shape, props.shapeBad, props.pins, props.best, props.handles, props.pills]);
+  }, [ready, props.shape, props.shapeBad, props.pins, props.best, props.friend, props.handles, props.pills]);
 
   // Reveal heat and land dimming.
   useEffect(() => {

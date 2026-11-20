@@ -20,6 +20,7 @@ import {
 import { aggregateTo, capturedSum, classifyGroups, fetchGroups, loadDataset, type Dataset } from "@/lib/cells";
 import { scoreBudget, scoreNet, scoreTarget } from "@/lib/score";
 import { goalText, puzzleLabel, type Puzzle } from "@/lib/puzzles";
+import { readChallenge } from "@/lib/share";
 import { hasSeenHowTo, loadResults, markSeenHowTo, saveResult, type Result } from "@/lib/storage";
 import type { Bounds } from "@/lib/land";
 import type { Handle, HitTarget, Pill } from "./GameMap";
@@ -48,6 +49,8 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
   const [projection, setProjection] = useState<"mercator" | "globe">("globe");
   const [howTo, setHowTo] = useState(() => !hasSeenHowTo());
   const [heat, setHeat] = useState<{ id: string; v: number }[] | null>(null);
+  const [challenge] = useState(() => readChallenge(window.location.search)); // a friend's ?beat=64&s=... link
+  const [collapsed, setCollapsed] = useState(false);
   const ds = useRef<Promise<Dataset> | null>(null);
   const vsDs = useRef<Promise<Dataset> | null>(null); // the "people" side of net puzzles
   const view = useRef<{ res: number; bounds: Bounds } | null>(null);
@@ -263,6 +266,7 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
         shapeBad={!!problem}
         pins={openPins}
         best={best}
+        friend={phase === "done" && challenge?.shape ? shapeRing(challenge.shape) : null}
         handles={handles}
         pills={pills}
         ring={isCircle && center && radiusKm && !fixedRadius && play ? { center, radiusKm } : null}
@@ -270,7 +274,7 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
         heat={phase === "done" ? heat : null}
         dimLand={phase === "done"}
         interactive={play}
-        bottomInset={phase === "done" ? 230 : 0}
+        bottomInset={phase === "done" ? (collapsed ? 70 : 230) : 0}
         onTap={onTap}
         onDrag={onDrag}
         onView={onView}
@@ -287,6 +291,9 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
               <span className="ml-auto rounded-sm bg-deep px-1.5 py-0.5 font-display text-[12px] text-chalk">{goalText(puzzle)}</span>
             </div>
             <h1 className="mt-1.5 font-display text-[17px] font-semibold leading-snug text-balance sm:text-[22px]">{puzzle.prompt}</h1>
+            {challenge && phase !== "done" && (
+              <p className="mt-1.5 font-display text-[14px] font-semibold text-amber">A friend scored {challenge.score}. Can you beat it?</p>
+            )}
           </div>
         </section>
         <div className="pointer-events-auto flex flex-col items-end gap-2">
@@ -326,7 +333,16 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
         </footer>
       )}
 
-      {phase === "done" && result && <RevealPanel puzzle={puzzle} result={result} />}
+      {phase === "done" && result && (
+        <RevealPanel
+          puzzle={puzzle}
+          result={result}
+          daily={daily}
+          friendScore={challenge?.score ?? null}
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+        />
+      )}
       {howTo && (
         <HowToPlay
           mechanic={puzzle.mechanic}

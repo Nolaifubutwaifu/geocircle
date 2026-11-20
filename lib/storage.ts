@@ -8,7 +8,10 @@ export type Result = {
   playedAt: string;
   /** Net puzzles: what the shape caught of each side. */
   counts?: { a: number; b: number };
+  /** The player's one-tap verdict after the reveal. */
+  feel?: Feel;
 };
+export type Feel = "too easy" | "just right" | "too hard";
 export const RESULTS_KEY = "geocircle:v1:results";
 const SEEN = "geocircle:v1:seen-how-to";
 
