@@ -12,7 +12,7 @@ Update the "Where things stand" and "Next steps" sections at the end of each wor
   - Generator (PRD M1 to M4): `pnpm data candidates` gave 2,112 passing candidates (2,009 after the approvals and the `trivial` gate), including livestock. Full run about 3 min, cached rerun about 10 s.
   - Review page `/dev/review` (dev only, 404 in production) writing to `puzzles/curated.json`.
   - `pnpm data publish` (legacy + approved + fun facts into `public/data/puzzles.json`) and `pnpm data schedule` (`public/data/schedule.json`).
-  - Home page reads the schedule; `/archive` and Next puzzle hide future dailies; Next puzzle only opens unplayed ones.
+  - Home page reads the schedule; `/archive` and Next puzzle hide future dailies when `SHOW_FUTURE` in `lib/puzzles.ts` is false. It is true since 20 Nov 2026 (Max wants every puzzle open): set it to false before a public launch. Next puzzle only opens unplayed ones.
   - Livestock (GLW 2015 cattle, sheep, pigs, chickens, goats) switched on: CC0 on each Dataverse record, checked 20 Nov 2026.
   - Fun facts: `puzzles/funfacts.json`, 41 sourced facts for 26 datasets, all approved.
   - Bug fixes: land layer stack overflow on large views (`lib/land.ts`); net facts for single-country scopes.

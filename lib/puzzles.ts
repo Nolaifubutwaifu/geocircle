@@ -56,15 +56,20 @@ export function todaysPuzzle(puzzles: Puzzle[], schedule: Schedule = {}, now = n
   return puzzles.find((p) => p.id === id) ?? puzzles[dayIndex(now) % puzzles.length];
 }
 
-/** Puzzles a player may open: scheduled on or before today, or never scheduled. Future dailies stay hidden. */
-export function released(puzzles: Puzzle[], schedule: Schedule, now = new Date()): Puzzle[] {
+/** Max's call (20 Nov 2026): every puzzle is open now. Set to false before a public launch so future dailies stay hidden. */
+export const SHOW_FUTURE = true;
+
+/** Puzzles a player may open: scheduled on or before today, or never scheduled. Future dailies stay hidden unless showFuture. */
+export function released(puzzles: Puzzle[], schedule: Schedule, now = new Date(), showFuture = SHOW_FUTURE): Puzzle[] {
+  if (showFuture) return puzzles;
   const today = localDate(now);
   const future = new Set(Object.entries(schedule).filter(([d]) => d > today).map(([, id]) => id));
   return puzzles.filter((p) => !future.has(p.id as number));
 }
 
-/** Puzzles scheduled on or before today, newest first, each once. */
-export function archive(puzzles: Puzzle[], schedule: Schedule, now = new Date()): Puzzle[] {
+/** Puzzles scheduled on or before today, newest first, each once. With showFuture: every daily puzzle, highest number first. */
+export function archive(puzzles: Puzzle[], schedule: Schedule, now = new Date(), showFuture = SHOW_FUTURE): Puzzle[] {
+  if (showFuture) return puzzles.filter((p) => typeof p.id === "number").sort((a, b) => (b.id as number) - (a.id as number));
   const today = localDate(now);
   const byId = new Map(puzzles.map((p) => [p.id, p]));
   const ids = Object.entries(schedule)

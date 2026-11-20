@@ -19,7 +19,7 @@ export default function Archive() {
         </Link>
       </nav>
       <h1 className="mt-4 font-display text-[36px] font-bold leading-tight">All puzzles</h1>
-      <p className="mt-2 max-w-prose text-[15px] text-mist">Every daily puzzle so far, newest first. Your scores stay on this device.</p>
+      <p className="mt-2 max-w-prose text-[15px] text-mist">Every daily puzzle, newest first. Your scores stay on this device.</p>
       <ArchiveList puzzles={puzzles as Puzzle[]} schedule={schedule} />
     </main>
   );

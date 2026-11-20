@@ -19,12 +19,17 @@ describe("schedule on the client", () => {
   });
 
   it("hides future dailies from random play, keeps unscheduled ones", () => {
-    expect(released(pool, sched, at(2026, 11, 19)).map((x) => x.id)).toEqual([1, 2, 41]);
+    expect(released(pool, sched, at(2026, 11, 19), false).map((x) => x.id)).toEqual([1, 2, 41]);
+  });
+
+  it("shows every puzzle when showFuture is on", () => {
+    expect(released(pool, sched, at(2026, 11, 19), true)).toEqual(pool);
+    expect(archive(pool, sched, at(2026, 11, 19), true).map((x) => x.id)).toEqual([42, 41, 3, 2, 1]);
   });
 
   it("archive lists scheduled puzzles up to today, newest first", () => {
-    expect(archive(pool, sched, at(2026, 11, 19)).map((x) => x.id)).toEqual([2, 1]);
-    expect(archive(pool, { ...sched, "2026-11-21": 2 }, at(2026, 11, 22)).map((x) => x.id)).toEqual([2, 3, 1]);
+    expect(archive(pool, sched, at(2026, 11, 19), false).map((x) => x.id)).toEqual([2, 1]);
+    expect(archive(pool, { ...sched, "2026-11-21": 2 }, at(2026, 11, 22), false).map((x) => x.id)).toEqual([2, 3, 1]);
   });
 });
 
