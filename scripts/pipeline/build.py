@@ -740,9 +740,13 @@ def auto_view(latlng, w):
 
     lat0, lat1 = wq(latlng[:, 0], 0.05), wq(latlng[:, 0], 0.95)
     lngs = latlng[:, 1].copy()
-    if wq(lngs, 0.95) - wq(lngs, 0.05) > 180:  # straddles the date line (Russia, Fiji, NZ islands)
-        lngs = np.where(lngs < 0, lngs + 360, lngs)
+    if wq(lngs, 0.95) - wq(lngs, 0.05) > 180:  # straddles the date line (Russia, Fiji, NZ islands), or is spread worldwide
+        shifted = np.where(lngs < 0, lngs + 360, lngs)
+        if wq(shifted, 0.95) - wq(shifted, 0.05) < wq(lngs, 0.95) - wq(lngs, 0.05):
+            lngs = shifted
     lng0, lng1 = wq(lngs, 0.05), wq(lngs, 0.95)
+    if lng1 - lng0 > 180:  # worldwide: centre on Europe and Africa like the handwritten world puzzles, not the Pacific
+        return [10.0, 25.0, 1.2]
     span = max(lat1 - lat0, (lng1 - lng0) * np.cos(np.radians((lat0 + lat1) / 2)), 0.5)
     zoom = float(np.clip(np.log2(300 / span) - 0.2, 1.2, 8))
     lng = (lng0 + lng1) / 2
@@ -1204,7 +1208,7 @@ GATE = dict(min_cells=200, max_top_share=0.20, min_surprise=0.25, budget_lo=20, 
 # Measurement settings. They are part of the cache hash, as is GEN_VERSION: bump it when gen_measure changes.
 MEASURE = dict(fine_max=40_000, circle_max_km=5000, side_max_km=8000, tri_fallback_margin=10, sim_shapes=400, sim_sigma=0.4,
                net_jitter_km=500)
-GEN_VERSION = "3"
+GEN_VERSION = "4"
 SCOPE_NAMES = {"United States of America": "the USA", "United Kingdom": "the UK", "Netherlands": "the Netherlands",
                "Philippines": "the Philippines", "Solomon Islands": "the Solomon Islands",
                "United Republic of Tanzania": "Tanzania", "South Georgia and the Islands": "South Georgia"}
@@ -1703,6 +1707,12 @@ def step_selftest():
     assert gate_fails(dict(mode="budget"), dict(best=dict(pct=70))) == ["budget_range"]
     assert gate_fails(dict(mode="net"), dict(best=dict(net=-5))) == ["net_positive"]
     assert gate_fails(dict(mode="net"), dict(best=dict(net=5), naive_median=100)) == ["trivial"]
+
+    # Start views: worldwide data opens on Europe and Africa, date-line data (Fiji) stays on the date line.
+    world = np.array([[40.0, -100.0], [20.0, 0.0], [25.0, 80.0], [30.0, 120.0], [-30.0, 150.0], [-15.0, -60.0]])
+    assert auto_view(world, np.ones(len(world))) == [10.0, 25.0, 1.2]
+    fiji = np.array([[-17.0, 178.0], [-17.5, 179.5], [-16.5, -179.5], [-18.0, -178.5]])
+    assert abs(abs(auto_view(fiji, np.ones(4))[0]) - 180) < 3
 
     # Scores match lib/score.ts, including JS rounding of .5 upwards.
     assert score_target(25, 25) == 100 and score_target(50, 25) == 0 and score_target(0, 25) == 0 and score_target(30, 20) == 50
