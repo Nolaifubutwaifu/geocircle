@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { pickRandom, puzzleHref, puzzleLabel, released, whose, type Puzzle, type Schedule } from "@/lib/puzzles";
+import { pickNext, puzzleHref, puzzleLabel, released, whose, type Puzzle, type Schedule } from "@/lib/puzzles";
 import { loadResults, type Result } from "@/lib/storage";
 
 function useCountUp(target: number, ms = 1400) {
@@ -34,10 +34,11 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
   const [copied, setCopied] = useState(false);
   // A transition, so "Loading…" clears itself even when Next keeps this page around for the back button.
   const [jumping, startJump] = useTransition();
+  const [allPlayed, setAllPlayed] = useState(false);
   const router = useRouter();
 
   // Country puzzles jump to another country, daily puzzles to another daily one.
-  function randomPuzzle() {
+  function nextPuzzle() {
     startJump(async () => {
       try {
         const daily = typeof puzzle.id === "number";
@@ -46,8 +47,9 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
           daily ? fetch("/data/schedule.json").then((r) => r.json()) : {},
         ]);
         // Never jump to a future daily puzzle.
-        const next = pickRandom(released(pool, schedule), puzzle.id, new Set(Object.keys(loadResults())));
+        const next = pickNext(released(pool, schedule), puzzle.id, new Set(Object.keys(loadResults())));
         if (next) router.push(puzzleHref(next));
+        else setAllPlayed(true);
       } catch {
         /* offline: stay on this puzzle */
       }
@@ -95,14 +97,14 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
               <button className="outline-btn" onClick={share}>
                 {copied ? "Copied" : "Share"}
               </button>
-              <button className="primary-btn" onClick={randomPuzzle} disabled={jumping}>
-                {jumping ? "Loading…" : typeof puzzle.id === "number" ? "Random puzzle" : "Random country"}
+              <button className="primary-btn" onClick={nextPuzzle} disabled={jumping || allPlayed}>
+                {allPlayed ? "All played" : jumping ? "Loading…" : typeof puzzle.id === "number" ? "Next puzzle" : "Next country"}
               </button>
             </div>
           </div>
           <p className="mt-3 text-[15px] leading-relaxed text-chalk">{detail}</p>
-          <p className="mt-2 text-[14px] leading-relaxed text-mist">{puzzle.fact}</p>
-          {puzzle.funfact && (
+          {/* One fact only: the sourced fun fact beats the generated one. */}
+          {puzzle.funfact ? (
             <p className="mt-2 text-[14px] leading-relaxed text-chalk">
               <span className="font-display font-semibold text-amber">Did you know? </span>
               {puzzle.funfact.text}{" "}
@@ -110,6 +112,8 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
                 Source
               </a>
             </p>
+          ) : (
+            <p className="mt-2 text-[14px] leading-relaxed text-mist">{puzzle.fact}</p>
           )}
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
             <Link href="/archive" className="text-amber underline-offset-4 hover:underline">
@@ -118,7 +122,6 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
             <Link href="/countries" className="text-amber underline-offset-4 hover:underline">
               Halve a country
             </Link>
-            <span className="text-mist">Zoom in to see where it all is.</span>
             <span className="ml-auto text-[12px] text-mist/80">Data: {puzzle.credit}</span>
           </div>
         </div>

@@ -25,7 +25,7 @@ test("circle: drop, drag, submit, reveal", async ({ page }) => {
   await expect(page.locator(".pill")).toHaveText(/km/);
   await page.getByRole("button", { name: "Submit circle" }).click();
   await expect(page.getByText(/You caught \d+(\.\d)?% of the world's rice eaten/)).toBeVisible({ timeout: 20_000 });
-  await page.getByRole("button", { name: "Random puzzle" }).click();
+  await page.getByRole("button", { name: "Next puzzle" }).click();
   await expect(page).toHaveURL(/\/play\/(?!2$)\d+$/);
   await expect(page.getByRole("button", { name: /Submit (circle|triangle)/ })).toBeVisible();
 });

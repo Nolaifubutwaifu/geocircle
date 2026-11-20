@@ -1617,7 +1617,8 @@ def step_candidates():
                         if pct < 50 or scope["kind"] in ("country", "region")]
             fracs = {r: s / ws.sum() for r, s in best_r3_sums(ll_rad, a, RADII).items()}
             r = pick_budget_radius(fracs)
-            variants += [("circle", "budget", r), ("triangle", "budget", nearest_perimeter(r))]
+            if d["key"] != "land":  # land is uniform: "as much land as you can" just means "keep the shape on land"
+                variants += [("circle", "budget", r), ("triangle", "budget", nearest_perimeter(r))]
             if d.get("vs"):
                 nets = best_r3_sums(ll_rad, a - p, RADII, rank=a)  # v1: vs is always population
                 variants.append(("circle", "net", max(RADII, key=lambda x: (nets[x], -x))))

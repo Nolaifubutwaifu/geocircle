@@ -911,61 +911,10 @@
     }
   },
   "land|AUS|triangle|budget|8000": {
-    "status": "approved",
-    "id": 58,
-    "fact": "Australia covers about 7.7 million km² of land.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "land|AUS|triangle|budget|8000",
-      "difficulty": "medium",
-      "stat": "land",
-      "prompt": "Your triangle can be at most 8,000 km around. Catch as much of Australia's land as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 8000,
-      "best": {
-        "pct": 38.29,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              150.858,
-              -30.8411
-            ],
-            [
-              133.456,
-              -13.2423
-            ],
-            [
-              120.8595,
-              -32.702
-            ]
-          ]
-        }
-      },
-      "cells": "/data/land",
-      "stat_file": null,
-      "scope": {
-        "name": "Australia",
-        "countries": [
-          177
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          133.418,
-          -25.189
-        ],
-        "zoom": 3.14
-      },
-      "fact": "Australia has 8.0 million land.",
-      "credit": "Natural Earth (public domain)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Land is uniform: 'as much land as possible' just means keep the shape on land.",
+    "decided": "2026-11-20"
   },
   "potatoes|world|circle|target|10": {
     "status": "approved",

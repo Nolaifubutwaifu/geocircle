@@ -7,12 +7,12 @@ Update the "Where things stand" and "Next steps" sections at the end of each wor
 ## Where things stand (20 Nov 2026)
 
 - **Live:** daily puzzles since 18 Nov 2026. The 40 handwritten puzzles cover 18 Nov to 27 Dec.
-- **20 Nov 2026 (later):** Max approved 31 generated puzzles (IDs 41 to 71) in chat; `pnpm data schedule` now runs to 19 Jan 2027 (61 days ahead), 8 approved puzzles spare. The 3 net puzzles with a 1,500 km circle scored 100 for any guess, so they were cut to NZ sheep 300 km, USA chickens 500 km, Mongolia goats 500 km. New `trivial` gate (`GATE["max_naive"]=95`) rejects candidates where a typical first guess scores 95+. Land facts now read "about X km² of land" (hex areas overcount coasts, undercount Antarctica). All 41 fun facts approved. Old Vercel project `geocircle` deleted.
+- **20 Nov 2026 (later):** Max approved 31 generated puzzles (IDs 41 to 71) in chat, then rejected 58 (land budget: maximising land is trivial, so the generator no longer makes land budget puzzles). `pnpm data schedule` runs to 19 Jan 2027 (61 days ahead), 7 approved puzzles spare. The reveal panel shows one fact (the sourced fun fact, else the generated one). The 3 net puzzles with a 1,500 km circle scored 100 for any guess, so they were cut to NZ sheep 300 km, USA chickens 500 km, Mongolia goats 500 km. New `trivial` gate (`GATE["max_naive"]=95`) rejects candidates where a typical first guess scores 95+. Land facts now read "about X km² of land" (hex areas overcount coasts, undercount Antarctica). All 41 fun facts approved. Old Vercel project `geocircle` deleted.
 - **Merged 20 Nov 2026** ([PR #1](https://github.com/Nolaifubutwaifu/geocircle/pull/1), merge commit `cf49bec`) and deployed to production by Vercel's git integration:
   - Generator (PRD M1 to M4): `pnpm data candidates` gave 2,112 passing candidates (2,009 after the approvals and the `trivial` gate), including livestock. Full run about 3 min, cached rerun about 10 s.
   - Review page `/dev/review` (dev only, 404 in production) writing to `puzzles/curated.json`.
   - `pnpm data publish` (legacy + approved + fun facts into `public/data/puzzles.json`) and `pnpm data schedule` (`public/data/schedule.json`).
-  - Home page reads the schedule; `/archive` and Random puzzle hide future dailies.
+  - Home page reads the schedule; `/archive` and Next puzzle hide future dailies; Next puzzle only opens unplayed ones.
   - Livestock (GLW 2015 cattle, sheep, pigs, chickens, goats) switched on: CC0 on each Dataverse record, checked 20 Nov 2026.
   - Fun facts: `puzzles/funfacts.json`, 41 sourced facts for 26 datasets, all approved.
   - Bug fixes: land layer stack overflow on large views (`lib/land.ts`); net facts for single-country scopes.

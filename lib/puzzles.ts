@@ -96,10 +96,8 @@ export function whose(p: Puzzle): string {
   return `${owner} ${p.stat}`;
 }
 
-/** A random other puzzle, preferring ones not played yet. Null if the pool has nothing else. */
-export function pickRandom(pool: Puzzle[], currentId: Puzzle["id"], played: Set<string>, rand = Math.random): Puzzle | null {
-  const others = pool.filter((p) => String(p.id) !== String(currentId));
-  const fresh = others.filter((p) => !played.has(String(p.id)));
-  const from = fresh.length ? fresh : others;
-  return from.length ? from[Math.floor(rand() * from.length)] : null;
+/** A random other puzzle the player hasn't played yet. Null once they've played them all. */
+export function pickNext(pool: Puzzle[], currentId: Puzzle["id"], played: Set<string>, rand = Math.random): Puzzle | null {
+  const fresh = pool.filter((p) => String(p.id) !== String(currentId) && !played.has(String(p.id)));
+  return fresh.length ? fresh[Math.floor(rand() * fresh.length)] : null;
 }
