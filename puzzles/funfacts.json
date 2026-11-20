@@ -51,7 +51,7 @@
     {
       "text": "Finns drink the most coffee in the world, about 12 kg of beans per person a year.",
       "source": "https://www.worldatlas.com/society/the-top-coffee-consuming-countries.html",
-      "approved": false
+      "approved": true
     }
   ],
   "tea": [
@@ -65,7 +65,7 @@
     {
       "text": "Vatican City has topped the world for wine per person: about 74 litres each in 2012.",
       "source": "https://www.ncronline.org/news/world/vatican-city-consumes-more-wine-capita-any-other-country",
-      "approved": false
+      "approved": true
     },
     {
       "text": "The oldest known winery, found in a cave in Armenia, is about 6,100 years old.",
@@ -177,7 +177,7 @@
     {
       "text": "There are more than three chickens for every person on Earth.",
       "source": "https://www.fao.org/faostat/en/#data/QCL",
-      "approved": false
+      "approved": true
     },
     {
       "text": "Chickens were first domesticated about 3,500 years ago, drawn to the rice fields of Southeast Asia.",
@@ -208,7 +208,7 @@
     {
       "text": "Coal makes about three quarters of India's electricity.",
       "source": "https://ember-energy.org/latest-insights/coals-diminishing-role-in-indias-electricity-transition/",
-      "approved": false
+      "approved": true
     }
   ],
   "igp-cement": [

@@ -1,0 +1,1879 @@
+{
+  "sheep|NZL|circle|net|300": {
+    "status": "approved",
+    "id": 41,
+    "fact": "New Zealand has 5.6 sheep per person.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "sheep|NZL|circle|net|300",
+      "difficulty": "easy",
+      "stat": "sheep",
+      "prompt": "Sheep vs people in New Zealand. Your 300 km circle should catch the most sheep beyond the number of people.",
+      "mechanic": "circle",
+      "mode": "net",
+      "target_pct": null,
+      "radius_km": 300,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": 12636083,
+        "shape": {
+          "center": [
+            177.5203,
+            -39.2405
+          ],
+          "radius_km": 300
+        }
+      },
+      "cells": "/data/sheep",
+      "stat_file": null,
+      "scope": {
+        "name": "New Zealand",
+        "countries": [
+          180
+        ]
+      },
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          173.046,
+          -42.14
+        ],
+        "zoom": 5.01
+      },
+      "fact": "New Zealand has 5.6 sheep per person.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "chickens|USA|circle|net|500": {
+    "status": "approved",
+    "id": 42,
+    "fact": "The USA has 5.9 chickens per person.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "chickens|USA|circle|net|500",
+      "difficulty": "easy",
+      "stat": "chickens",
+      "prompt": "Chickens vs people in the USA. Your 500 km circle should catch the most chickens beyond the number of people.",
+      "mechanic": "circle",
+      "mode": "net",
+      "target_pct": null,
+      "radius_km": 500,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": 857825258,
+        "shape": {
+          "center": [
+            -84.943,
+            33.818
+          ],
+          "radius_km": 500
+        }
+      },
+      "cells": "/data/chickens",
+      "stat_file": null,
+      "scope": {
+        "name": "the USA",
+        "countries": [
+          155
+        ]
+      },
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          -85.959,
+          36.025
+        ],
+        "zoom": 3.98
+      },
+      "fact": "The USA has 5.9 chickens per person.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "earthquakes|CHL|circle|budget|300": {
+    "status": "approved",
+    "id": 43,
+    "fact": "Chile recorded 6,307 earthquakes since 2000.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "earthquakes|CHL|circle|budget|300",
+      "difficulty": "easy",
+      "stat": "earthquakes",
+      "prompt": "You get a 300 km circle. Catch as many of Chile's earthquakes (M4.5+, since 2000) as you can.",
+      "mechanic": "circle",
+      "mode": "budget",
+      "target_pct": null,
+      "radius_km": 300,
+      "perimeter_km": null,
+      "best": {
+        "pct": 32.65,
+        "net": null,
+        "shape": {
+          "center": [
+            -72.2229,
+            -32.8603
+          ],
+          "radius_km": 300
+        }
+      },
+      "cells": "/data/points/earthquakes",
+      "stat_file": null,
+      "scope": {
+        "name": "Chile",
+        "countries": [
+          3
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          -71.339,
+          -31.229
+        ],
+        "zoom": 3.49
+      },
+      "fact": "Chile recorded 6,307 earthquakes since 2000.",
+      "credit": "USGS Earthquake Catalog (public domain)"
+    }
+  },
+  "sheep|world|triangle|target|25": {
+    "status": "approved",
+    "id": 44,
+    "fact": "China alone accounts for 14% of the world's sheep. Australia and India follow with 6% and 6%.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "sheep|world|triangle|target|25",
+      "difficulty": "easy",
+      "stat": "sheep",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 25% of the world's sheep.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 25,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/sheep",
+      "stat_file": null,
+      "scope": null,
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          -178.753,
+          6.8
+        ],
+        "zoom": 1.2
+      },
+      "fact": "China alone accounts for 14% of the world's sheep. Australia and India follow with 6% and 6%.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "mcdonalds|IND|triangle|target|50": {
+    "status": "approved",
+    "id": 45,
+    "fact": "The smallest circle we found holding 50% of India's mapped McDonald's has a radius of 559 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "mcdonalds|IND|triangle|target|50",
+      "difficulty": "easy",
+      "stat": "mapped McDonald's",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly half of India's mapped McDonald's.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 50,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/points/mcdonalds",
+      "stat_file": null,
+      "scope": {
+        "name": "India",
+        "countries": [
+          9
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          76.541,
+          21.803
+        ],
+        "zoom": 3.87
+      },
+      "fact": "The smallest circle we found holding 50% of India's mapped McDonald's has a radius of 559 km.",
+      "credit": "Overture Maps Places (CDLA Permissive 2.0)"
+    }
+  },
+  "cattle|ARG|circle|target|50": {
+    "status": "approved",
+    "id": 46,
+    "fact": "The smallest circle we found holding 50% of Argentina's cattle has a radius of 412 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "cattle|ARG|circle|target|50",
+      "difficulty": "easy",
+      "stat": "cattle",
+      "prompt": "Draw a circle that holds exactly half of Argentina's cattle.",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 50,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/cattle",
+      "stat_file": null,
+      "scope": {
+        "name": "Argentina",
+        "countries": [
+          6
+        ]
+      },
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          -61.622,
+          -32.049
+        ],
+        "zoom": 4.36
+      },
+      "fact": "The smallest circle we found holding 50% of Argentina's cattle has a radius of 412 km.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "land|USA|triangle|target|50": {
+    "status": "approved",
+    "id": 47,
+    "fact": "The smallest circle we found covering 50% of the USA's land has a radius of 1,643 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "land|USA|triangle|target|50",
+      "difficulty": "easy",
+      "stat": "land",
+      "prompt": "Put down 3 pins. Your triangle must cover exactly half of the USA's land.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 50,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/land",
+      "stat_file": null,
+      "scope": {
+        "name": "the USA",
+        "countries": [
+          155
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          -118.089,
+          48.239
+        ],
+        "zoom": 2.27
+      },
+      "fact": "The smallest circle we found covering 50% of the USA's land has a radius of 1,643 km.",
+      "credit": "Natural Earth (public domain)"
+    }
+  },
+  "goats|MNG|circle|net|500": {
+    "status": "approved",
+    "id": 48,
+    "fact": "Mongolia has 6.8 goats per person.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "goats|MNG|circle|net|500",
+      "difficulty": "medium",
+      "stat": "goats",
+      "prompt": "Goats vs people in Mongolia. Your 500 km circle should catch the most goats beyond the number of people.",
+      "mechanic": "circle",
+      "mode": "net",
+      "target_pct": null,
+      "radius_km": 500,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": 13275682,
+        "shape": {
+          "center": [
+            100.3322,
+            46.4728
+          ],
+          "radius_km": 500
+        }
+      },
+      "cells": "/data/goats",
+      "stat_file": null,
+      "scope": {
+        "name": "Mongolia",
+        "countries": [
+          47
+        ]
+      },
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          102.011,
+          46.833
+        ],
+        "zoom": 4.16
+      },
+      "fact": "Mongolia has 6.8 goats per person.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "cattle|world|circle|target|20": {
+    "status": "approved",
+    "id": 49,
+    "fact": "Brazil alone accounts for 15% of the world's cattle. India and the USA follow with 13% and 6%.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "cattle|world|circle|target|20",
+      "difficulty": "easy",
+      "stat": "cattle",
+      "prompt": "Draw a circle that holds exactly 20% of the world's cattle.",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 20,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/cattle",
+      "stat_file": null,
+      "scope": null,
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          166.486,
+          9.626
+        ],
+        "zoom": 1.2
+      },
+      "fact": "Brazil alone accounts for 15% of the world's cattle. India and the USA follow with 13% and 6%.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "earthquakes|JPN|circle|target|50": {
+    "status": "approved",
+    "id": 50,
+    "fact": "The smallest circle we found holding 50% of Japan's earthquakes has a radius of 456 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "earthquakes|JPN|circle|target|50",
+      "difficulty": "medium",
+      "stat": "earthquakes",
+      "prompt": "Draw a circle that holds exactly half of Japan's earthquakes (M4.5+, since 2000).",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 50,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/points/earthquakes",
+      "stat_file": null,
+      "scope": {
+        "name": "Japan",
+        "countries": [
+          190
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          134.799,
+          33.116
+        ],
+        "zoom": 3.9
+      },
+      "fact": "The smallest circle we found holding 50% of Japan's earthquakes has a radius of 456 km.",
+      "credit": "USGS Earthquake Catalog (public domain)"
+    }
+  },
+  "pigs|USA|circle|target|50": {
+    "status": "approved",
+    "id": 51,
+    "fact": "The smallest circle we found holding 50% of the USA's pigs has a radius of 296 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "pigs|USA|circle|target|50",
+      "difficulty": "medium",
+      "stat": "pigs",
+      "prompt": "Draw a circle that holds exactly half of the USA's pigs.",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 50,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/pigs",
+      "stat_file": null,
+      "scope": {
+        "name": "the USA",
+        "countries": [
+          155
+        ]
+      },
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          -87.992,
+          39.664
+        ],
+        "zoom": 4.05
+      },
+      "fact": "The smallest circle we found holding 50% of the USA's pigs has a radius of 296 km.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "sheep|AUS|circle|target|25": {
+    "status": "approved",
+    "id": 52,
+    "fact": "The smallest circle we found holding 25% of Australia's sheep has a radius of 273 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "sheep|AUS|circle|target|25",
+      "difficulty": "medium",
+      "stat": "sheep",
+      "prompt": "Draw a circle that holds exactly 25% of Australia's sheep.",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 25,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/sheep",
+      "stat_file": null,
+      "scope": {
+        "name": "Australia",
+        "countries": [
+          177
+        ]
+      },
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          133.323,
+          -33.67
+        ],
+        "zoom": 3.24
+      },
+      "fact": "The smallest circle we found holding 25% of Australia's sheep has a radius of 273 km.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "bananas|Oceania|triangle|target|10": {
+    "status": "approved",
+    "id": 53,
+    "fact": "The smallest circle we found holding 10% of Oceania's bananas eaten has a radius of 55 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "bananas|Oceania|triangle|target|10",
+      "difficulty": "medium",
+      "stat": "bananas eaten",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of Oceania's bananas eaten.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 10,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/bananas.json",
+      "scope": {
+        "name": "Oceania",
+        "countries": [
+          161,
+          177,
+          179,
+          180,
+          181,
+          193,
+          194,
+          197,
+          198,
+          232,
+          233,
+          234,
+          235,
+          236,
+          237,
+          238,
+          240,
+          241,
+          244,
+          245,
+          246,
+          247,
+          248,
+          249,
+          251,
+          255
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          153.865,
+          -20.702
+        ],
+        "zoom": 2.93
+      },
+      "fact": "The smallest circle we found holding 10% of Oceania's bananas eaten has a radius of 55 km.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "mcdonalds|Asia|circle|target|25": {
+    "status": "approved",
+    "id": 54,
+    "fact": "The smallest circle we found holding 25% of Asia's mapped McDonald's has a radius of 499 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "mcdonalds|Asia|circle|target|25",
+      "difficulty": "medium",
+      "stat": "mapped McDonald's",
+      "prompt": "Draw a circle that holds exactly 25% of Asia's mapped McDonald's.",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 25,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/points/mcdonalds",
+      "stat_file": null,
+      "scope": {
+        "name": "Asia",
+        "countries": [
+          1,
+          2,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          20,
+          25,
+          26,
+          33,
+          40,
+          41,
+          42,
+          43,
+          47,
+          56,
+          57,
+          59,
+          61,
+          64,
+          66,
+          68,
+          69,
+          70,
+          90,
+          93,
+          105,
+          106,
+          109,
+          111,
+          116,
+          119,
+          120,
+          127,
+          128,
+          130,
+          143,
+          144,
+          145,
+          163,
+          167,
+          169,
+          170,
+          171,
+          172,
+          173,
+          183,
+          184,
+          189,
+          190,
+          229,
+          231,
+          250,
+          252,
+          254,
+          258
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          92.898,
+          21.495
+        ],
+        "zoom": 1.58
+      },
+      "fact": "The smallest circle we found holding 25% of Asia's mapped McDonald's has a radius of 499 km.",
+      "credit": "Overture Maps Places (CDLA Permissive 2.0)"
+    }
+  },
+  "coffee|Asia|triangle|target|30": {
+    "status": "approved",
+    "id": 55,
+    "fact": "The smallest circle we found holding 30% of Asia's coffee drunk has a radius of 933 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "coffee|Asia|triangle|target|30",
+      "difficulty": "medium",
+      "stat": "coffee drunk",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 30% of Asia's coffee drunk.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 30,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/coffee.json",
+      "scope": {
+        "name": "Asia",
+        "countries": [
+          1,
+          2,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          20,
+          25,
+          26,
+          33,
+          40,
+          41,
+          42,
+          43,
+          47,
+          56,
+          57,
+          59,
+          61,
+          64,
+          66,
+          68,
+          69,
+          70,
+          90,
+          93,
+          105,
+          106,
+          109,
+          111,
+          116,
+          119,
+          120,
+          127,
+          128,
+          130,
+          143,
+          144,
+          145,
+          163,
+          167,
+          169,
+          170,
+          171,
+          172,
+          173,
+          183,
+          184,
+          189,
+          190,
+          229,
+          231,
+          250,
+          252,
+          254,
+          258
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          81.202,
+          24.425
+        ],
+        "zoom": 1.64
+      },
+      "fact": "The smallest circle we found holding 30% of Asia's coffee drunk has a radius of 933 km.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "sheep|CHN|circle|target|50": {
+    "status": "approved",
+    "id": 56,
+    "fact": "The smallest circle we found holding 50% of China's sheep has a radius of 919 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "sheep|CHN|circle|target|50",
+      "difficulty": "medium",
+      "stat": "sheep",
+      "prompt": "Draw a circle that holds exactly half of China's sheep.",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 50,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/sheep",
+      "stat_file": null,
+      "scope": {
+        "name": "China",
+        "countries": [
+          10
+        ]
+      },
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          101.567,
+          39.032
+        ],
+        "zoom": 2.9
+      },
+      "fact": "The smallest circle we found holding 50% of China's sheep has a radius of 919 km.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "earthquakes|CHL|triangle|budget|2000": {
+    "status": "approved",
+    "id": 57,
+    "fact": "Chile recorded 6,307 earthquakes since 2000.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "earthquakes|CHL|triangle|budget|2000",
+      "difficulty": "medium",
+      "stat": "earthquakes",
+      "prompt": "Your triangle can be at most 2,000 km around. Catch as many of Chile's earthquakes (M4.5+, since 2000) as you can.",
+      "mechanic": "triangle",
+      "mode": "budget",
+      "target_pct": null,
+      "radius_km": null,
+      "perimeter_km": 2000,
+      "best": {
+        "pct": 31.84,
+        "net": null,
+        "shape": {
+          "pins": [
+            [
+              -72.1403,
+              -30.0561
+            ],
+            [
+              -74.6775,
+              -37.1788
+            ],
+            [
+              -69.3449,
+              -35.1859
+            ]
+          ]
+        }
+      },
+      "cells": "/data/points/earthquakes",
+      "stat_file": null,
+      "scope": {
+        "name": "Chile",
+        "countries": [
+          3
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          -71.339,
+          -31.229
+        ],
+        "zoom": 3.49
+      },
+      "fact": "Chile recorded 6,307 earthquakes since 2000.",
+      "credit": "USGS Earthquake Catalog (public domain)"
+    }
+  },
+  "land|AUS|triangle|budget|8000": {
+    "status": "approved",
+    "id": 58,
+    "fact": "Australia covers about 7.7 million km² of land.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "land|AUS|triangle|budget|8000",
+      "difficulty": "medium",
+      "stat": "land",
+      "prompt": "Your triangle can be at most 8,000 km around. Catch as much of Australia's land as you can.",
+      "mechanic": "triangle",
+      "mode": "budget",
+      "target_pct": null,
+      "radius_km": null,
+      "perimeter_km": 8000,
+      "best": {
+        "pct": 38.29,
+        "net": null,
+        "shape": {
+          "pins": [
+            [
+              150.858,
+              -30.8411
+            ],
+            [
+              133.456,
+              -13.2423
+            ],
+            [
+              120.8595,
+              -32.702
+            ]
+          ]
+        }
+      },
+      "cells": "/data/land",
+      "stat_file": null,
+      "scope": {
+        "name": "Australia",
+        "countries": [
+          177
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          133.418,
+          -25.189
+        ],
+        "zoom": 3.14
+      },
+      "fact": "Australia has 8.0 million land.",
+      "credit": "Natural Earth (public domain)"
+    }
+  },
+  "potatoes|world|circle|target|10": {
+    "status": "approved",
+    "id": 59,
+    "fact": "China alone accounts for 25% of the world's potatoes eaten. India and the USA follow with 14% and 7%.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "potatoes|world|circle|target|10",
+      "difficulty": "medium",
+      "stat": "potatoes eaten",
+      "prompt": "Draw a circle that holds exactly 10% of the world's potatoes eaten.",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 10,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/potatoes.json",
+      "scope": null,
+      "vs": null,
+      "view": {
+        "center": [
+          159.247,
+          20.521
+        ],
+        "zoom": 1.2
+      },
+      "fact": "China alone accounts for 25% of the world's potatoes eaten. India and the USA follow with 14% and 7%.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "fish|world|triangle|target|10": {
+    "status": "approved",
+    "id": 60,
+    "fact": "China alone accounts for 37% of the world's fish eaten. India and Indonesia follow with 8% and 7%.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "fish|world|triangle|target|10",
+      "difficulty": "medium",
+      "stat": "fish eaten",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the world's fish eaten.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 10,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/fish.json",
+      "scope": null,
+      "vs": null,
+      "view": {
+        "center": [
+          161.156,
+          20.898
+        ],
+        "zoom": 1.2
+      },
+      "fact": "China alone accounts for 37% of the world's fish eaten. India and Indonesia follow with 8% and 7%.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "eggs|Asia|triangle|target|10": {
+    "status": "approved",
+    "id": 61,
+    "fact": "The smallest circle we found holding 10% of Asia's eggs eaten has a radius of 343 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "eggs|Asia|triangle|target|10",
+      "difficulty": "medium",
+      "stat": "eggs eaten",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of Asia's eggs eaten.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 10,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/eggs.json",
+      "scope": {
+        "name": "Asia",
+        "countries": [
+          1,
+          2,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          20,
+          25,
+          26,
+          33,
+          40,
+          41,
+          42,
+          43,
+          47,
+          56,
+          57,
+          59,
+          61,
+          64,
+          66,
+          68,
+          69,
+          70,
+          90,
+          93,
+          105,
+          106,
+          109,
+          111,
+          116,
+          119,
+          120,
+          127,
+          128,
+          130,
+          143,
+          144,
+          145,
+          163,
+          167,
+          169,
+          170,
+          171,
+          172,
+          173,
+          183,
+          184,
+          189,
+          190,
+          229,
+          231,
+          250,
+          252,
+          254,
+          258
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          93.781,
+          17.469
+        ],
+        "zoom": 1.9
+      },
+      "fact": "The smallest circle we found holding 10% of Asia's eggs eaten has a radius of 343 km.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "rice|North America|triangle|target|10": {
+    "status": "approved",
+    "id": 62,
+    "fact": "The smallest circle we found holding 10% of North America's rice eaten has a radius of 153 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "rice|North America|triangle|target|10",
+      "difficulty": "medium",
+      "stat": "rice eaten",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of North America's rice eaten.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 10,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/rice.json",
+      "scope": {
+        "name": "North America",
+        "countries": [
+          29,
+          30,
+          38,
+          39,
+          113,
+          114,
+          117,
+          118,
+          134,
+          135,
+          136,
+          155,
+          156,
+          157,
+          158,
+          159,
+          178,
+          185,
+          186,
+          187,
+          188,
+          191,
+          199,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          209,
+          210,
+          211,
+          212,
+          213,
+          214,
+          215,
+          216,
+          256,
+          257
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          -94.216,
+          27.843
+        ],
+        "zoom": 2.61
+      },
+      "fact": "The smallest circle we found holding 10% of North America's rice eaten has a radius of 153 km.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "chocolate|Asia|circle|budget|2000": {
+    "status": "approved",
+    "id": 63,
+    "fact": "Indonesia accounts for 30% of Asia's chocolate eaten.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "chocolate|Asia|circle|budget|2000",
+      "difficulty": "medium",
+      "stat": "chocolate eaten",
+      "prompt": "You get a 2,000 km circle. Catch as much of Asia's chocolate eaten as you can.",
+      "mechanic": "circle",
+      "mode": "budget",
+      "target_pct": null,
+      "radius_km": 2000,
+      "perimeter_km": null,
+      "best": {
+        "pct": 42.96,
+        "net": null,
+        "shape": {
+          "center": [
+            115.4264,
+            7.0258
+          ],
+          "radius_km": 2000
+        }
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/chocolate.json",
+      "scope": {
+        "name": "Asia",
+        "countries": [
+          1,
+          2,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          20,
+          25,
+          26,
+          33,
+          40,
+          41,
+          42,
+          43,
+          47,
+          56,
+          57,
+          59,
+          61,
+          64,
+          66,
+          68,
+          69,
+          70,
+          90,
+          93,
+          105,
+          106,
+          109,
+          111,
+          116,
+          119,
+          120,
+          127,
+          128,
+          130,
+          143,
+          144,
+          145,
+          163,
+          167,
+          169,
+          170,
+          171,
+          172,
+          173,
+          183,
+          184,
+          189,
+          190,
+          229,
+          231,
+          250,
+          252,
+          254,
+          258
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          80.765,
+          16.937
+        ],
+        "zoom": 1.58
+      },
+      "fact": "Indonesia accounts for 30% of Asia's chocolate eaten.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "earthquakes|USA|triangle|target|10": {
+    "status": "approved",
+    "id": 64,
+    "fact": "The smallest circle we found holding 10% of the USA's earthquakes has a radius of 91 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "earthquakes|USA|triangle|target|10",
+      "difficulty": "hard",
+      "stat": "earthquakes",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the USA's earthquakes (M4.5+, since 2000).",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 10,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/points/earthquakes",
+      "stat_file": null,
+      "scope": {
+        "name": "the USA",
+        "countries": [
+          155
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          -150.762,
+          48.847
+        ],
+        "zoom": 2.6
+      },
+      "fact": "The smallest circle we found holding 10% of the USA's earthquakes has a radius of 91 km.",
+      "credit": "USGS Earthquake Catalog (public domain)"
+    }
+  },
+  "mcdonalds|Africa|triangle|target|20": {
+    "status": "approved",
+    "id": 65,
+    "fact": "The smallest circle we found holding 20% of Africa's mapped McDonald's has a radius of 30 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "mcdonalds|Africa|triangle|target|20",
+      "difficulty": "hard",
+      "stat": "mapped McDonald's",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 20% of Africa's mapped McDonald's.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 20,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/points/mcdonalds",
+      "stat_file": null,
+      "scope": {
+        "name": "Africa",
+        "countries": [
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          27,
+          28,
+          31,
+          32,
+          36,
+          37,
+          72,
+          73,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          96,
+          98,
+          99,
+          100,
+          101,
+          102,
+          107,
+          108,
+          115,
+          122,
+          123,
+          124,
+          125,
+          126,
+          133,
+          146,
+          147,
+          148,
+          149,
+          150,
+          151,
+          152,
+          153,
+          162,
+          164,
+          165,
+          166,
+          175,
+          182,
+          220,
+          221,
+          222
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          12.333,
+          -0.203
+        ],
+        "zoom": 1.95
+      },
+      "fact": "The smallest circle we found holding 20% of Africa's mapped McDonald's has a radius of 30 km.",
+      "credit": "Overture Maps Places (CDLA Permissive 2.0)"
+    }
+  },
+  "wine|world|triangle|target|10": {
+    "status": "approved",
+    "id": 66,
+    "fact": "France alone accounts for 13% of the world's wine drunk. The USA and Italy follow with 12% and 10%.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "wine|world|triangle|target|10",
+      "difficulty": "hard",
+      "stat": "wine drunk",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the world's wine drunk.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 10,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/wine.json",
+      "scope": null,
+      "vs": null,
+      "view": {
+        "center": [
+          179.969,
+          11.064
+        ],
+        "zoom": 1.2
+      },
+      "fact": "France alone accounts for 13% of the world's wine drunk. The USA and Italy follow with 12% and 10%.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "beer|Asia|triangle|budget|6000": {
+    "status": "approved",
+    "id": 67,
+    "fact": "China accounts for 62% of Asia's beer drunk.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "beer|Asia|triangle|budget|6000",
+      "difficulty": "hard",
+      "stat": "beer drunk",
+      "prompt": "Your triangle can be at most 6,000 km around. Catch as much of Asia's beer drunk as you can.",
+      "mechanic": "triangle",
+      "mode": "budget",
+      "target_pct": null,
+      "radius_km": null,
+      "perimeter_km": 6000,
+      "best": {
+        "pct": 34.33,
+        "net": null,
+        "shape": {
+          "pins": [
+            [
+              122.1394,
+              25.4328
+            ],
+            [
+              120.0431,
+              42.3721
+            ],
+            [
+              102.4596,
+              29.7303
+            ]
+          ]
+        }
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/beer.json",
+      "scope": {
+        "name": "Asia",
+        "countries": [
+          1,
+          2,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          20,
+          25,
+          26,
+          33,
+          40,
+          41,
+          42,
+          43,
+          47,
+          56,
+          57,
+          59,
+          61,
+          64,
+          66,
+          68,
+          69,
+          70,
+          90,
+          93,
+          105,
+          106,
+          109,
+          111,
+          116,
+          119,
+          120,
+          127,
+          128,
+          130,
+          143,
+          144,
+          145,
+          163,
+          167,
+          169,
+          170,
+          171,
+          172,
+          173,
+          183,
+          184,
+          189,
+          190,
+          229,
+          231,
+          250,
+          252,
+          254,
+          258
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          102.022,
+          26.973
+        ],
+        "zoom": 2.32
+      },
+      "fact": "China accounts for 62% of Asia's beer drunk.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "tea|Africa|triangle|target|10": {
+    "status": "approved",
+    "id": 68,
+    "fact": "The smallest circle we found holding 10% of Africa's tea drunk has a radius of 85 km.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "tea|Africa|triangle|target|10",
+      "difficulty": "hard",
+      "stat": "tea drunk",
+      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of Africa's tea drunk.",
+      "mechanic": "triangle",
+      "mode": "target",
+      "target_pct": 10,
+      "radius_km": null,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": null,
+        "shape": null
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/tea.json",
+      "scope": {
+        "name": "Africa",
+        "countries": [
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          27,
+          28,
+          31,
+          32,
+          36,
+          37,
+          72,
+          73,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          96,
+          98,
+          99,
+          100,
+          101,
+          102,
+          107,
+          108,
+          115,
+          122,
+          123,
+          124,
+          125,
+          126,
+          133,
+          146,
+          147,
+          148,
+          149,
+          150,
+          151,
+          152,
+          153,
+          162,
+          164,
+          165,
+          166,
+          175,
+          182,
+          220,
+          221,
+          222
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          25.833,
+          6.606
+        ],
+        "zoom": 2.63
+      },
+      "fact": "The smallest circle we found holding 10% of Africa's tea drunk has a radius of 85 km.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "brick-kilns|IND|triangle|budget|2000": {
+    "status": "approved",
+    "id": 69,
+    "fact": "India has 34,383 mapped brick kilns.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "brick-kilns|IND|triangle|budget|2000",
+      "difficulty": "hard",
+      "stat": "brick kilns",
+      "prompt": "Your triangle can be at most 2,000 km around. Catch as many of India's mapped brick kilns as you can.",
+      "mechanic": "triangle",
+      "mode": "budget",
+      "target_pct": null,
+      "radius_km": null,
+      "perimeter_km": 2000,
+      "best": {
+        "pct": 30.94,
+        "net": null,
+        "shape": {
+          "pins": [
+            [
+              81.8117,
+              24.6566
+            ],
+            [
+              85.9291,
+              26.5812
+            ],
+            [
+              77.0904,
+              28.5131
+            ]
+          ]
+        }
+      },
+      "cells": "/data/points/brick-kilns",
+      "stat_file": null,
+      "scope": {
+        "name": "India",
+        "countries": [
+          9
+        ]
+      },
+      "vs": null,
+      "view": {
+        "center": [
+          81.68,
+          26.448
+        ],
+        "zoom": 4.4
+      },
+      "fact": "India has 34,383 brick kilns.",
+      "credit": "APAD Asset Data via AWS Open Data (CC BY 4.0)"
+    }
+  },
+  "pigs|USA|circle|net|400": {
+    "status": "approved",
+    "id": 70,
+    "fact": "The USA has 0.2 pigs per person.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "pigs|USA|circle|net|400",
+      "difficulty": "hard",
+      "stat": "pigs",
+      "prompt": "Pigs vs people in the USA. Your 400 km circle should catch the most pigs beyond the number of people.",
+      "mechanic": "circle",
+      "mode": "net",
+      "target_pct": null,
+      "radius_km": 400,
+      "perimeter_km": null,
+      "best": {
+        "pct": null,
+        "net": 28411371,
+        "shape": {
+          "center": [
+            -94.7684,
+            41.207
+          ],
+          "radius_km": 400
+        }
+      },
+      "cells": "/data/pigs",
+      "stat_file": null,
+      "scope": {
+        "name": "the USA",
+        "countries": [
+          155
+        ]
+      },
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
+      "view": {
+        "center": [
+          -87.992,
+          39.664
+        ],
+        "zoom": 4.05
+      },
+      "fact": "The USA has 0.2 pigs per person.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  },
+  "rice|world|triangle|budget|10000": {
+    "status": "approved",
+    "id": 71,
+    "fact": "China alone accounts for 28% of the world's rice eaten. India and Indonesia follow with 22% and 8%.",
+    "prompt": null,
+    "reason": null,
+    "decided": "2026-11-20",
+    "puzzle": {
+      "key": "rice|world|triangle|budget|10000",
+      "difficulty": "hard",
+      "stat": "rice eaten",
+      "prompt": "Your triangle can be at most 10,000 km around. Catch as much of the world's rice eaten as you can.",
+      "mechanic": "triangle",
+      "mode": "budget",
+      "target_pct": null,
+      "radius_km": null,
+      "perimeter_km": 10000,
+      "best": {
+        "pct": 30.1,
+        "net": null,
+        "shape": {
+          "pins": [
+            [
+              102.3331,
+              18.7849
+            ],
+            [
+              73.1124,
+              35.3326
+            ],
+            [
+              71.4817,
+              7.972
+            ]
+          ]
+        }
+      },
+      "cells": "/data/population",
+      "stat_file": "/data/stats/rice.json",
+      "scope": null,
+      "vs": null,
+      "view": {
+        "center": [
+          55.269,
+          16.369
+        ],
+        "zoom": 1.2
+      },
+      "fact": "China alone accounts for 28% of the world's rice eaten. India and Indonesia follow with 22% and 8%.",
+      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
+    }
+  }
+}

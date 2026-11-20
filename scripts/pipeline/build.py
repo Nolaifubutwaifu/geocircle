@@ -930,7 +930,11 @@ def make_fact(p, latlng, w, scope_ids, scope_label, countries) -> str:
         n, share, v = shares[0]
         if p.get("food"):  # "Germany has 5.4 billion beer drunk" reads wrong for kg totals
             return f"{n} accounts for {pct_text(share)} of {whose(scope_label)} {p['stat']}."
-        return f"{n} recorded {fmt_count(v)} {p['stat']} since 2000." if p["cells"] == "points/earthquakes" else f"{n} has {fmt_count(v)} {p['stat']}."
+        if p["cells"] == "points/earthquakes":
+            return f"{n} recorded {fmt_count(v)} {p['stat']} since 2000."
+        if p["cells"] == "land":  # hex areas overcount coasts a few %, hence "about"
+            return f"{n} has about {fmt_count(v)} km² of land."
+        return f"{n} has {fmt_count(v)} {p['stat']}."
     if p["cells"] == "population" and not p.get("food"):
         return "Half of all people live in a circle about 4,000 km wide over Asia."
     (n1, s1, _), (n2, s2, _), (n3, s3, _) = shares[:3]
@@ -1197,11 +1201,12 @@ RADII = [100, 150, 200, 250, 300, 400, 500, 750, 1000, 1500, 2000]
 PERIMETERS = [1000, 1500, 2000, 3000, 4000, 5000, 6000, 8000, 10000]
 # Thresholds (PRD §5.3, §5.4). Starting values until calibration; changing them needs no re-measuring.
 GATE = dict(min_cells=200, max_top_share=0.20, min_surprise=0.25, budget_lo=20, budget_hi=60, budget_aim=35,
-            country_min_share=0.02, reach_margin=10, min_smallest_km=25, prompt_max=140, easy_from=55, medium_from=30)
+            country_min_share=0.02, reach_margin=10, min_smallest_km=25, prompt_max=140, easy_from=55, medium_from=30,
+            max_naive=95)
 # Measurement settings. They are part of the cache hash, as is GEN_VERSION: bump it when gen_measure changes.
 MEASURE = dict(fine_max=40_000, circle_max_km=5000, side_max_km=8000, tri_fallback_margin=10, sim_shapes=400, sim_sigma=0.4,
                net_jitter_km=500)
-GEN_VERSION = "1"
+GEN_VERSION = "3"
 SCOPE_NAMES = {"United States of America": "the USA", "United Kingdom": "the UK", "Netherlands": "the Netherlands",
                "Philippines": "the Philippines", "Solomon Islands": "the Solomon Islands",
                "United Republic of Tanzania": "Tanzania", "South Georgia and the Islands": "South Georgia"}
@@ -1489,11 +1494,14 @@ def gen_spec(d: dict, code: str, name: str, kind: str, ids, mech: str, mode: str
 def gate_fails(s: dict, m: dict) -> list[str]:
     """Checks on the expensive measurements. Thresholds live in GATE, so tuning them needs no re-measuring."""
     if s["mode"] == "target":
-        return (["reachable"] if m["reach_pct"] < s["target_pct"] + GATE["reach_margin"] else []) + (
+        fails = (["reachable"] if m["reach_pct"] < s["target_pct"] + GATE["reach_margin"] else []) + (
             ["pinpoint"] if m["smallest_km"] < GATE["min_smallest_km"] else [])
-    if s["mode"] == "budget":
-        return [] if GATE["budget_lo"] <= m["best"]["pct"] <= GATE["budget_hi"] else ["budget_range"]
-    return [] if m["best"]["net"] > 0 else ["net_positive"]
+    elif s["mode"] == "budget":
+        fails = [] if GATE["budget_lo"] <= m["best"]["pct"] <= GATE["budget_hi"] else ["budget_range"]
+    else:
+        fails = [] if m["best"]["net"] > 0 else ["net_positive"]
+    # A typical first guess already scores this much, e.g. a 1,500 km circle anywhere on New Zealand.
+    return fails + (["trivial"] if m.get("naive_median", 0) >= GATE["max_naive"] else [])
 
 
 def gen_record(s: dict, d: dict, m: dict | None, fails: list[str]) -> dict:
@@ -1695,6 +1703,7 @@ def step_selftest():
     assert gate_fails(t, dict(reach_pct=30, smallest_km=10)) == ["reachable", "pinpoint"]
     assert gate_fails(dict(mode="budget"), dict(best=dict(pct=70))) == ["budget_range"]
     assert gate_fails(dict(mode="net"), dict(best=dict(net=-5))) == ["net_positive"]
+    assert gate_fails(dict(mode="net"), dict(best=dict(net=5), naive_median=100)) == ["trivial"]
 
     # Scores match lib/score.ts, including JS rounding of .5 upwards.
     assert score_target(25, 25) == 100 and score_target(50, 25) == 0 and score_target(0, 25) == 0 and score_target(30, 20) == 50
