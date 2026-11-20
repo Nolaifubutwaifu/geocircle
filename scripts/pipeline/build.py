@@ -838,26 +838,24 @@ PUZZLES = [
          prompt="Draw a circle that holds exactly half of the USA's chickens.", credit=GLW),
     dict(stat="sheep", cells="sheep", scope={"continent": "Oceania"}, mechanic="triangle", mode="target", target_pct=25,
          prompt="Put down 3 pins. Your triangle must hold exactly 25% of Oceania's sheep.", credit=GLW),
-    dict(stat="brick kilns", cells="points/brick-kilns", scope=["Bangladesh"], mechanic="triangle", mode="target", target_pct=50,
-         prompt="Put down 3 pins. Your triangle must hold exactly half of Bangladesh's mapped brick kilns.", credit=APAD_BY),
-    dict(stat="brick kilns", cells="points/brick-kilns", scope=["Pakistan"], mechanic="circle", mode="target", target_pct=50,
-         prompt="Draw a circle that holds exactly half of Pakistan's mapped brick kilns.", credit=APAD_BY),
-    dict(stat="coal power capacity", cells="points/igp-coal", scope=IGP, mechanic="circle", mode="target", target_pct=30,
-         prompt="Draw a circle that holds exactly 30% of the coal power capacity on the Indo-Gangetic Plain.", fact_biggest=True,
-         credit=APAD_BY),
-    dict(stat="cement plants", cells="points/igp-cement", scope=IGP, mechanic="triangle", mode="target", target_pct=25,
-         prompt="Put down 3 pins. Your triangle must hold exactly 25% of the Indo-Gangetic Plain's cement plants.", credit=APAD_ODC),
-    dict(stat="paper mills", cells="points/igp-paper", scope=IGP, mechanic="circle", mode="budget", radius_km=250,
-         prompt="You get a 250 km circle. Catch as many of the Indo-Gangetic Plain's paper mills as you can.", credit=APAD_ODC),
-    dict(stat="plastic waste and dump sites", cells="points/igp-waste", scope=IGP, mechanic="circle", mode="target", target_pct=30,
-         prompt="Draw a circle that holds exactly 30% of the plastic waste and dump sites mapped on the Indo-Gangetic Plain.",
-         credit=APAD_ODC),
+    # 33 to 38 and 40 were APAD industrial data (brick kilns, coal, cement, paper, waste) until 20 Nov 2026; Max: weird data on one strip.
+    dict(stat="pigs", cells="pigs", scope=["Brazil"], mechanic="circle", mode="target", target_pct=10,
+         prompt="Draw a circle that holds exactly 10% of Brazil's pigs.", credit=GLW),
+    dict(stat="rice eaten", cells="population", food="rice", scope={"continent": "Africa"}, mechanic="triangle", mode="target",
+         target_pct=25, prompt="Put down 3 pins. Your triangle must hold exactly 25% of Africa's rice eaten.", credit=FOOD_CREDIT),
+    dict(stat="cattle", cells="cattle", scope=["Mexico"], mechanic="circle", mode="budget", radius_km=400,
+         prompt="You get a 400 km circle. Catch as many of Mexico's cattle as you can.", credit=GLW),
+    dict(stat="tea drunk", cells="population", food="tea", mechanic="triangle", mode="target", target_pct=10,
+         prompt="Put down 3 pins. Your triangle must hold exactly 10% of the world's tea drunk.", credit=FOOD_CREDIT),
+    dict(stat="chocolate eaten", cells="population", food="chocolate", mechanic="circle", mode="target", target_pct=25,
+         prompt="Draw a circle that holds exactly 25% of the world's chocolate eaten.", credit=FOOD_CREDIT),
+    dict(stat="coffee drunk", cells="population", food="coffee", mechanic="triangle", mode="target", target_pct=25,
+         prompt="Put down 3 pins. Your triangle must hold exactly 25% of the world's coffee drunk.", credit=FOOD_CREDIT),
     # 39 was Africa's gas and oil power capacity until 20 Nov 2026: a few plants hold it all, a first guess scored 0 at any size.
     dict(stat="potatoes eaten", cells="population", food="potatoes", scope={"continent": "Africa"}, mechanic="triangle", mode="target",
          target_pct=10, prompt="Put down 3 pins. Your triangle must hold exactly 10% of Africa's potatoes eaten.", credit=FOOD_CREDIT),
-    dict(stat="waste tonnage at mapped dump sites", cells="points/africa-waste", scope=AFRICA_APAD, mechanic="circle", mode="target", target_pct=50,
-         prompt="Draw a circle that holds exactly half of the waste tonnage at Africa's mapped dump sites.", fact_biggest=True,
-         credit=APAD_ODC),
+    dict(stat="land", cells="land", scope=["Russia"], mechanic="circle", mode="target", target_pct=20,
+         prompt="Draw a circle that covers exactly 20% of Russia's land.", credit=LAND),
 ]
 
 
@@ -1186,13 +1184,13 @@ DATASETS = [
     *[dict(key=k, cells=k, stat=k, noun="count", credit=GLW, licence_ok=True, vs=("population", "people"))
       for k in ("cattle", "sheep", "pigs", "chickens", "goats")],
     # APAD: CC BY 4.0 / ODC-By 1.0 (both allow commercial use), checked when puzzles 31 to 40 were added.
-    dict(key="brick-kilns", cells="points/brick-kilns", stat="brick kilns", prompt_stat="mapped brick kilns", noun="count", credit=APAD_BY, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
-    dict(key="igp-coal", cells="points/igp-coal", stat="coal power capacity", noun="mass", credit=APAD_BY, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
-    dict(key="igp-cement", cells="points/igp-cement", stat="cement plants", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
-    dict(key="igp-paper", cells="points/igp-paper", stat="paper mills", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
-    dict(key="igp-waste", cells="points/igp-waste", stat="plastic waste and dump sites", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
-    dict(key="africa-power", cells="points/africa-power", stat="mapped gas and oil power capacity", noun="mass", credit=APAD_BY, licence_ok=True, coverage=["Africa"]),
-    dict(key="africa-waste", cells="points/africa-waste", stat="waste tonnage at mapped dump sites", noun="mass", credit=APAD_ODC, licence_ok=True, coverage=["Africa"]),
+    dict(key="brick-kilns", off=True, cells="points/brick-kilns", stat="brick kilns", prompt_stat="mapped brick kilns", noun="count", credit=APAD_BY, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="igp-coal", off=True, cells="points/igp-coal", stat="coal power capacity", noun="mass", credit=APAD_BY, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="igp-cement", off=True, cells="points/igp-cement", stat="cement plants", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="igp-paper", off=True, cells="points/igp-paper", stat="paper mills", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="igp-waste", off=True, cells="points/igp-waste", stat="plastic waste and dump sites", noun="count", credit=APAD_ODC, licence_ok=True, coverage=["Indo-Gangetic Plain"]),
+    dict(key="africa-power", off=True, cells="points/africa-power", stat="mapped gas and oil power capacity", noun="mass", credit=APAD_BY, licence_ok=True, coverage=["Africa"]),
+    dict(key="africa-waste", off=True, cells="points/africa-waste", stat="waste tonnage at mapped dump sites", noun="mass", credit=APAD_ODC, licence_ok=True, coverage=["Africa"]),
 ]
 CONTINENTS = ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"]
 REGIONS = {"Indo-Gangetic Plain": IGP}
@@ -1597,7 +1595,7 @@ def step_candidates():
 
     specs = []
     for d in DATASETS:
-        if not d["licence_ok"]:
+        if not d["licence_ok"] or d.get("off"):  # off: Max found the APAD industrial data weird (20 Nov 2026)
             continue
         w, cidx, r3 = data[d["key"]]
         pos = w > 0
@@ -1737,7 +1735,7 @@ def step_selftest():
     assert make_prompt(ds["earthquakes"], "Japan", "country", "circle", "budget", 300) == PUZZLES[15]["prompt"]
     assert make_prompt(ds["wine"], "Europe", "continent", "triangle", "target", 30) == PUZZLES[16]["prompt"]
     assert make_prompt(ds["land"], "Canada", "country", "triangle", "target", 50) == PUZZLES[18]["prompt"]
-    assert make_prompt(ds["brick-kilns"], "Bangladesh", "country", "triangle", "target", 50) == PUZZLES[32]["prompt"]
+    assert make_prompt(ds["brick-kilns"], "Bangladesh", "country", "triangle", "target", 50) == "Put down 3 pins. Your triangle must hold exactly half of Bangladesh's mapped brick kilns."
     assert make_prompt(ds["mcdonalds"], "the world", "world", "circle", "target", 10) == PUZZLES[9]["prompt"]
     assert make_prompt(ds["land"], "the world", "world", "circle", "budget", 1500) == \
         "You get a 1,500 km circle. Catch as much of the world's land as you can."

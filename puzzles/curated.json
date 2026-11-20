@@ -1666,60 +1666,68 @@
     }
   },
   "brick-kilns|IND|triangle|budget|2000": {
+    "status": "rejected",
+    "reason": "too hard",
+    "note": "Brick kiln data is weird: everything along one strip. ID 69 now goats South America.",
+    "decided": "2026-11-20"
+  },
+  "goats|South America|circle|target|20": {
     "status": "approved",
     "id": 69,
-    "fact": "India has 34,383 mapped brick kilns.",
+    "fact": "The smallest circle we found holding 20% of South America's goats has a radius of 262 km.",
     "prompt": null,
     "reason": null,
     "decided": "2026-11-20",
     "puzzle": {
-      "key": "brick-kilns|IND|triangle|budget|2000",
+      "key": "goats|South America|circle|target|20",
       "difficulty": "hard",
-      "stat": "brick kilns",
-      "prompt": "Your triangle can be at most 2,000 km around. Catch as many of India's mapped brick kilns as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
+      "stat": "goats",
+      "prompt": "Draw a circle that holds exactly 20% of South America's goats.",
+      "mechanic": "circle",
+      "mode": "target",
+      "target_pct": 20,
       "radius_km": null,
-      "perimeter_km": 2000,
+      "perimeter_km": null,
       "best": {
-        "pct": 30.94,
+        "pct": null,
         "net": null,
-        "shape": {
-          "pins": [
-            [
-              81.8117,
-              24.6566
-            ],
-            [
-              85.9291,
-              26.5812
-            ],
-            [
-              77.0904,
-              28.5131
-            ]
-          ]
-        }
+        "shape": null
       },
-      "cells": "/data/points/brick-kilns",
+      "cells": "/data/goats",
       "stat_file": null,
       "scope": {
-        "name": "India",
+        "name": "South America",
         "countries": [
-          9
+          3,
+          4,
+          5,
+          6,
+          23,
+          24,
+          45,
+          46,
+          137,
+          138,
+          139,
+          140,
+          160,
+          174,
+          243
         ]
       },
-      "vs": null,
+      "vs": {
+        "cells": "/data/population",
+        "label": "people"
+      },
       "view": {
         "center": [
-          81.68,
-          26.448
+          -57.257,
+          -13.199
         ],
-        "zoom": 4.4
+        "zoom": 2.44
       },
-      "fact": "India has 34,383 brick kilns.",
-      "credit": "APAD Asset Data via AWS Open Data (CC BY 4.0)"
+      "fact": "The smallest circle we found holding 20% of South America's goats has a radius of 262 km.",
+      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
     }
   },
   "pigs|USA|circle|net|500": {
