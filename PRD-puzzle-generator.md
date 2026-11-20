@@ -305,7 +305,7 @@ The schedule must be live before **28 Dec 2026**.
 | M4 | Schedule, client reads it, archive change, 20+ approved so days 41 to 60 are covered | 21 Dec | Code done; 0 of 20+ approved yet |
 | M5 | 150 approved, 60 days ahead (needs more datasets from the backlog) | Phase 1 end, mid Jan 2027 | Not started |
 
-M1 to M4 live on branch `puzzle-generator` ([PR #1](https://github.com/Nolaifubutwaifu/geocircle/pull/1)) until merged.
+M1 to M4 merged into `main` on 20 Nov 2026 ([PR #1](https://github.com/Nolaifubutwaifu/geocircle/pull/1)).
 
 ## 10. Risks
 

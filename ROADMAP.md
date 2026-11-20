@@ -11,8 +11,8 @@ Live since 18 Nov 2026 with 40 handwritten daily puzzles (they run out after 27 
 | Phase 0: mobile polish, PWA, share image | Done |
 | Phase 0: PRD #1 puzzle generator | Done ([PRD](PRD-puzzle-generator.md)) |
 | Phase 0: domain, PostHog, competitor analysis | Not started |
-| Phase 1: generator, review page, schedule (PRD M1 to M4) | Built, in [PR #1](https://github.com/Nolaifubutwaifu/geocircle/pull/1), not merged yet |
-| Phase 1: fun facts per dataset | Built, 37 approved (same PR) |
+| Phase 1: generator, review page, schedule (PRD M1 to M4) | Done, merged 20 Nov 2026 ([PR #1](https://github.com/Nolaifubutwaifu/geocircle/pull/1)) |
+| Phase 1: fun facts per dataset | Done, 37 approved |
 | Phase 1: 150 approved puzzles, 60 days scheduled (PRD M5) | 0 approved so far |
 | Phase 1: Pick the countries, 4 to 6 new datasets | Not started |
 
