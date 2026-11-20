@@ -9,7 +9,7 @@ pnpm install
 pnpm dev
 ```
 
-Open http://localhost:3000. `/archive` lists the 40 daily puzzles, `/countries` has a "halve the country" puzzle for 173 countries.
+Open http://localhost:3000. `/archive` lists the daily puzzles up to today, `/countries` has a "halve the country" puzzle for 173 countries.
 
 Puzzle modes: **target** (hit a %), **budget** (catch the most with a fixed circle or perimeter) and **net** (catch the most of one thing minus another, e.g. cows minus people). Any puzzle can be limited to some countries (`scope`).
 

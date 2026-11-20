@@ -2,6 +2,20 @@
 
 Written 19 Nov 2026. Living document: update it at the end of each phase.
 
+## Status (20 Nov 2026)
+
+Live since 18 Nov 2026 with 40 handwritten daily puzzles (they run out after 27 Dec). Current phase: end of Phase 0, Phase 1 underway. Day-to-day status and next steps: [CLAUDE.md](CLAUDE.md).
+
+| Item | Status |
+|---|---|
+| Phase 0: mobile polish, PWA, share image | Done |
+| Phase 0: PRD #1 puzzle generator | Done ([PRD](PRD-puzzle-generator.md)) |
+| Phase 0: domain, PostHog, competitor analysis | Not started |
+| Phase 1: generator, review page, schedule (PRD M1 to M4) | Built, in [PR #1](https://github.com/Nolaifubutwaifu/geocircle/pull/1), not merged yet |
+| Phase 1: fun facts per dataset | Built, 37 approved (same PR) |
+| Phase 1: 150 approved puzzles, 60 days scheduled (PRD M5) | 0 approved so far |
+| Phase 1: Pick the countries, 4 to 6 new datasets | Not started |
+
 ## 1. Goals
 
 1. **Real players who enjoy it.** People come back on their own and send it to friends.
@@ -50,7 +64,7 @@ It then filters candidates with automatic checks:
 - **Surprise score:** how far the data's distribution is from plain population. Higher means more interesting.
 - **Difficulty estimate:** used to schedule easy Mondays and hard Sundays.
 
-You curate: pick the daily puzzle from the top candidates and write or approve the one-line fun fact.
+You curate: approve candidates on the review page (`/dev/review`); the schedule fills the daily slots. Fun facts are written per dataset with a source (`puzzles/funfacts.json`) and approved once.
 
 **Three kinds of interesting:**
 1. **Surprising data:** meteorites (Antarctica, Sahara), lightning (eastern Congo), coffee grown vs coffee drunk.

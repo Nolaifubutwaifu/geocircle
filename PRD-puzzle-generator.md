@@ -297,13 +297,15 @@ Before trusting any threshold:
 
 The schedule must be live before **28 Dec 2026**.
 
-| # | Deliverable | Date |
-|---|---|---|
-| M1 | Registry, enumeration, cheap checks, `candidates.json` | 30 Nov |
-| M2 | Best shapes, difficulty, prompt templates, calibration on the 40 | 7 Dec |
-| M3 | Review page, `curated.json`, `publish` | 14 Dec |
-| M4 | Schedule, client reads it, archive change, 20+ approved so days 41 to 60 are covered | 21 Dec |
-| M5 | 150 approved, 60 days ahead (needs more datasets from the backlog) | Phase 1 end, mid Jan 2027 |
+| # | Deliverable | Date | Status (20 Nov 2026) |
+|---|---|---|---|
+| M1 | Registry, enumeration, cheap checks, `candidates.json` | 30 Nov | Done |
+| M2 | Best shapes, difficulty, prompt templates, calibration on the 40 | 7 Dec | Built; threshold tuning waits on Max's labels in `calibration.csv` |
+| M3 | Review page, `curated.json`, `publish` | 14 Dec | Done |
+| M4 | Schedule, client reads it, archive change, 20+ approved so days 41 to 60 are covered | 21 Dec | Code done; 0 of 20+ approved yet |
+| M5 | 150 approved, 60 days ahead (needs more datasets from the backlog) | Phase 1 end, mid Jan 2027 | Not started |
+
+M1 to M4 live on branch `puzzle-generator` ([PR #1](https://github.com/Nolaifubutwaifu/geocircle/pull/1)) until merged.
 
 ## 10. Risks
 
