@@ -102,6 +102,15 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
           </div>
           <p className="mt-3 text-[15px] leading-relaxed text-chalk">{detail}</p>
           <p className="mt-2 text-[14px] leading-relaxed text-mist">{puzzle.fact}</p>
+          {puzzle.funfact && (
+            <p className="mt-2 text-[14px] leading-relaxed text-chalk">
+              <span className="font-display font-semibold text-amber">Did you know? </span>
+              {puzzle.funfact.text}{" "}
+              <a href={puzzle.funfact.source} target="_blank" rel="noopener noreferrer" className="text-[12px] text-mist underline underline-offset-2 hover:text-chalk">
+                Source
+              </a>
+            </p>
+          )}
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
             <Link href="/archive" className="text-amber underline-offset-4 hover:underline">
               All puzzles

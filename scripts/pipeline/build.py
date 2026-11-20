@@ -999,9 +999,24 @@ def merge_curated(legacy, curated):
     return sorted(out, key=lambda p: p["id"])
 
 
+FUNFACTS = ROOT / "puzzles" / "funfacts.json"
+
+
+def attach_funfacts(puzzles, funfacts):
+    """Adds one approved "Did you know?" fact per puzzle from its dataset's list, rotating by ID so repeats differ."""
+    for p in puzzles:
+        p.pop("funfact", None)
+        facts = [f for f in funfacts.get(puzzle_dataset(p), []) if f.get("approved")]
+        if facts:
+            f = facts[p["id"] % len(facts)]
+            p["funfact"] = {"text": f["text"], "source": f["source"]}
+    return puzzles
+
+
 def write_puzzles(legacy):
     curated = json.loads(CURATED.read_text()) if CURATED.exists() else {}
-    out = merge_curated(legacy, curated)
+    funfacts = json.loads(FUNFACTS.read_text()) if FUNFACTS.exists() else {}
+    out = attach_funfacts(merge_curated(legacy, curated), funfacts)
     write_json(OUT / "puzzles.json", out)
     log(f"puzzles.json: {len(legacy)} legacy + {len(out) - len(legacy)} approved = {len(out)}")
 
@@ -1763,6 +1778,14 @@ def step_selftest():
             raise AssertionError("bad curated ids accepted")
         except AssertionError as e:
             assert "accepted" not in str(e)
+
+    # fun facts: only approved ones, rotated by ID, replaced on every publish
+    ff = {"coffee": [{"text": "A.", "source": "u", "approved": True}, {"text": "No.", "source": "u", "approved": False},
+                     {"text": "B.", "source": "v", "approved": True}]}
+    ps = attach_funfacts([{"id": 4, "cells": "/data/population", "stat_file": "/data/stats/coffee.json", "funfact": "old"},
+                          {"id": 5, "cells": "/data/population", "stat_file": "/data/stats/coffee.json"},
+                          {"id": 6, "cells": "/data/land", "stat_file": None, "funfact": "old"}], ff)
+    assert ps[0]["funfact"] == {"text": "A.", "source": "u"} and ps[1]["funfact"]["text"] == "B." and "funfact" not in ps[2]
 
     # schedule (PRD §5.11): rules on a fake pool of 10 datasets x 3 levels x 2 mechanics x 2 modes
     legacy = [{"id": i, "cells": f"/data/legacy{i % 5}", "stat_file": None, "mechanic": "circle", "mode": "target"} for i in range(1, len(PUZZLES) + 1)]

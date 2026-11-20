@@ -27,6 +27,8 @@ export type Puzzle = {
   view: { center: LngLat; zoom: number };
   fact: string;
   credit: string;
+  /** "Did you know?" line from puzzles/funfacts.json, added by `pnpm data publish`. */
+  funfact?: { text: string; source: string };
   /** Generated puzzles: candidate key and simulated difficulty. */
   key?: string;
   difficulty?: "easy" | "medium" | "hard";
