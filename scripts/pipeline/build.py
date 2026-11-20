@@ -516,7 +516,7 @@ def step_points():
         log("mcdonalds: no Overture extract yet, skipping")
 
 
-# ---------------------------------------------------------------- livestock (GLW4 2015, CC0)
+# ---------------------------------------------------------------- livestock (GLW4 2015, CC0 on Dataverse)
 
 def raster_to_cells(path: Path, res: int):
     """Sum a global count raster (one value per pixel) into H3 cells by pixel centre."""
@@ -753,7 +753,7 @@ def auto_view(latlng, w):
 
 POP = "Kontur Population (CC BY 4.0)"
 FOOD_CREDIT = "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
-GLW = "FAO Gridded Livestock of the World 2015 (CC0)"
+GLW = "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0)"
 LAND = "Natural Earth (public domain)"
 QUAKES = "USGS Earthquake Catalog (public domain)"
 MCD = "Overture Maps Places (CDLA Permissive 2.0)"
@@ -916,8 +916,12 @@ def make_fact(p, latlng, w, scope_ids, scope_label, countries) -> str:
             if people > (2e5 if scope_ids else 2e6):
                 ratios.append((sum(v.values()) / people, countries.loc[int(c), "ADMIN"]))
         ratios.sort(reverse=True)
-        (r1, n1), (r2, n2) = ratios[0], ratios[1]
-        return f"{n1} has {r1:.1f} {p['stat']} per person. {n2} has {r2:.1f}."
+        if len(ratios) >= 2:
+            (r1, n1), (r2, n2) = ratios[0], ratios[1]
+            return f"{n1} has {r1:.1f} {p['stat']} per person. {n2} has {r2:.1f}."
+        if ratios:  # a single-country scope
+            return f"{ratios[0][1]} has {ratios[0][0]:.1f} {p['stat']} per person."
+        # no country big enough to compare: fall through to the share facts
     if p["mode"] == "target" and scope_ids is not None:
         km = p.get("smallest_km") or smallest_circle_km(latlng, w, p["target_pct"] / 100)
         return f"The smallest circle we found holding {p['target_pct']}% of {whose(scope_label)} {p['stat']} has a radius of {fmt_count(km)} km."
@@ -1159,8 +1163,8 @@ DATASETS = [
     *[dict(key=k, cells="population", food=k, stat=FOOD_STAT[k], noun="mass", credit=FOOD_CREDIT, licence_ok=True) for k in FOOD],
     dict(key="earthquakes", cells="points/earthquakes", stat="earthquakes", prompt_stat="earthquakes (M4.5+, since 2000)", noun="count", credit=QUAKES, licence_ok=True),
     dict(key="mcdonalds", cells="points/mcdonalds", stat="mapped McDonald's", noun="count", credit=MCD, licence_ok=True),
-    # GLW is ⚠️ in GAME-SPEC §4: flip licence_ok once Max has checked each species file (PRD open question 1).
-    *[dict(key=k, cells=k, stat=k, noun="count", credit=GLW, licence_ok=False, vs=("population", "people"))
+    # GLW: each 2015 species record on Harvard Dataverse is CC0, FAO's catalogue says CC BY 4.0; both allow commercial use (checked 20 Nov 2026).
+    *[dict(key=k, cells=k, stat=k, noun="count", credit=GLW, licence_ok=True, vs=("population", "people"))
       for k in ("cattle", "sheep", "pigs", "chickens", "goats")],
     # APAD: CC BY 4.0 / ODC-By 1.0 (both allow commercial use), checked when puzzles 31 to 40 were added.
     dict(key="brick-kilns", cells="points/brick-kilns", stat="brick kilns", prompt_stat="mapped brick kilns", noun="count", credit=APAD_BY, licence_ok=True, coverage=["Indo-Gangetic Plain"]),

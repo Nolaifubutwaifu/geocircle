@@ -38,7 +38,7 @@ It reads raw downloads from `data-raw/` (not in git). Sources and download URLs:
 | `data-raw/kontur/` | Kontur Population 3 km (`kontur_population_20231101_r6.gpkg.gz`, HDX) | CC BY 4.0 |
 | `data-raw/fao/` | FAOSTAT Food Balances, bulk normalized CSV | CC BY 4.0 |
 | `data-raw/usgs/` | USGS earthquakes M4.5+, one CSV per year 2000 to 2025 (FDSN API) | Public domain |
-| `data-raw/glw/` | FAO Gridded Livestock of the World 2015: cattle, sheep, pigs, chickens, goats (`5_*_2015_Da.tif`, Harvard Dataverse) | CC0 |
+| `data-raw/glw/` | FAO Gridded Livestock of the World 2015: cattle, sheep, pigs, chickens, goats (`5_*_2015_Da.tif`, Harvard Dataverse: cattle doi:10.7910/DVN/LHBICE, sheep VZOYHM, pigs CIVCPB, chickens SXHLF3, goats YYG6ET) | CC0 on each record; FAO catalogue says CC BY 4.0, so credit the authors |
 | `data-raw/apad/` | APAD industrial asset data (AWS Open Data, bucket `assetdata-igp`, ap-southeast-1): South Asia brick kilns, coal, cement, paper, waste sites; Africa power and waste sites | CC BY 4.0 / ODC-By 1.0 |
 | `data-raw/overture/` | McDonald's from Overture Places: `uv run scripts/pipeline/overture_brand.py 2026-10-21.0 Q38076 data-raw/overture/mcdonalds-full.csv "mcdonald's%" ...` (resumable, one Parquet file at a time), then deduplicated within 150 m into `mcdonalds.csv` | CDLA Permissive 2.0 |
 

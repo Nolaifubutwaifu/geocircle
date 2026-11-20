@@ -313,9 +313,9 @@ The schedule must be live before **28 Dec 2026**.
 | Food stats look alike (all population × kg per person) | 7-day dataset spacing; rank favours datasets with fewer approved puzzles; add the backlog datasets. |
 | Triangle search is slow | r3 aggregates, cache, survivors only. |
 | Generator slips past 28 Dec | Hand-write 10 more puzzles in `PUZZLES` (the current flow) as insurance by 14 Dec if M2 is late. Worst case the daily cycles, which repeats but doesn't break. |
-| A dataset's licence turns out to be non-commercial | `licence_ok` gate; GLW livestock is ⚠️ in GAME-SPEC, Max confirms each species file before setting it. |
+| A dataset's licence turns out to be non-commercial | `licence_ok` gate; each new dataset gets its licence checked before it is set. |
 
 ## 11. Open questions
 
-1. GLW livestock licence per species file: Dataverse says CC BY 4.0 or CC0, the FAO parent page says CC BY-NC-SA. Puzzles 13, 14, 20 to 23 already use it.
+1. ~~GLW livestock licence per species file~~ Resolved 20 Nov 2026: the five 2015 species records are CC0 on Dataverse and the FAO catalogue says CC BY 4.0. Both allow commercial use; credit Gilbert et al. 2022.
 2. All thresholds in §5.3 and §5.4 are guesses until calibration.
