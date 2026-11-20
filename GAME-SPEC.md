@@ -153,7 +153,7 @@ Licence matters because a Premium tier makes this commercial use. Anything non-c
 | 6 | Base population layer (recommended) | Kontur Population, 22 km H3 | H3 res 4 | ✅ CC BY | Already in the game's grid. Also 3 km and 400 m versions. |
 | 7 | "Split the world's **rice / beer / wine / coffee / chocolate / potatoes / bananas / cheese / fish / sugar / pork** eaten" | FAOSTAT Food Balances (per person per year, by country) | Per country × population | ✅ CC BY 4.0 | One join gives 12+ puzzles. Cheapest start. Cite as "FAO". |
 | 8 | "Catch 25% of the world's **coffee grown**" / cocoa / rice / bananas | SPAM 2020 (IFPRI MapSPAM), 46 crops | 10 km grid | ✅ CC BY 4.0 | Pair with #7: coffee grown on Monday, coffee drunk on Tuesday. Download needs a short guestbook form. |
-| 9 | "1,000 km circle: catch the most **sheep**" / cows / chickens / pigs / goats / ducks / horses / buffalo | FAO Gridded Livestock of the World (GLW4, 2015 and 2020) | 10 km grid | ⚠️ Dataverse says CC BY 4.0, one record CC0, FAO parent page says CC BY-NC-SA | Check the licence on each species file. NZ/Australia sheep puzzle lives here. |
+| 9 | "1,000 km circle: catch the most **sheep**" / cows / chickens / pigs / goats / ducks / horses / buffalo | FAO Gridded Livestock of the World (GLW4, 2015 and 2020) | 10 km grid | ✅ 2015 cattle, sheep, pigs, chickens, goats: CC0 on each Dataverse record; FAO catalogue now says CC BY 4.0 (checked 20 Nov 2026) | Credit Gilbert et al. 2022. Check ducks, horses, buffalo and the 2020 files before using them. NZ/Australia sheep puzzle lives here. |
 | 10 | "Catch 10% of **all lightning ever recorded**" | NASA LIS/OTD lightning climatology, 0.5° | Grid | ✅ NASA open data | Global (unlike #2). Peak is eastern Congo, which few people guess. |
 | 11 | "Catch the most **light pollution**" | VIIRS Nighttime Lights annual (Colorado School of Mines EOG) | 500 m grid | ⚠️ Listed as public domain in some catalogues, CC BY in others | Check eogdata.mines.edu. |
 | 12 | "Catch the most **wildfires this month**" | NASA FIRMS active fires | Points, near real time | ✅ Open, citation and disclaimer required | Fresh data each week. |
@@ -194,7 +194,7 @@ Licence matters because a Premium tier makes this commercial use. Anything non-c
 - [Kontur Population on HDX](https://data.humdata.org/dataset/kontur-population-dataset)
 - [FAOSTAT Food Balances catalogue entry](https://data.fao.org/catalog/dataset/2f264bb6-1238-459a-bf8b-0e2d0a16804a) and [FAO database terms](https://www.fao.org/contact-us/terms/db-terms-of-use)
 - [SPAM 2020 FAO catalogue entry (CC BY 4.0, doi:10.7910/DVN/SWPENT)](https://data.fao.org/catalog/iso/3757ea29-7c21-419e-a9d0-46e0b268049e)
-- [GLW4 on Harvard Dataverse](https://dataverse.harvard.edu/dataverse/glw) and [FAO GLW catalogue (conflicting licence)](https://data.apps.fao.org/catalog/dataset/glw)
+- [GLW4 on Harvard Dataverse](https://dataverse.harvard.edu/dataverse/glw) and [FAO GLW catalogue (CC BY 4.0)](https://data.apps.fao.org/catalog/dataset/glw)
 - [LIS/OTD lightning climatology](https://catalog.data.gov/dataset/lis-otd-0-5-degree-high-resolution-full-climatology-hrfc-v2-3-2015)
 - [VIIRS night lights (licence notes)](https://gee-community-catalog.org/projects/eog_viirs_ntl/)
 - [NASA FIRMS](https://developers.google.com/earth-engine/datasets/catalog/FIRMS)

@@ -1,0 +1,259 @@
+{
+  "population": [
+    {
+      "text": "More people live inside one circle over South and East Asia, about 4,000 km in radius, than in the rest of the world combined.",
+      "source": "https://blogs.lse.ac.uk/maths/2015/12/16/the-worlds-tightest-cluster-of-people/",
+      "approved": true
+    },
+    {
+      "text": "By the UN's 2025 count, Jakarta is the world's biggest city at about 42 million people, ahead of Dhaka and Tokyo.",
+      "source": "https://www.un.org/sustainabledevelopment/blog/2025/11/press-release-wup2025/",
+      "approved": true
+    },
+    {
+      "text": "Mongolia is the least densely populated country, with about 2 people per square kilometre.",
+      "source": "https://www.worldatlas.com/geography/10-least-densely-populated-countries-in-the-world.html",
+      "approved": true
+    }
+  ],
+  "land": [
+    {
+      "text": "Russia alone covers about 11% of the world's land.",
+      "source": "https://www.worldometers.info/geography/largest-countries-in-the-world/",
+      "approved": true
+    },
+    {
+      "text": "Canada has the longest coastline of any country: at least 202,080 km.",
+      "source": "https://www.guinnessworldrecords.com/world-records/65957-longest-coastline",
+      "approved": true
+    }
+  ],
+  "rice": [
+    {
+      "text": "Rice is the staple food for more than half of the world's people.",
+      "source": "https://www.fao.org/4/Y5167E/y5167e02.htm",
+      "approved": true
+    },
+    {
+      "text": "About four fifths of the world's rice is grown by small farmers and eaten close to where it grows.",
+      "source": "https://www.foodnavigator.com/Article/2004/02/17/Rice-is-life-warns-FAO/",
+      "approved": true
+    }
+  ],
+  "beer": [
+    {
+      "text": "Czechia has drunk the most beer per person every year since 1993: about 152 litres each in 2023.",
+      "source": "https://kirinholdings.com/en/newsroom/release/2024/1219_01.html",
+      "approved": true
+    }
+  ],
+  "coffee": [
+    {
+      "text": "Finns drink the most coffee in the world, about 12 kg of beans per person a year.",
+      "source": "https://www.worldatlas.com/society/the-top-coffee-consuming-countries.html",
+      "approved": false
+    }
+  ],
+  "tea": [
+    {
+      "text": "Türkiye drinks the most tea per person, about 1,300 cups each a year.",
+      "source": "https://www.foodnavigator.com/Article/2019/01/16/Turkey-tops-tea-drinking-chart-Each-Turk-drinks-an-average-of-1-300-cups-of-tea-per-year/",
+      "approved": true
+    }
+  ],
+  "wine": [
+    {
+      "text": "Vatican City has topped the world for wine per person: about 74 litres each in 2012.",
+      "source": "https://www.ncronline.org/news/world/vatican-city-consumes-more-wine-capita-any-other-country",
+      "approved": false
+    },
+    {
+      "text": "The oldest known winery, found in a cave in Armenia, is about 6,100 years old.",
+      "source": "https://www.decanter.com/wine-news/armenian-find-is-world-s-oldest-winery-42433/",
+      "approved": true
+    }
+  ],
+  "chocolate": [
+    {
+      "text": "Côte d'Ivoire grows about 40% of the world's cocoa.",
+      "source": "https://unctad.org/node/13076",
+      "approved": true
+    },
+    {
+      "text": "The Aztecs used cocoa beans as money and demanded them as tribute.",
+      "source": "https://www.worldhistory.org/Chocolate_in_Mesoamerica/",
+      "approved": true
+    }
+  ],
+  "bananas": [
+    {
+      "text": "Botanically, bananas are berries. Strawberries are not.",
+      "source": "https://www.livescience.com/57477-why-are-bananas-considered-berries.html",
+      "approved": true
+    },
+    {
+      "text": "Almost every banana traded between countries is one variety: the Cavendish.",
+      "source": "https://www.fao.org/4/y5102e/y5102e04.htm",
+      "approved": true
+    }
+  ],
+  "potatoes": [
+    {
+      "text": "In 1995, five small potatoes were grown on board the Space Shuttle Columbia.",
+      "source": "https://webharvest.gov/peth04/20041015164551/http://www1.nasa.gov/missions/science/spacespuds.html",
+      "approved": true
+    }
+  ],
+  "eggs": [
+    {
+      "text": "China lays about a third of the world's eggs.",
+      "source": "https://poultryworld.net/poultry/layers/a-decade-of-immense-growth",
+      "approved": true
+    }
+  ],
+  "fish": [
+    {
+      "text": "In 2022, for the first time, fish farms produced more aquatic animals than wild fishing.",
+      "source": "https://www.fao.org/newsroom/detail/fao-report-global-fisheries-and-aquaculture-production-reaches-a-new-record-high/en",
+      "approved": true
+    },
+    {
+      "text": "People in the Maldives eat the most fish in the world, more than 80 kg each a year.",
+      "source": "https://www.weforum.org/stories/2022/11/chart-shows-countries-consume-fish-food-security/",
+      "approved": true
+    }
+  ],
+  "earthquakes": [
+    {
+      "text": "The strongest earthquake ever recorded hit Chile in 1960, at magnitude 9.5.",
+      "source": "https://webarchive.library.unt.edu/eot2008/20090109060417/http://earthquake.usgs.gov/regional/world/events/1960_05_22.php",
+      "approved": true
+    },
+    {
+      "text": "The USGS estimates several million earthquakes happen every year. Most are too small or remote to detect.",
+      "source": "https://webarchive.library.unt.edu/web/20130221090001/http://earthquake.usgs.gov/eqcenter/eqarchives/year/eqstats.php",
+      "approved": true
+    },
+    {
+      "text": "Japan has 0.28% of the world's land but about 18% of its magnitude 6+ earthquakes.",
+      "source": "https://www.nippon.com/en/japan-data/h00549/",
+      "approved": true
+    }
+  ],
+  "mcdonalds": [
+    {
+      "text": "Iceland has had no McDonald's since 2009. Its last burger and fries are still on display, barely decayed.",
+      "source": "https://icelandmonitor.mbl.is/news/culture_and_living/2015/01/24/iceland_s_last_mcdonald_s_burger_still_intact",
+      "approved": true
+    },
+    {
+      "text": "Since 1986, The Economist has compared Big Mac prices around the world to judge whether currencies are over or undervalued.",
+      "source": "https://en.wikipedia.org/wiki/Big_Mac_Index",
+      "approved": true
+    }
+  ],
+  "cattle": [
+    {
+      "text": "Brazil has more cattle than people.",
+      "source": "https://www.riotimesonline.com/brazil-news/brazil/brazil-has-more-cattle-than-people/",
+      "approved": true
+    }
+  ],
+  "sheep": [
+    {
+      "text": "In 1982 New Zealand had about 70 million sheep, 22 for every person. Today it's under 5.",
+      "source": "https://www.ctvnews.ca/world/article/yes-new-zealand-still-has-more-sheep-than-people-but-humans-are-catching-up/",
+      "approved": true
+    }
+  ],
+  "pigs": [
+    {
+      "text": "About half of the world's pigs live in China.",
+      "source": "https://modernfarmer.com/2014/03/tail-curling-facts-chinese-pork",
+      "approved": true
+    }
+  ],
+  "chickens": [
+    {
+      "text": "There are more than three chickens for every person on Earth.",
+      "source": "https://www.fao.org/faostat/en/#data/QCL",
+      "approved": false
+    },
+    {
+      "text": "Chickens were first domesticated about 3,500 years ago, drawn to the rice fields of Southeast Asia.",
+      "source": "https://www.smithsonianmag.com/smart-news/researchers-pinpoint-date-when-chickens-were-first-domesticated-180980212/",
+      "approved": true
+    }
+  ],
+  "goats": [
+    {
+      "text": "People herded goats in Iran's Zagros Mountains about 10,000 years ago, making them one of the first farm animals.",
+      "source": "https://www.tcd.ie/news_events/articles/10000-year-old-dna-pens-the-first-tales-of-the-earliest-domesticated-goats/",
+      "approved": true
+    }
+  ],
+  "brick-kilns": [
+    {
+      "text": "Almost everyone in Bangladesh lives within 10 km of a brick kiln.",
+      "source": "https://news.stanford.edu/stories/2021/04/ai-empowers-environmental-regulators",
+      "approved": true
+    },
+    {
+      "text": "Brick kilns produce about 17% of Bangladesh's yearly CO2 emissions.",
+      "source": "https://news.stanford.edu/stories/2021/04/ai-empowers-environmental-regulators",
+      "approved": true
+    }
+  ],
+  "igp-coal": [
+    {
+      "text": "Coal makes about three quarters of India's electricity.",
+      "source": "https://ember-energy.org/latest-insights/coals-diminishing-role-in-indias-electricity-transition/",
+      "approved": false
+    }
+  ],
+  "igp-cement": [
+    {
+      "text": "India makes the second most cement in the world: about 450 million tonnes in 2024, behind China's 1.9 billion.",
+      "source": "https://globalcement.com/magazine/articles/1390-global-cement-top-100-2026",
+      "approved": true
+    }
+  ],
+  "igp-paper": [
+    {
+      "text": "In 105 CE, Cai Lun presented a papermaking process to China's emperor, though simpler paper existed before him.",
+      "source": "https://www.britannica.com/biography/Cai-Lun",
+      "approved": true
+    }
+  ],
+  "igp-waste": [
+    {
+      "text": "Delhi's Ghazipur landfill was about 65 m tall in 2019, close to the 73 m Taj Mahal.",
+      "source": "https://www.irishtimes.com/news/world/asia-pacific/new-delhi-rubbish-heap-set-to-exceed-the-height-of-taj-mahal-1.3915853",
+      "approved": true
+    }
+  ],
+  "africa-power": [
+    {
+      "text": "Africa has 60% of the world's best solar resources but only about 1% of its installed solar power.",
+      "source": "https://www.pv-tech.org/solar-pv-leading-capacity-installs-in-africa-with-125gw-by-2030-iea",
+      "approved": true
+    },
+    {
+      "text": "Almost 600 million people in Africa still have no electricity.",
+      "source": "https://www.engineeringnews.co.za/article/longer-term-demand-side-support-needed-to-realise-universal-electricity-access-in-africa-iea-2025-10-21",
+      "approved": true
+    }
+  ],
+  "africa-waste": [
+    {
+      "text": "More than 90% of Africa's waste goes to dump sites, often burned in the open.",
+      "source": "https://www.engineeringnews.co.za/article/un-csir-launch-africa-waste-management-outlook-2018-06-05",
+      "approved": true
+    },
+    {
+      "text": "19 of the world's 50 biggest dump sites are in Africa.",
+      "source": "https://www.engineeringnews.co.za/article/un-csir-launch-africa-waste-management-outlook-2018-06-05",
+      "approved": true
+    }
+  ]
+}

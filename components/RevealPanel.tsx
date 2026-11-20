@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { pickRandom, puzzleHref, puzzleLabel, whose, type Puzzle } from "@/lib/puzzles";
+import { pickRandom, puzzleHref, puzzleLabel, released, whose, type Puzzle, type Schedule } from "@/lib/puzzles";
 import { loadResults, type Result } from "@/lib/storage";
 
 function useCountUp(target: number, ms = 1400) {
@@ -40,8 +40,13 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
   function randomPuzzle() {
     startJump(async () => {
       try {
-        const pool: Puzzle[] = await fetch(typeof puzzle.id === "number" ? "/data/puzzles.json" : "/data/countries-mode.json").then((r) => r.json());
-        const next = pickRandom(pool, puzzle.id, new Set(Object.keys(loadResults())));
+        const daily = typeof puzzle.id === "number";
+        const [pool, schedule]: [Puzzle[], Schedule] = await Promise.all([
+          fetch(daily ? "/data/puzzles.json" : "/data/countries-mode.json").then((r) => r.json()),
+          daily ? fetch("/data/schedule.json").then((r) => r.json()) : {},
+        ]);
+        // Never jump to a future daily puzzle.
+        const next = pickRandom(released(pool, schedule), puzzle.id, new Set(Object.keys(loadResults())));
         if (next) router.push(puzzleHref(next));
       } catch {
         /* offline: stay on this puzzle */
@@ -78,14 +83,14 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
   }
 
   return (
-    <section className="reveal pointer-events-none absolute inset-x-0 bottom-0 flex justify-center p-3 sm:p-5" aria-live="polite">
+    <section className="reveal pointer-events-none absolute inset-x-0 bottom-0 flex justify-center p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-5 sm:pb-[max(1.25rem,env(safe-area-inset-bottom))]" aria-live="polite">
       <div className="chamfer pointer-events-auto w-full max-w-xl">
         <div className="chamfer-in px-5 py-4 sm:px-6 sm:py-5">
           <div className="flex items-end gap-4">
             <p className="font-display text-[64px] font-bold leading-none text-amber tabular-nums sm:text-[76px]" aria-label={`Score ${result.score} out of 100`}>
               {Math.round(score)}
             </p>
-            <p className="pb-2 font-display text-[18px] text-mist">/ 100</p>
+            <p className="whitespace-nowrap pb-2 font-display text-[18px] text-mist">/ 100</p>
             <div className="ml-auto flex flex-wrap justify-end gap-2 pb-1">
               <button className="outline-btn" onClick={share}>
                 {copied ? "Copied" : "Share"}
@@ -97,6 +102,15 @@ export default function RevealPanel({ puzzle, result }: { puzzle: Puzzle; result
           </div>
           <p className="mt-3 text-[15px] leading-relaxed text-chalk">{detail}</p>
           <p className="mt-2 text-[14px] leading-relaxed text-mist">{puzzle.fact}</p>
+          {puzzle.funfact && (
+            <p className="mt-2 text-[14px] leading-relaxed text-chalk">
+              <span className="font-display font-semibold text-amber">Did you know? </span>
+              {puzzle.funfact.text}{" "}
+              <a href={puzzle.funfact.source} target="_blank" rel="noopener noreferrer" className="text-[12px] text-mist underline underline-offset-2 hover:text-chalk">
+                Source
+              </a>
+            </p>
+          )}
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
             <Link href="/archive" className="text-amber underline-offset-4 hover:underline">
               All puzzles
