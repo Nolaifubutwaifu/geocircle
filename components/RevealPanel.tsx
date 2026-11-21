@@ -8,6 +8,7 @@ import { pickNext, puzzleHref, puzzleLabel, released, whose, type Puzzle, type S
 import { encodeShape } from "@/lib/share";
 import { playerStats, untilMidnight } from "@/lib/stats";
 import { loadResults, saveResult, type Feel, type Result } from "@/lib/storage";
+import { track } from "@/lib/analytics";
 
 function useCountUp(target: number, ms = 1400) {
   const [v, setV] = useState(0);
@@ -86,6 +87,7 @@ export default function RevealPanel({ puzzle, result, daily, friendScore, collap
   function rate(f: Feel) {
     setFeel(f);
     saveResult(puzzle.id, { ...result, feel: f });
+    track("puzzle_feedback", { puzzle: puzzle.id, key: puzzle.key, feel: f, score: result.score, difficulty: puzzle.difficulty });
   }
 
   const pct = result.pct.toFixed(1);
@@ -114,6 +116,7 @@ export default function RevealPanel({ puzzle, result, daily, friendScore, collap
     const streak = daily && stats && stats.streak >= 2 ? ` 🔥${stats.streak}` : "";
     const topic = whose(puzzle).replace(/^./, (c) => c.toUpperCase());
     const url = `${location.origin}${puzzleHref(puzzle)}?beat=${result.score}&s=${encodeShape(result.shape)}`;
+    track("puzzle_shared", { puzzle: puzzle.id, score: result.score });
     const text = `Geocircle ${puzzleLabel(puzzle)} ${icon} ${result.score}/100${streak}\n${topic}. Can you beat ${result.score}?\n${url}`;
     try {
       if (navigator.share && matchMedia("(pointer: coarse)").matches) await navigator.share({ text });

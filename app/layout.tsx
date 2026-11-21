@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Chakra_Petch, Figtree } from "next/font/google";
 import "./globals.css";
+import Analytics from "@/components/Analytics";
 
 const display = Chakra_Petch({ variable: "--font-chakra", subsets: ["latin"], weight: ["500", "600", "700"] });
 const body = Figtree({ variable: "--font-figtree", subsets: ["latin"] });
@@ -17,7 +18,10 @@ export const viewport: Viewport = { themeColor: "#0B1228", width: "device-width"
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} h-full antialiased`}>
-      <body className="min-h-full bg-ocean font-sans text-chalk">{children}</body>
+      <body className="min-h-full bg-ocean font-sans text-chalk">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

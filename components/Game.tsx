@@ -21,6 +21,7 @@ import { aggregateTo, capturedSum, classifyGroups, fetchGroups, loadDataset, typ
 import { scoreBudget, scoreNet, scoreTarget } from "@/lib/score";
 import { goalText, puzzleLabel, type Puzzle } from "@/lib/puzzles";
 import { readChallenge } from "@/lib/share";
+import { track } from "@/lib/analytics";
 import { hasSeenHowTo, loadResults, markSeenHowTo, saveResult, type Result } from "@/lib/storage";
 import type { Bounds } from "@/lib/land";
 import type { Handle, HitTarget, Pill } from "./GameMap";
@@ -51,6 +52,9 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
   const [heat, setHeat] = useState<{ id: string; v: number }[] | null>(null);
   const [challenge] = useState(() => readChallenge(window.location.search)); // a friend's ?beat=64&s=... link
   const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    if (challenge) track("challenge_opened", { puzzle: puzzle.id, beat: challenge.score });
+  }, [challenge, puzzle.id]);
   const ds = useRef<Promise<Dataset> | null>(null);
   const vsDs = useRef<Promise<Dataset> | null>(null); // the "people" side of net puzzles
   const view = useRef<{ res: number; bounds: Bounds } | null>(null);
@@ -106,13 +110,23 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
       } else score = puzzle.mode === "target" ? scoreTarget(pct, puzzle.target_pct!) : scoreBudget(pct, puzzle.best.pct ?? pct);
       const r: Result = { score, pct, shape, playedAt: new Date().toISOString(), counts };
       saveResult(puzzle.id, r);
+      track("puzzle_submitted", {
+        puzzle: puzzle.id,
+        key: puzzle.key,
+        daily,
+        mechanic: puzzle.mechanic,
+        mode: puzzle.mode,
+        difficulty: puzzle.difficulty,
+        score,
+        challenged: !!challenge,
+      });
       setResult(r);
       setPhase("done");
     } catch {
       setPhase("play");
       setError("Scoring failed while loading data. Check your connection and submit again.");
     }
-  }, [phase, shape, problem, isCircle, pins.length, puzzle]);
+  }, [phase, shape, problem, isCircle, pins.length, puzzle, daily, challenge]);
 
   // Heat reveal for whatever part of the map is in view.
   const refreshHeat = useCallback(async () => {
