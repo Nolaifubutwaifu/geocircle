@@ -6585,61 +6585,10 @@
     }
   },
   "earthquakes|VUT|triangle|budget|1500": {
-    "status": "approved",
-    "id": 595,
-    "fact": "Vanuatu recorded 5,437 earthquakes since 2000.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "earthquakes|VUT|triangle|budget|1500",
-      "difficulty": "easy",
-      "stat": "earthquakes",
-      "prompt": "Your triangle can be at most 1,500 km around. Catch as many of Vanuatu's earthquakes (M4.5+, since 2000) as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 1500,
-      "best": {
-        "pct": 40.56,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              165.5958,
-              -12.7397
-            ],
-            [
-              167.5499,
-              -17.5404
-            ],
-            [
-              169.0747,
-              -13.3437
-            ]
-          ]
-        }
-      },
-      "cells": "/data/points/earthquakes",
-      "stat_file": null,
-      "scope": {
-        "name": "Vanuatu",
-        "countries": [
-          244
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          168.095,
-          -16.948
-        ],
-        "zoom": 5.02
-      },
-      "fact": "Vanuatu recorded 5,437 earthquakes since 2000.",
-      "credit": "USGS Earthquake Catalog (public domain)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Dud sweep: a typical first guess already scores 85+ (was ID 595, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "earthquakes|VUT|triangle|target|10": {
     "status": "approved",
@@ -12033,69 +11982,10 @@
     }
   },
   "chickens|South America|circle|net|2000": {
-    "status": "approved",
-    "id": 138,
-    "fact": "Guyana has 30.7 chickens per person. Bolivia has 16.1.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|South America|circle|net|2000",
-      "difficulty": "easy",
-      "stat": "chickens",
-      "prompt": "Chickens vs people in South America. Your 2,000 km circle should catch the most chickens beyond the number of people.",
-      "mechanic": "circle",
-      "mode": "net",
-      "target_pct": null,
-      "radius_km": 2000,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": 1446999615,
-        "shape": {
-          "center": [
-            -62.2295,
-            -19.0647
-          ],
-          "radius_km": 2000
-        }
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "South America",
-        "countries": [
-          3,
-          4,
-          5,
-          6,
-          23,
-          24,
-          45,
-          46,
-          137,
-          138,
-          139,
-          140,
-          160,
-          174,
-          243
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          -59.895,
-          -12.223
-        ],
-        "zoom": 2.59
-      },
-      "fact": "Guyana has 30.7 chickens per person. Bolivia has 16.1.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Dud sweep: a typical first guess already scores 85+ (was ID 138, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "chickens|South America|circle|target|10": {
     "status": "approved",
@@ -12758,55 +12648,10 @@
     }
   },
   "chickens|BRA|circle|net|2000": {
-    "status": "approved",
-    "id": 177,
-    "fact": "Brazil has 6.1 chickens per person.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|BRA|circle|net|2000",
-      "difficulty": "easy",
-      "stat": "chickens",
-      "prompt": "Chickens vs people in Brazil. Your 2,000 km circle should catch the most chickens beyond the number of people.",
-      "mechanic": "circle",
-      "mode": "net",
-      "target_pct": null,
-      "radius_km": 2000,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": 1108685456,
-        "shape": {
-          "center": [
-            -49.6977,
-            -18.0033
-          ],
-          "radius_km": 2000
-        }
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "Brazil",
-        "countries": [
-          45
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          -46.789,
-          -17.224
-        ],
-        "zoom": 3.44
-      },
-      "fact": "Brazil has 6.1 chickens per person.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Dud sweep: a typical first guess already scores 85+ (was ID 177, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "chickens|BRA|circle|target|10": {
     "status": "approved",
@@ -15175,80 +15020,10 @@
     }
   },
   "chickens|Oceania|circle|net|2000": {
-    "status": "approved",
-    "id": 218,
-    "fact": "Fiji has 5.4 chickens per person. New Zealand has 4.1.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|Oceania|circle|net|2000",
-      "difficulty": "easy",
-      "stat": "chickens",
-      "prompt": "Chickens vs people in Oceania. Your 2,000 km circle should catch the most chickens beyond the number of people.",
-      "mechanic": "circle",
-      "mode": "net",
-      "target_pct": null,
-      "radius_km": 2000,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": 70693150,
-        "shape": {
-          "center": [
-            147.7708,
-            -43.4515
-          ],
-          "radius_km": 2000
-        }
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "Oceania",
-        "countries": [
-          161,
-          177,
-          179,
-          180,
-          181,
-          193,
-          194,
-          197,
-          198,
-          232,
-          233,
-          234,
-          235,
-          236,
-          237,
-          238,
-          240,
-          241,
-          244,
-          245,
-          246,
-          247,
-          248,
-          249,
-          251,
-          255
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          157.705,
-          -30.343
-        ],
-        "zoom": 2.98
-      },
-      "fact": "Fiji has 5.4 chickens per person. New Zealand has 4.1.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Dud sweep: a typical first guess already scores 85+ (was ID 218, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "chickens|Oceania|circle|target|10": {
     "status": "approved",
@@ -20093,55 +19868,10 @@
     }
   },
   "chickens|RUS|circle|net|2000": {
-    "status": "approved",
-    "id": 392,
-    "fact": "Russia has 3.3 chickens per person.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|RUS|circle|net|2000",
-      "difficulty": "easy",
-      "stat": "chickens",
-      "prompt": "Chickens vs people in Russia. Your 2,000 km circle should catch the most chickens beyond the number of people.",
-      "mechanic": "circle",
-      "mode": "net",
-      "target_pct": null,
-      "radius_km": 2000,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": 320100842,
-        "shape": {
-          "center": [
-            59.8949,
-            56.1723
-          ],
-          "radius_km": 2000
-        }
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "Russia",
-        "countries": [
-          48
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          61.316,
-          52.205
-        ],
-        "zoom": 2.82
-      },
-      "fact": "Russia has 3.3 chickens per person.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Dud sweep: a typical first guess already scores 85+ (was ID 392, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "chickens|RUS|circle|target|10": {
     "status": "approved",
@@ -26714,55 +26444,10 @@
     }
   },
   "chickens|CHN|circle|net|2000": {
-    "status": "approved",
-    "id": 572,
-    "fact": "China has 3.3 chickens per person.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|CHN|circle|net|2000",
-      "difficulty": "easy",
-      "stat": "chickens",
-      "prompt": "Chickens vs people in China. Your 2,000 km circle should catch the most chickens beyond the number of people.",
-      "mechanic": "circle",
-      "mode": "net",
-      "target_pct": null,
-      "radius_km": 2000,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": 3266412500,
-        "shape": {
-          "center": [
-            113.0388,
-            36.7644
-          ],
-          "radius_km": 2000
-        }
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "China",
-        "countries": [
-          10
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          114.453,
-          32.763
-        ],
-        "zoom": 3.65
-      },
-      "fact": "China has 3.3 chickens per person.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Dud sweep: a typical first guess already scores 85+ (was ID 572, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "chickens|CHN|circle|target|10": {
     "status": "approved",

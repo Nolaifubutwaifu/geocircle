@@ -1248,7 +1248,10 @@ PERIMETERS = [1000, 1500, 2000, 3000, 4000, 5000, 6000, 8000, 10000]
 # Thresholds (PRD §5.3, §5.4). Starting values until calibration; changing them needs no re-measuring.
 GATE = dict(min_cells=200, max_top_share=0.20, min_surprise=0.25, budget_lo=20, budget_hi=60, budget_aim=35,
             country_min_share=0.02, reach_margin=10, min_smallest_km=25, prompt_max=140, easy_from=55, medium_from=30,
-            max_naive=95, continent_min_share=0.05)  # 5%: Max disliked "a few spots hold it all" puzzles
+            max_naive=85, continent_min_share=0.05,  # 5%: Max disliked "a few spots hold it all" puzzles
+            # max_naive 85 (was 95): 2,000 km chicken nets with first guesses of 85 to 94 were duds (21 Nov 2026).
+            # Dud sweep (pnpm data duds): Max's "too hard" ones had first guesses of 0 to 16.
+            dud_naive_lo=20, dud_smallest_km=75)
 # Measurement settings. They are part of the cache hash, as is GEN_VERSION: bump it when gen_measure changes.
 MEASURE = dict(fine_max=40_000, circle_max_km=5000, side_max_km=8000, tri_fallback_margin=10, sim_shapes=400, sim_sigma=0.4,
                net_jitter_km=500)
@@ -1724,6 +1727,40 @@ def step_candidates():
         log(f"  {c['rank']:.2f} {c['difficulty']:<6} {c['prompt']}")
 
 
+def dud_flags(mode: str, m: dict) -> list[str]:
+    """Why an approved puzzle looks like a dud, from its measurements."""
+    n = m["naive_median"]
+    return (["too_hard"] if n < GATE["dud_naive_lo"] else []) + (["too_easy"] if n >= GATE["max_naive"] else []) + (
+        ["pinpoint"] if mode == "target" and m["smallest_km"] < GATE["dud_smallest_km"] else [])
+
+
+def step_duds():
+    """Flag approved puzzles (legacy + curated) that look like duds. Writes out/duds.csv; changes nothing else."""
+    countries = json.loads((OUT / "countries.json").read_text())
+    # shortcut: reads the candidates cache, so run `pnpm data candidates` first if the data or GEN_VERSION changed
+    measured = json.loads((CACHE / "candidates-measured.json").read_text())
+    curated = json.loads(CURATED.read_text())
+    date_of = {v: d for d, v in json.loads((OUT / "schedule.json").read_text()).items()}
+    today = dt.date.today().isoformat()
+    approved = {pid: (legacy_key(p, countries), p["prompt"]) for pid, p in enumerate(PUZZLES, start=1)}
+    approved |= {v["id"]: (k, v["prompt"] or v["puzzle"]["prompt"]) for k, v in curated.items() if v["status"] == "approved"}
+    rows, unmeasured = [], []
+    for pid, (key, prompt) in sorted(approved.items()):
+        m = measured.get(key)
+        if m is None:
+            unmeasured.append(pid)
+            continue
+        flags = dud_flags(key.split("|")[3], m)
+        if flags and date_of.get(pid, today) >= today:  # puzzles already played as a daily stay
+            rows.append(dict(id=pid, date=date_of.get(pid, ""), flags=" ".join(flags), naive_median=m["naive_median"],
+                             smallest_km=m["smallest_km"], key=key, prompt=prompt))
+    pd.DataFrame(rows, columns=["id", "date", "flags", "naive_median", "smallest_km", "key", "prompt"]).to_csv(GEN_OUT / "duds.csv", index=False)
+    counts = pd.Series([f for r in rows for f in r["flags"].split()]).value_counts()
+    log(f"duds: {len(rows)} of {len(approved)} approved puzzles flagged ({', '.join(f'{k} {v}' for k, v in counts.items())}), "
+        f"{sum(1 for r in rows if r['date'])} of them scheduled; not measured: {unmeasured}")
+    log(f"wrote {(GEN_OUT / 'duds.csv').relative_to(ROOT)}")
+
+
 def step_selftest():
     """Assert-based checks for the generator (PRD §5.11, Python part)."""
     p = np.array([5.0, 3, 0, 2])
@@ -1885,6 +1922,11 @@ def step_selftest():
     s2 = fill_schedule({}, legacy + only_hard, first, ahead=0)  # Monday wants easy
     assert byid[s2[first.isoformat()]]["difficulty"] == "hard"
 
+    m = dict(naive_median=15, smallest_km=50)
+    assert dud_flags("target", m) == ["too_hard", "pinpoint"] and dud_flags("budget", m) == ["too_hard"]
+    assert dud_flags("net", dict(naive_median=90, smallest_km=None)) == ["too_easy"]
+    assert dud_flags("target", dict(naive_median=40, smallest_km=200)) == []
+
     log("selftest: ok")
 
 
@@ -1903,6 +1945,7 @@ STEPS = {
     "schedule": step_schedule,
     "countries": step_countries,
     "candidates": step_candidates,
+    "duds": step_duds,
     "selftest": step_selftest,
 }
 
