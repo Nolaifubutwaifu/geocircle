@@ -1310,7 +1310,7 @@ def gen_scopes(countries: list[dict]) -> list[dict]:
     by_name = {c["name"]: c["i"] for c in countries}
     out = [dict(code="world", name="the world", kind="world", ids=None)]
     out += [dict(code=k, name=k, kind="continent", ids=[c["i"] for c in countries if c["continent"] == k]) for k in CONTINENTS]
-    out += [dict(code=k, name=v["label"], kind="region", ids=[by_name[n] for n in v["countries"]]) for k, v in REGIONS.items()]
+    # Named regions (REGIONS) are no longer offered: Max rejected the Indo-Gangetic Plain strip four times (21 Nov 2026).
     return out
 
 

@@ -20,6 +20,7 @@ export const C = {
   amber: "#FAC775",
   ember: "#EF9F27",
   bad: "#F08A6C",
+  region: "#4FD18B",
 };
 
 export type Handle = { id: string; at: LngLat };
@@ -35,6 +36,8 @@ type Props = {
   best: LngLat[] | null;
   /** A friend's shape from a challenge link, drawn dotted after the reveal. */
   friend: LngLat[] | null;
+  /** Land hexes of the puzzle's country or continent, tinted green as a help. */
+  region: string[] | null;
   handles: Handle[];
   pills: Pill[];
   ring: { center: LngLat; radiusKm: number } | null; // circle edge is draggable
@@ -141,6 +144,7 @@ export default function GameMap(props: Props) {
       const add = (id: string, data: GeoJSON.FeatureCollection | string = empty()) => map.addSource(id, { type: "geojson", data, tolerance: 0 });
       add("grid", graticule());
       add("hex");
+      add("region");
       add("heat");
       add("shape");
       add("pins");
@@ -159,6 +163,7 @@ export default function GameMap(props: Props) {
           "fill-opacity-transition": { duration: 600 },
         },
       });
+      map.addLayer({ id: "region", type: "fill", source: "region", paint: { "fill-color": C.region, "fill-opacity": 0.8, "fill-outline-color": C.ocean } });
       map.addLayer({
         id: "heat",
         type: "fill",
@@ -344,6 +349,12 @@ export default function GameMap(props: Props) {
     });
     positionPills();
   }, [ready, props.shape, props.shapeBad, props.pins, props.best, props.friend, props.handles, props.pills]);
+
+  // Country or continent highlight.
+  useEffect(() => {
+    if (!ready) return;
+    (mapRef.current!.getSource("region") as GeoJSONSource).setData(props.region ? hexFeatures(props.region) : empty());
+  }, [ready, props.region]);
 
   // Reveal heat and land dimming.
   useEffect(() => {

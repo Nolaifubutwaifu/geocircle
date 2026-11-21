@@ -5361,142 +5361,22 @@
     }
   },
   "mcdonalds|Indo-Gangetic Plain|circle|budget|400": {
-    "status": "approved",
-    "id": 171,
-    "fact": "India has 985 mapped McDonald's.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "mcdonalds|Indo-Gangetic Plain|circle|budget|400",
-      "difficulty": "hard",
-      "stat": "mapped McDonald's",
-      "prompt": "You get a 400 km circle. Catch as many of the Indo-Gangetic Plain's mapped McDonald's as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 400,
-      "perimeter_km": null,
-      "best": {
-        "pct": 34.15,
-        "net": null,
-        "shape": {
-          "center": [
-            75.7188,
-            29.9366
-          ],
-          "radius_km": 400
-        }
-      },
-      "cells": "/data/points/mcdonalds",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          76.405,
-          22.185
-        ],
-        "zoom": 3.81
-      },
-      "fact": "India has 985 mapped McDonald's.",
-      "credit": "Overture Maps Places (CDLA Permissive 2.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "mcdonalds|Indo-Gangetic Plain|circle|target|20": {
-    "status": "approved",
-    "id": 189,
-    "fact": "The smallest circle we found holding 20% of the Indo-Gangetic Plain's mapped McDonald's has a radius of 68 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "mcdonalds|Indo-Gangetic Plain|circle|target|20",
-      "difficulty": "hard",
-      "stat": "mapped McDonald's",
-      "prompt": "Draw a circle that holds exactly 20% of the Indo-Gangetic Plain's mapped McDonald's.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 20,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/points/mcdonalds",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          76.405,
-          22.185
-        ],
-        "zoom": 3.81
-      },
-      "fact": "The smallest circle we found holding 20% of the Indo-Gangetic Plain's mapped McDonald's has a radius of 68 km.",
-      "credit": "Overture Maps Places (CDLA Permissive 2.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "mcdonalds|Indo-Gangetic Plain|triangle|target|20": {
-    "status": "approved",
-    "id": 207,
-    "fact": "The smallest circle we found holding 20% of the Indo-Gangetic Plain's mapped McDonald's has a radius of 68 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "mcdonalds|Indo-Gangetic Plain|triangle|target|20",
-      "difficulty": "hard",
-      "stat": "mapped McDonald's",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 20% of the Indo-Gangetic Plain's mapped McDonald's.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 20,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/points/mcdonalds",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          76.405,
-          22.185
-        ],
-        "zoom": 3.81
-      },
-      "fact": "The smallest circle we found holding 20% of the Indo-Gangetic Plain's mapped McDonald's has a radius of 68 km.",
-      "credit": "Overture Maps Places (CDLA Permissive 2.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "mcdonalds|IND|circle|budget|400": {
     "status": "approved",
@@ -8566,98 +8446,16 @@
     }
   },
   "sheep|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 267,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's sheep has a radius of 120 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "sheep|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "hard",
-      "stat": "sheep",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's sheep.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/sheep",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          75.488,
-          22.979
-        ],
-        "zoom": 3.69
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's sheep has a radius of 120 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "sheep|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 274,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's sheep has a radius of 120 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "sheep|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "hard",
-      "stat": "sheep",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's sheep.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/sheep",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          75.488,
-          22.979
-        ],
-        "zoom": 3.69
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's sheep has a radius of 120 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "sheep|MNG|circle|budget|250": {
     "status": "approved",
@@ -10150,98 +9948,16 @@
     }
   },
   "pigs|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 216,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's pigs has a radius of 79 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "pigs|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "medium",
-      "stat": "pigs",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's pigs.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/pigs",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          85.269,
-          21.787
-        ],
-        "zoom": 3.89
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's pigs has a radius of 79 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "pigs|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 230,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's pigs has a radius of 79 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "pigs|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "hard",
-      "stat": "pigs",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's pigs.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/pigs",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          85.269,
-          21.787
-        ],
-        "zoom": 3.89
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's pigs has a radius of 79 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "sheep|NZL|circle|budget|150": {
     "status": "approved",
@@ -23030,213 +22746,28 @@
     }
   },
   "chickens|Indo-Gangetic Plain|circle|budget|750": {
-    "status": "approved",
-    "id": 499,
-    "fact": "India has 752.2 million chickens.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|Indo-Gangetic Plain|circle|budget|750",
-      "difficulty": "easy",
-      "stat": "chickens",
-      "prompt": "You get a 750 km circle. Catch as many of the Indo-Gangetic Plain's chickens as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 750,
-      "perimeter_km": null,
-      "best": {
-        "pct": 36.97,
-        "net": null,
-        "shape": {
-          "center": [
-            72.3105,
-            28.9199
-          ],
-          "radius_km": 750
-        }
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          79.785,
-          22.435
-        ],
-        "zoom": 3.52
-      },
-      "fact": "India has 752.2 million chickens.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "chickens|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 509,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's chickens has a radius of 147 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "hard",
-      "stat": "chickens",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's chickens.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          79.785,
-          22.435
-        ],
-        "zoom": 3.52
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's chickens has a radius of 147 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "chickens|Indo-Gangetic Plain|triangle|budget|6000": {
-    "status": "approved",
-    "id": 518,
-    "fact": "India has 752.2 million chickens.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|Indo-Gangetic Plain|triangle|budget|6000",
-      "difficulty": "easy",
-      "stat": "chickens",
-      "prompt": "Your triangle can be at most 6,000 km around. Catch as many of the Indo-Gangetic Plain's chickens as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 6000,
-      "best": {
-        "pct": 39.7,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              91.2588,
-              25.261
-            ],
-            [
-              71.6927,
-              18.5093
-            ],
-            [
-              77.1974,
-              7.5653
-            ]
-          ]
-        }
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          79.785,
-          22.435
-        ],
-        "zoom": 3.52
-      },
-      "fact": "India has 752.2 million chickens.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "chickens|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 525,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's chickens has a radius of 147 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "chickens|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "medium",
-      "stat": "chickens",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's chickens.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/chickens",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          79.785,
-          22.435
-        ],
-        "zoom": 3.52
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's chickens has a radius of 147 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "cattle|Europe|circle|budget|750": {
     "status": "approved",
@@ -26241,92 +25772,16 @@
     }
   },
   "land|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 541,
-    "fact": "The smallest circle we found covering 10% of the Indo-Gangetic Plain's land has a radius of 379 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "land|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "medium",
-      "stat": "land",
-      "prompt": "Draw a circle that covers exactly 10% of the Indo-Gangetic Plain's land.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/land",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          79.489,
-          23.06
-        ],
-        "zoom": 3.46
-      },
-      "fact": "The smallest circle we found covering 10% of the Indo-Gangetic Plain's land has a radius of 379 km.",
-      "credit": "Natural Earth (public domain)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "land|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 567,
-    "fact": "The smallest circle we found covering 10% of the Indo-Gangetic Plain's land has a radius of 379 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "land|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "medium",
-      "stat": "land",
-      "prompt": "Put down 3 pins. Your triangle must cover exactly 10% of the Indo-Gangetic Plain's land.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/land",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          79.489,
-          23.06
-        ],
-        "zoom": 3.46
-      },
-      "fact": "The smallest circle we found covering 10% of the Indo-Gangetic Plain's land has a radius of 379 km.",
-      "credit": "Natural Earth (public domain)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "rice|North America|circle|budget|1000": {
     "status": "approved",
@@ -26599,213 +26054,28 @@
     }
   },
   "goats|Indo-Gangetic Plain|circle|budget|500": {
-    "status": "approved",
-    "id": 524,
-    "fact": "India has 141.2 million goats.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "goats|Indo-Gangetic Plain|circle|budget|500",
-      "difficulty": "medium",
-      "stat": "goats",
-      "prompt": "You get a 500 km circle. Catch as many of the Indo-Gangetic Plain's goats as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 500,
-      "perimeter_km": null,
-      "best": {
-        "pct": 36.88,
-        "net": null,
-        "shape": {
-          "center": [
-            87.5672,
-            24.5492
-          ],
-          "radius_km": 500
-        }
-      },
-      "cells": "/data/goats",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          79.574,
-          23.801
-        ],
-        "zoom": 3.66
-      },
-      "fact": "India has 141.2 million goats.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "goats|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 533,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's goats has a radius of 118 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "goats|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "medium",
-      "stat": "goats",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's goats.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/goats",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          79.574,
-          23.801
-        ],
-        "zoom": 3.66
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's goats has a radius of 118 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "goats|Indo-Gangetic Plain|triangle|budget|4000": {
-    "status": "approved",
-    "id": 542,
-    "fact": "India has 141.2 million goats.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "goats|Indo-Gangetic Plain|triangle|budget|4000",
-      "difficulty": "medium",
-      "stat": "goats",
-      "prompt": "Your triangle can be at most 4,000 km around. Catch as many of the Indo-Gangetic Plain's goats as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 4000,
-      "best": {
-        "pct": 38.26,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              87.1768,
-              19.0589
-            ],
-            [
-              94.8422,
-              26.4625
-            ],
-            [
-              78.8236,
-              27.4774
-            ]
-          ]
-        }
-      },
-      "cells": "/data/goats",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          79.574,
-          23.801
-        ],
-        "zoom": 3.66
-      },
-      "fact": "India has 141.2 million goats.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "goats|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 551,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's goats has a radius of 118 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "goats|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "medium",
-      "stat": "goats",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's goats.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/goats",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          79.574,
-          23.801
-        ],
-        "zoom": 3.66
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's goats has a radius of 118 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "tea|Asia|circle|budget|1000": {
     "status": "approved",
@@ -34942,213 +34212,28 @@
     }
   },
   "cattle|Indo-Gangetic Plain|circle|budget|500": {
-    "status": "approved",
-    "id": 569,
-    "fact": "India has 190.8 million cattle.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "cattle|Indo-Gangetic Plain|circle|budget|500",
-      "difficulty": "medium",
-      "stat": "cattle",
-      "prompt": "You get a 500 km circle. Catch as many of the Indo-Gangetic Plain's cattle as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 500,
-      "perimeter_km": null,
-      "best": {
-        "pct": 34.02,
-        "net": null,
-        "shape": {
-          "center": [
-            86.0064,
-            23.939
-          ],
-          "radius_km": 500
-        }
-      },
-      "cells": "/data/cattle",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          80.717,
-          22.759
-        ],
-        "zoom": 3.75
-      },
-      "fact": "India has 190.8 million cattle.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "cattle|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 577,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's cattle has a radius of 179 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "cattle|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "easy",
-      "stat": "cattle",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's cattle.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/cattle",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          80.717,
-          22.759
-        ],
-        "zoom": 3.75
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's cattle has a radius of 179 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "cattle|Indo-Gangetic Plain|triangle|budget|4000": {
-    "status": "approved",
-    "id": 586,
-    "fact": "India has 190.8 million cattle.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "cattle|Indo-Gangetic Plain|triangle|budget|4000",
-      "difficulty": "medium",
-      "stat": "cattle",
-      "prompt": "Your triangle can be at most 4,000 km around. Catch as many of the Indo-Gangetic Plain's cattle as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 4000,
-      "best": {
-        "pct": 36.1,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              79.9191,
-              26.5937
-            ],
-            [
-              84.5578,
-              17.4446
-            ],
-            [
-              94.3274,
-              26.6341
-            ]
-          ]
-        }
-      },
-      "cells": "/data/cattle",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          80.717,
-          22.759
-        ],
-        "zoom": 3.75
-      },
-      "fact": "India has 190.8 million cattle.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "cattle|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 597,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's cattle has a radius of 179 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "cattle|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "medium",
-      "stat": "cattle",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's cattle.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/cattle",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": {
-        "cells": "/data/population",
-        "label": "people"
-      },
-      "view": {
-        "center": [
-          80.717,
-          22.759
-        ],
-        "zoom": 3.75
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's cattle has a radius of 179 km.",
-      "credit": "FAO Gridded Livestock of the World 2015, Gilbert et al. 2022 (CC0 / CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "potatoes|world|circle|budget|2000": {
     "status": "approved",
@@ -38385,201 +37470,28 @@
     }
   },
   "population|Indo-Gangetic Plain|circle|budget|500": {
-    "status": "approved",
-    "id": 359,
-    "fact": "India has 1.4 billion people.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "population|Indo-Gangetic Plain|circle|budget|500",
-      "difficulty": "medium",
-      "stat": "people",
-      "prompt": "You get a 500 km circle. Catch as many of the Indo-Gangetic Plain's people as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 500,
-      "perimeter_km": null,
-      "best": {
-        "pct": 29.73,
-        "net": null,
-        "shape": {
-          "center": [
-            86.2495,
-            24.2594
-          ],
-          "radius_km": 500
-        }
-      },
-      "cells": "/data/population",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          80.884,
-          22.119
-        ],
-        "zoom": 3.69
-      },
-      "fact": "India has 1.4 billion people.",
-      "credit": "Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "population|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 369,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's people has a radius of 199 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "population|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "easy",
-      "stat": "people",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's people.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/population",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          80.884,
-          22.119
-        ],
-        "zoom": 3.69
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's people has a radius of 199 km.",
-      "credit": "Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "population|Indo-Gangetic Plain|triangle|budget|4000": {
-    "status": "approved",
-    "id": 377,
-    "fact": "India has 1.4 billion people.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "population|Indo-Gangetic Plain|triangle|budget|4000",
-      "difficulty": "medium",
-      "stat": "people",
-      "prompt": "Your triangle can be at most 4,000 km around. Catch as many of the Indo-Gangetic Plain's people as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 4000,
-      "best": {
-        "pct": 32.92,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              94.8474,
-              25.0988
-            ],
-            [
-              78.7606,
-              28.3846
-            ],
-            [
-              84.9672,
-              19.5882
-            ]
-          ]
-        }
-      },
-      "cells": "/data/population",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          80.884,
-          22.119
-        ],
-        "zoom": 3.69
-      },
-      "fact": "India has 1.4 billion people.",
-      "credit": "Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "population|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 386,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's people has a radius of 199 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "population|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "easy",
-      "stat": "people",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's people.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/population",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          80.884,
-          22.119
-        ],
-        "zoom": 3.69
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's people has a radius of 199 km.",
-      "credit": "Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "population|NGA|circle|budget|250": {
     "status": "approved",
@@ -44824,54 +43736,10 @@
     }
   },
   "dates|Indo-Gangetic Plain|circle|budget|400": {
-    "status": "approved",
-    "id": 647,
-    "fact": "India accounts for 53% of the Indo-Gangetic Plain's dates eaten.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "dates|Indo-Gangetic Plain|circle|budget|400",
-      "difficulty": "hard",
-      "stat": "dates eaten",
-      "prompt": "You get a 400 km circle. Catch as much of the Indo-Gangetic Plain's dates eaten as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 400,
-      "perimeter_km": null,
-      "best": {
-        "pct": 34.81,
-        "net": null,
-        "shape": {
-          "center": [
-            73.0218,
-            31.535
-          ],
-          "radius_km": 400
-        }
-      },
-      "cells": "/data/population",
-      "stat_file": "/data/stats/dates.json",
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          78.163,
-          23.538
-        ],
-        "zoom": 3.64
-      },
-      "fact": "India accounts for 53% of the Indo-Gangetic Plain's dates eaten.",
-      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "lake-area|Asia|circle|target|20": {
     "status": "approved",
@@ -46846,48 +45714,10 @@
     }
   },
   "dates|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 683,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's dates eaten has a radius of 111 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "dates|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "medium",
-      "stat": "dates eaten",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's dates eaten.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/population",
-      "stat_file": "/data/stats/dates.json",
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          78.163,
-          23.538
-        ],
-        "zoom": 3.64
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's dates eaten has a radius of 111 km.",
-      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "lake-area|CHN|circle|budget|750": {
     "status": "approved",
@@ -47491,54 +46321,10 @@
     }
   },
   "languages|Indo-Gangetic Plain|circle|budget|750": {
-    "status": "approved",
-    "id": 739,
-    "fact": "India has 433 languages.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "languages|Indo-Gangetic Plain|circle|budget|750",
-      "difficulty": "easy",
-      "stat": "languages",
-      "prompt": "You get a 750 km circle. Catch as many of the Indo-Gangetic Plain's languages as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 750,
-      "perimeter_km": null,
-      "best": {
-        "pct": 38.89,
-        "net": null,
-        "shape": {
-          "center": [
-            89.4579,
-            25.1037
-          ],
-          "radius_km": 750
-        }
-      },
-      "cells": "/data/points/languages",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          82.197,
-          22.581
-        ],
-        "zoom": 3.5
-      },
-      "fact": "India has 433 languages.",
-      "credit": "Glottolog 5.4, Hammarström, Forkel, Haspelmath & Bank (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "apples|North America|circle|target|10": {
     "status": "approved",
@@ -47762,48 +46548,10 @@
     }
   },
   "languages|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 742,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's languages has a radius of 98 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "languages|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "medium",
-      "stat": "languages",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's languages.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/points/languages",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          82.197,
-          22.581
-        ],
-        "zoom": 3.5
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's languages has a radius of 98 km.",
-      "credit": "Glottolog 5.4, Hammarström, Forkel, Haspelmath & Bank (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "cassava|South America|circle|budget|750": {
     "status": "approved",
@@ -47951,63 +46699,10 @@
     }
   },
   "languages|Indo-Gangetic Plain|triangle|budget|6000": {
-    "status": "approved",
-    "id": 745,
-    "fact": "India has 433 languages.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "languages|Indo-Gangetic Plain|triangle|budget|6000",
-      "difficulty": "medium",
-      "stat": "languages",
-      "prompt": "Your triangle can be at most 6,000 km around. Catch as many of the Indo-Gangetic Plain's languages as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 6000,
-      "best": {
-        "pct": 42.86,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              76.717,
-              20.2208
-            ],
-            [
-              91.4051,
-              13.7269
-            ],
-            [
-              97.0555,
-              30.2807
-            ]
-          ]
-        }
-      },
-      "cells": "/data/points/languages",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          82.197,
-          22.581
-        ],
-        "zoom": 3.5
-      },
-      "fact": "India has 433 languages.",
-      "credit": "Glottolog 5.4, Hammarström, Forkel, Haspelmath & Bank (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "lakes|Asia|circle|budget|2000": {
     "status": "approved",
@@ -48173,48 +46868,10 @@
     }
   },
   "languages|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 747,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's languages has a radius of 98 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "languages|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "medium",
-      "stat": "languages",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's languages.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/points/languages",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          82.197,
-          22.581
-        ],
-        "zoom": 3.5
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's languages has a radius of 98 km.",
-      "credit": "Glottolog 5.4, Hammarström, Forkel, Haspelmath & Bank (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "mutton|Africa|circle|budget|1500": {
     "status": "approved",
@@ -48467,63 +47124,10 @@
     }
   },
   "dates|Indo-Gangetic Plain|triangle|budget|3000": {
-    "status": "approved",
-    "id": 718,
-    "fact": "India accounts for 53% of the Indo-Gangetic Plain's dates eaten.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "dates|Indo-Gangetic Plain|triangle|budget|3000",
-      "difficulty": "hard",
-      "stat": "dates eaten",
-      "prompt": "Your triangle can be at most 3,000 km around. Catch as much of the Indo-Gangetic Plain's dates eaten as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 3000,
-      "best": {
-        "pct": 35.84,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              67.7691,
-              26.4951
-            ],
-            [
-              77.8358,
-              30.4843
-            ],
-            [
-              71.5987,
-              35.6607
-            ]
-          ]
-        }
-      },
-      "cells": "/data/population",
-      "stat_file": "/data/stats/dates.json",
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          78.163,
-          23.538
-        ],
-        "zoom": 3.64
-      },
-      "fact": "India accounts for 53% of the Indo-Gangetic Plain's dates eaten.",
-      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "lake-area|CHN|triangle|target|10": {
     "status": "approved",
@@ -49301,54 +47905,10 @@
     }
   },
   "lake-area|Indo-Gangetic Plain|circle|budget|500": {
-    "status": "approved",
-    "id": 746,
-    "fact": "India has 19,383 km² of lakes.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "lake-area|Indo-Gangetic Plain|circle|budget|500",
-      "difficulty": "medium",
-      "stat": "lake area",
-      "prompt": "You get a 500 km circle. Catch as much of the Indo-Gangetic Plain's lake area as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 500,
-      "perimeter_km": null,
-      "best": {
-        "pct": 32.62,
-        "net": null,
-        "shape": {
-          "center": [
-            77.5367,
-            19.1587
-          ],
-          "radius_km": 500
-        }
-      },
-      "cells": "/data/points/lake-area",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          79.147,
-          22.441
-        ],
-        "zoom": 3.7
-      },
-      "fact": "India has 19,383 km² of lakes.",
-      "credit": "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Max: 'garbage' (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "languages|PNG|circle|budget|250": {
     "status": "approved",
@@ -49595,54 +48155,10 @@
     }
   },
   "lakes|Indo-Gangetic Plain|circle|budget|500": {
-    "status": "approved",
-    "id": 749,
-    "fact": "India has 11,105 lakes.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "lakes|Indo-Gangetic Plain|circle|budget|500",
-      "difficulty": "medium",
-      "stat": "lakes",
-      "prompt": "You get a 500 km circle. Catch as many of the Indo-Gangetic Plain's lakes (10 hectares and up) as you can.",
-      "mechanic": "circle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": 500,
-      "perimeter_km": null,
-      "best": {
-        "pct": 32.78,
-        "net": null,
-        "shape": {
-          "center": [
-            78.0525,
-            16.4507
-          ],
-          "radius_km": 500
-        }
-      },
-      "cells": "/data/points/lakes",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          80.347,
-          19.241
-        ],
-        "zoom": 3.7
-      },
-      "fact": "India has 11,105 lakes.",
-      "credit": "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "cassava|South America|triangle|budget|6000": {
     "status": "approved",
@@ -49773,48 +48289,10 @@
     }
   },
   "lake-area|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 755,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's lake area has a radius of 219 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "lake-area|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "medium",
-      "stat": "lake area",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's lake area.",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/points/lake-area",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          79.147,
-          22.441
-        ],
-        "zoom": 3.7
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's lake area has a radius of 219 km.",
-      "credit": "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "sweet-potatoes|Africa|triangle|target|10": {
     "status": "approved",
@@ -50024,48 +48502,10 @@
     }
   },
   "lakes|Indo-Gangetic Plain|circle|target|10": {
-    "status": "approved",
-    "id": 759,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's lakes has a radius of 200 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "lakes|Indo-Gangetic Plain|circle|target|10",
-      "difficulty": "medium",
-      "stat": "lakes",
-      "prompt": "Draw a circle that holds exactly 10% of the Indo-Gangetic Plain's lakes (10 hectares and up).",
-      "mechanic": "circle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/points/lakes",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          80.347,
-          19.241
-        ],
-        "zoom": 3.7
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's lakes has a radius of 200 km.",
-      "credit": "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "dinosaurs|GBR|triangle|budget|1000": {
     "status": "approved",
@@ -50173,107 +48613,16 @@
     }
   },
   "dates|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 754,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's dates eaten has a radius of 111 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "dates|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "medium",
-      "stat": "dates eaten",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's dates eaten.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/population",
-      "stat_file": "/data/stats/dates.json",
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          78.163,
-          23.538
-        ],
-        "zoom": 3.64
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's dates eaten has a radius of 111 km.",
-      "credit": "FAO FAOSTAT Food Balances (CC BY 4.0); Kontur Population (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "lake-area|Indo-Gangetic Plain|triangle|budget|4000": {
-    "status": "approved",
-    "id": 764,
-    "fact": "India has 19,383 km² of lakes.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "lake-area|Indo-Gangetic Plain|triangle|budget|4000",
-      "difficulty": "medium",
-      "stat": "lake area",
-      "prompt": "Your triangle can be at most 4,000 km around. Catch as much of the Indo-Gangetic Plain's lake area as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 4000,
-      "best": {
-        "pct": 30.02,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              85.8776,
-              21.5643
-            ],
-            [
-              72.131,
-              20.9712
-            ],
-            [
-              77.9346,
-              11.7688
-            ]
-          ]
-        }
-      },
-      "cells": "/data/points/lake-area",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          79.147,
-          22.441
-        ],
-        "zoom": 3.7
-      },
-      "fact": "India has 19,383 km² of lakes.",
-      "credit": "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "sorghum|Asia|triangle|target|10": {
     "status": "approved",
@@ -50542,63 +48891,10 @@
     }
   },
   "lakes|Indo-Gangetic Plain|triangle|budget|4000": {
-    "status": "approved",
-    "id": 765,
-    "fact": "India has 11,105 lakes.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "lakes|Indo-Gangetic Plain|triangle|budget|4000",
-      "difficulty": "medium",
-      "stat": "lakes",
-      "prompt": "Your triangle can be at most 4,000 km around. Catch as many of the Indo-Gangetic Plain's lakes (10 hectares and up) as you can.",
-      "mechanic": "triangle",
-      "mode": "budget",
-      "target_pct": null,
-      "radius_km": null,
-      "perimeter_km": 4000,
-      "best": {
-        "pct": 35.31,
-        "net": null,
-        "shape": {
-          "pins": [
-            [
-              71.3114,
-              17.7251
-            ],
-            [
-              79.2953,
-              8.6298
-            ],
-            [
-              82.0874,
-              21.4831
-            ]
-          ]
-        }
-      },
-      "cells": "/data/points/lakes",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          80.347,
-          19.241
-        ],
-        "zoom": 3.7
-      },
-      "fact": "India has 11,105 lakes.",
-      "credit": "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "cassava|South America|triangle|target|10": {
     "status": "approved",
@@ -50810,91 +49106,15 @@
     }
   },
   "lake-area|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 772,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's lake area has a radius of 219 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "lake-area|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "medium",
-      "stat": "lake area",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's lake area.",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/points/lake-area",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          79.147,
-          22.441
-        ],
-        "zoom": 3.7
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's lake area has a radius of 219 km.",
-      "credit": "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   },
   "lakes|Indo-Gangetic Plain|triangle|target|10": {
-    "status": "approved",
-    "id": 773,
-    "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's lakes has a radius of 200 km.",
-    "prompt": null,
-    "reason": null,
-    "decided": "2026-11-20",
-    "puzzle": {
-      "key": "lakes|Indo-Gangetic Plain|triangle|target|10",
-      "difficulty": "medium",
-      "stat": "lakes",
-      "prompt": "Put down 3 pins. Your triangle must hold exactly 10% of the Indo-Gangetic Plain's lakes (10 hectares and up).",
-      "mechanic": "triangle",
-      "mode": "target",
-      "target_pct": 10,
-      "radius_km": null,
-      "perimeter_km": null,
-      "best": {
-        "pct": null,
-        "net": null,
-        "shape": null
-      },
-      "cells": "/data/points/lakes",
-      "stat_file": null,
-      "scope": {
-        "name": "the Indo-Gangetic Plain",
-        "countries": [
-          9,
-          109,
-          128
-        ]
-      },
-      "vs": null,
-      "view": {
-        "center": [
-          80.347,
-          19.241
-        ],
-        "zoom": 3.7
-      },
-      "fact": "The smallest circle we found holding 10% of the Indo-Gangetic Plain's lakes has a radius of 200 km.",
-      "credit": "HydroLAKES v1.0, Messager et al. 2016 (CC BY 4.0)"
-    }
+    "status": "rejected",
+    "reason": "boring",
+    "note": "Indo-Gangetic Plain region retired after Max rejected it again (No. 746, 21 Nov 2026).",
+    "decided": "2026-11-21"
   }
 }

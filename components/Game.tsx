@@ -57,6 +57,9 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
   }, [challenge, puzzle.id]);
   const ds = useRef<Promise<Dataset> | null>(null);
   const vsDs = useRef<Promise<Dataset> | null>(null); // the "people" side of net puzzles
+  const regionDs = useRef<Promise<Dataset> | null>(null); // land of the puzzle's country or continent, for the highlight
+  const [region, setRegion] = useState<string[] | null>(null);
+  const [showRegion, setShowRegion] = useState(true);
   const view = useRef<{ res: number; bounds: Bounds } | null>(null);
 
   // Load the puzzle's data.
@@ -64,6 +67,7 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
     const scope = puzzle.scope?.countries ?? null;
     ds.current = loadDataset(puzzle.cells, puzzle.stat_file, scope);
     vsDs.current = puzzle.vs ? loadDataset(puzzle.vs.cells, null, scope) : null;
+    regionDs.current = scope ? (puzzle.cells === "/data/land" ? ds.current : loadDataset("/data/land", null, scope)) : null;
     Promise.all([ds.current, vsDs.current]).catch(() => setError("Couldn't load this puzzle's data. Reload the page to try again."));
   }, [puzzle]);
 
@@ -128,11 +132,10 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
     }
   }, [phase, shape, problem, isCircle, pins.length, puzzle, daily, challenge]);
 
-  // Heat reveal for whatever part of the map is in view.
-  const refreshHeat = useCallback(async () => {
+  // A dataset's cells in whatever part of the map is in view, at the view's resolution.
+  const cellsInView = useCallback(async (d: Dataset) => {
     const v = view.current;
-    if (!v || !ds.current) return;
-    const d = await ds.current;
+    if (!v) return null;
     const wrap = (x: number) => ((((x - v.bounds.west) % 360) + 360) % 360);
     const width = Math.min(360, v.bounds.east - v.bounds.west);
     const keys = [...d.r3Totals.keys()].filter((k) => {
@@ -143,8 +146,25 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
     if (res >= 4 && keys.length <= 2500) await fetchGroups(d, keys);
     else res = Math.min(res, 3);
     const agg = aggregateTo(d, res, keys);
-    setHeat([...agg].filter(([, val]) => val > 0).map(([id, val]) => ({ id, v: val })));
+    return [...agg].filter(([, val]) => val > 0).map(([id, val]) => ({ id, v: val }));
   }, []);
+
+  // Heat reveal for whatever part of the map is in view.
+  const refreshHeat = useCallback(async () => {
+    if (!ds.current) return;
+    const cells = await cellsInView(await ds.current);
+    if (cells) setHeat(cells);
+  }, [cellsInView]);
+
+  const refreshRegion = useCallback(async () => {
+    if (!regionDs.current) return;
+    try {
+      const cells = await cellsInView(await regionDs.current);
+      if (cells) setRegion(cells.map((c) => c.id));
+    } catch {
+      /* the highlight is only a help: skip it if the land file fails */
+    }
+  }, [cellsInView]);
 
   useEffect(() => {
     if (phase === "done") refreshHeat();
@@ -154,8 +174,9 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
     (res: number, bounds: Bounds) => {
       view.current = { res, bounds };
       if (phase === "done") refreshHeat();
+      refreshRegion();
     },
-    [phase, refreshHeat],
+    [phase, refreshHeat, refreshRegion],
   );
 
   const play = phase === "play";
@@ -281,6 +302,7 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
         pins={openPins}
         best={best}
         friend={phase === "done" && challenge?.shape ? shapeRing(challenge.shape) : null}
+        region={showRegion ? region : null}
         handles={handles}
         pills={pills}
         ring={isCircle && center && radiusKm && !fixedRadius && play ? { center, radiusKm } : null}
@@ -321,6 +343,26 @@ export default function Game({ puzzle, daily }: { puzzle: Puzzle; daily: boolean
           <button className="icon-btn" onClick={() => setHowTo(true)} aria-label="How to play">
             ?
           </button>
+          {puzzle.scope && (
+            <div className="seg">
+              <button aria-pressed={showRegion} onClick={() => setShowRegion((s) => !s)} className="max-w-[10rem] truncate">
+                <span className="mr-1.5 inline-block size-2.5 rounded-full align-[-1px]" style={{ background: "#4FD18B" /* C.region in GameMap */, opacity: showRegion ? 1 : 0.3 }} aria-hidden />
+                {puzzle.scope.name.replace(/^the /, "").replace(/^./, (c) => c.toUpperCase())}
+              </button>
+            </div>
+          )}
+          {phase === "done" && (
+            <div className="chamfer w-36" aria-label={`Map colours: brighter means more ${puzzle.stat}`}>
+              <div className="chamfer-in px-2.5 py-2">
+                <div className="heat-legend h-2.5 w-full" />
+                <div className="mt-1 flex justify-between text-[11px] text-mist">
+                  <span>less</span>
+                  <span>more</span>
+                </div>
+                <p className="mt-0.5 text-[11px] leading-tight text-mist first-letter:uppercase">{puzzle.stat}, per hexagon</p>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 

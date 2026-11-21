@@ -101,3 +101,5 @@ html, body { background: var(--color-ocean); overscroll-behavior: none; }
 @media (prefers-reduced-motion: reduce) { .reveal .chamfer { animation: none; } }
 
 .maplibregl-canvas:focus-visible { outline: none; }
+/* Same ramp as the map heat layer (GameMap, "heat"), on a square-root scale. */
+.heat-legend { background: linear-gradient(to right, #3a2a12, #854f0b 15%, #ef9f27 40%, #fac775 75%, #fff4dc); }
